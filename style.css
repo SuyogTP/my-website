@@ -253,13 +253,19 @@ nav {
 }
 
 body.dark-mode .hero-img {
-    background: linear-gradient(140deg, rgba(56, 189, 248, 0.22), rgba(15, 23, 42, 0.95));
+    background: #02050d;
     color: #dbeafe;
 }
 
 body.dark-mode .hero-image-container {
-    background: rgba(15, 23, 42, 0.85);
-    border-color: rgba(125, 211, 252, 0.22);
+    background: #02040a;
+    border-color: rgba(80, 160, 255, 0.08);
+    box-shadow: 0 35px 110px rgba(0, 0, 0, 0.88);
+}
+
+body.dark-mode #bg-canvas {
+    mix-blend-mode: normal;
+    opacity: 0.72;
 }
 
 .hero-caption {
