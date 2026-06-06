@@ -10,19 +10,53 @@
     <meta property="og:description" content="Explore the portfolio of Suyog Basnet, a young coder and lifelong learner from Nepal. Learn about his projects, favorite books, and gaming interests.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://suyogbasnet.com.np/">
-    <meta property="og:image" content="my picture.jpg">
+    <meta property="og:image" content="https://suyogbasnet.com.np/my picture.jpg">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Suyog Basnet | Nepali Student, Coder & Creative Portfolio">
     <meta name="twitter:description" content="Explore the portfolio of Suyog Basnet, a young coder and lifelong learner from Nepal.">
     <link rel="canonical" href="https://suyogbasnet.com.np/">
+    <meta name="author" content="Suyog Basnet">
+    <meta name="theme-color" content="#0f172a">
+    <link rel="preload" href="my picture.jpg" as="image">
     <title>Suyog Basnet | Professional Portfolio</title>
     <link rel="stylesheet" href="style.css">
     <script type="application/ld+json">
     {
         "@context": "https://schema.org",
-        "@type": "Person",
-        "name": "Suyog Basnet",
-        "description": "14-year-old student, coder, and creative builder from Nepal."
+        "@graph": [
+            {
+                "@type": "Person",
+                "@id": "https://suyogbasnet.com.np/#person",
+                "name": "Suyog Basnet",
+                "url": "https://suyogbasnet.com.np/",
+                "description": "14-year-old student, coder, and creative builder from Nepal.",
+                "image": "https://suyogbasnet.com.np/my picture.jpg",
+                "sameAs": []
+            },
+            {
+                "@type": "WebSite",
+                "@id": "https://suyogbasnet.com.np/#website",
+                "url": "https://suyogbasnet.com.np/",
+                "name": "Suyog Basnet",
+                "potentialAction": {
+                    "@type": "SearchAction",
+                    "target": "https://suyogbasnet.com.np/?s={search_term_string}",
+                    "query-input": "required name=search_term_string"
+                }
+            },
+            {
+                "@type": "BreadcrumbList",
+                "@id": "https://suyogbasnet.com.np/#breadcrumbs",
+                "itemListElement": [
+                    {
+                        "@type": "ListItem",
+                        "position": 1,
+                        "name": "Home",
+                        "item": "https://suyogbasnet.com.np/"
+                    }
+                ]
+            }
+        ]
     }
     </script>
 </head>
@@ -39,6 +73,8 @@
                 <div class="nav-links">
                     <a href="#about">About</a>
                     <a href="#topics">Topics</a>
+                    <a href="projects.html">Projects</a>
+                    <a href="about.html">About Page</a>
                     <a href="contact.html">Contact</a>
                 </div>
             </div>
@@ -104,7 +140,20 @@
                 <h2>Interests I Love</h2>
                 <p>Click a topic to open a special page with its own style and theme.</p>
             </div>
-            <div id="topic-cards" class="topic-grid"></div>
+            <div id="topic-cards" class="topic-grid">
+                <div class="topic-link">
+                    <a href="blog-freefire.html">Free Fire tips by Suyog Basnet</a>
+                </div>
+                <div class="topic-link">
+                    <a href="blog-atomic-habits.html">Lessons from Atomic Habits</a>
+                </div>
+                <div class="topic-link">
+                    <a href="blog-reading.html">Books I read</a>
+                </div>
+                <div class="topic-link">
+                    <a href="projects.html">Web Projects by Suyog Basnet</a>
+                </div>
+            </div>
         </section>
 
         <footer>
