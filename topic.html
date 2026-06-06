@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Topic | Suyog Basnet</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <canvas id="bg-canvas"></canvas>
+    <div id="ui-wrapper">
+        <nav>
+            <div class="nav-left">
+                <a class="logo" href="index.html">SUYOG BASNET</a>
+                <div class="nav-links">
+                    <a href="index.html#about">About</a>
+                    <a href="index.html#topics">Topics</a>
+                    <a href="contact.html">Contact</a>
+                </div>
+            </div>
+            <button id="theme-toggle" class="btn-toggle">🌙 Dark Mode</button>
+        </nav>
+
+        <section class="section topic-page">
+            <div class="topic-card-large">
+                <span id="topic-badge" class="topic-badge">📚 Topic</span>
+                <h1 id="topic-title">Loading...</h1>
+                <p id="topic-description">Select a topic from the home page to see colorful details and special effects.</p>
+                <div class="topic-detail" id="topic-detail"></div>
+                <div id="topic-effect" class="topic-effect"></div>
+                <div class="topic-actions">
+                    <a href="index.html" class="cta">Back to Home</a>
+                    <a href="index.html#topics" class="cta alt">Explore More Topics</a>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <p>&copy; 2026 Suyog Basnet. Built to share my favorite interests.</p>
+        </footer>
+    </div>
+
+    <div id="error-screen" class="hidden">
+        <h1 class="glitch">SYSTEM ERROR</h1>
+        <div id="countdown">3</div>
+    </div>
+    <div id="explosion-screen" class="hidden"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>

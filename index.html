@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Suyog Basnet | Professional Portfolio</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body id="top">
+
+    <!-- Particle Background -->
+    <canvas id="bg-canvas"></canvas>
+
+    <!-- UI Elements that will "fall apart" -->
+    <div id="ui-wrapper">
+        <nav>
+            <div class="nav-left">
+                <a class="logo" href="index.html">SUYOG BASNET</a>
+                <div class="nav-links">
+                    <a href="#about">About</a>
+                    <a href="#topics">Topics</a>
+                    <a href="contact.html">Contact</a>
+                </div>
+            </div>
+            <button id="theme-toggle" class="btn-toggle">🌙 Dark Mode</button>
+        </nav>
+
+        <header class="hero">
+            <div class="hero-content">
+                <h1>Hi, I'm <span class="highlight">Suyog Basnet</span></h1>
+                <p>A 14-year-old explorer, coder, and lifelong learner from Nepal. I love reading books like Atomic Habits, I study at Golden Flower Secondary School, and I’ve played Free Fire for 8 years. I thrive on challenges and enjoy expanding my knowledge across all kinds of creative and tech topics.</p>
+                <a href="#topics" class="cta">Explore My Favorite Topics</a>
+            </div>
+            
+            <div class="hero-image-container" id="interactive-img">
+                <img id="hero-img-light" src="my picture.jpg" alt="Suyog daytime" class="hero-img active">
+                <img id="hero-img-dark" src="night my picture.jpg" alt="Suyog nighttime" class="hero-img">
+                <div class="hero-caption">Click to trigger the visual effect</div>
+            </div>
+        </header>
+
+        <section id="about" class="section">
+            <h2>About Me</h2>
+            <p class="about-intro">I read every day, enjoy building creative web projects, and love everything from science to stories. My favorite book is <strong>Atomic Habits</strong>, I study at <strong>Golden Flower Secondary School</strong>, and I am a long-time Free Fire player with 8 years of experience in the game.</p>
+            <div class="about-grid">
+                <div class="about-card">
+                    <h3>📚 Favorite Book</h3>
+                    <p><strong>Atomic Habits</strong> inspires me to build strong routines, improve every day, and keep learning.</p>
+                </div>
+                <div class="about-card">
+                    <h3>🏫 My School</h3>
+                    <p>I study at <strong>Golden Flower Secondary School</strong>, where I enjoy technology, science, and reading clubs.</p>
+                </div>
+                <div class="about-card">
+                    <h3>🎮 Free Fire</h3>
+                    <p>I have been playing <strong>Free Fire</strong> for 8 years, and it is one of my favorite games. I love strategy, speed, and exciting battles.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section highlights">
+            <div class="section-header">
+                <h2>Personal Highlights</h2>
+                <p>Some of the things I enjoy and the habits I follow every day.</p>
+            </div>
+            <div class="highlight-grid">
+                <div class="highlight-card highlight-reading">
+                    <h3>Reading Every Day</h3>
+                    <p>I enjoy stories, science facts, and books that help me grow.</p>
+                </div>
+                <div class="highlight-card highlight-coding">
+                    <h3>Building Websites</h3>
+                    <p>Creating fun web pages and learning new code tricks is one of my favorite hobbies.</p>
+                </div>
+                <div class="highlight-card highlight-freefire">
+                    <h3>Free Fire Champion</h3>
+                    <p>I’ve played Free Fire for years and love discovering new strategies and skins.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="topics" class="section">
+            <div class="section-header">
+                <h2>Interests I Love</h2>
+                <p>Click a topic to open a special page with its own style and theme.</p>
+            </div>
+            <div id="topic-cards" class="topic-grid"></div>
+        </section>
+
+        <footer>
+            <p>&copy; 2026 Suyog Basnet. All Rights Reserved.</p>
+        </footer>
+    </div>
+
+    <!-- Hidden Easter Egg Screens -->
+    <div id="error-screen" class="hidden">
+        <h1 class="glitch">SYSTEM ERROR</h1>
+        <div id="countdown">3</div>
+    </div>
+    
+    <div id="explosion-screen" class="hidden"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
