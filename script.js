@@ -71,26 +71,6 @@ const topics = [
         special: 'none'
     },
     {
-        id: 'free-fire',
-        title: 'Free Fire',
-        icon: '🔥',
-        subtitle: 'Battle royale fun for 8 years',
-        description: 'Free Fire is one of my favorite games, and I have played it for 8 years.',
-        details: [
-            'I love strategy, fast moves, and epic victories.',
-            'Free Fire shows how games can be exciting and creative.',
-            'I enjoy collecting skins, teaming up with friends, and improving every match.'
-        ],
-        theme: {
-            bg: 'linear-gradient(135deg, #fed7aa, #fb7185)',
-            accent: '#ef4444',
-            text: '#1f2937',
-            card: 'rgba(255, 243, 238, 0.95)',
-            border: 'rgba(248, 113, 113, 0.18)'
-        },
-        special: 'none'
-    },
-    {
         id: 'space',
         title: 'Space',
         icon: '🚀',
