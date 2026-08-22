@@ -52,6 +52,32 @@ body {
     overflow-x: hidden;
     background-attachment: fixed;
 }
+/* Container styling */
+.navbar {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem; /* Separates the links clearly */
+  padding: 1rem 2rem;
+  background-color: #0f172a; /* Dark background */
+}
+
+/* Link styling */
+.navbar a {
+  color: #f8fafc; /* High-contrast light text */
+  text-decoration: none; /* Removes harsh default underlines */
+  font-size: 1rem;
+  font-weight: 500;
+  padding: 0.5rem 0.75rem; /* Creates a larger click target */
+  border-radius: 6px;
+  transition: all 0.2s ease-in-out;
+}
+
+/* Hover and Focus states for clear visual feedback */
+.navbar a:hover,
+.navbar a:focus {
+  background-color: #1e293b;
+  color: #38bdf8; /* Highlight color on hover */
+}
 
 /* --- Canvas Background --- */
 #bg-canvas {
