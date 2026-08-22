@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arduino Uno & Basics Guide</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f4f7f6;
+        }
+        header {
+            background-color: #00979d;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border-radius: 8px;
+        }
+        section {
+            background: white;
+            margin: 20px 0;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        h2 {
+            color: #005f73;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 5px;
+        }
+        ul {
+            padding-left: 20px;
+        }
+        .formula {
+            background: #eef9fa;
+            border-left: 5px solid #00979d;
+            padding: 10px 15px;
+            font-weight: bold;
+            margin: 15px 0;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Arduino Uno & Electronics Guide</h1>
+        <p>A simple overview of microcontrollers, components, and concepts.</p>
+    </header>
+
+    <main>
+        <section>
+            <h2>Arduino Uno</h2>
+            <p>The <strong>Arduino Uno</strong> is a series of open-source single-board microcontrollers based on a diverse range of microcontrollers (MCU).</p>
+        </section>
+
+        <section>
+            <h2>Resistors & Ohm's Law</h2>
+            <p><strong>Resistors:</strong> They are electronic components that limit the flow of electrical current in a circuit.</p>
+            <div class="formula">
+                Ohm's Law: V = I × R
+            </div>
+            <ul>
+                <li><strong>V</strong> = Voltage</li>
+                <li><strong>I</strong> = Current</li>
+                <li><strong>R</strong> = Resistance</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>Arduino Pin Types</h2>
+            <h3>Digital Pins</h3>
+            <p>Send only two states: 0 volts (LOW) or 5 volts (HIGH). They act as output-only on standard pins and cannot read variable incoming data.</p>
+            
+            <h3>Hybrid Pins (PWM / Pulse Width Modulation)</h3>
+            <p>Marked with a tilde symbol (<code>~</code>) on the board. They act as a hybrid by outputting simulated varying voltages through rapid pulsing. They can send varied signals, but are not true analog outputs.</p>
+            
+            <h3>Analog Pins</h3>
+            <p>Read incoming continuous voltage levels (not just 0 or 5V). They accept whole numbers and decimal values from sensors and convert variable input voltages into digital numbers using an internal analog-to-digital converter.</p>
+        </section>
+
+        <section>
+            <h2>Potentiometer</h2>
+            <p>Acts as a manual variable resistor to change voltage levels in a circuit. It turns physical rotation into a changing voltage signal and is used to control output devices like dimming an LED or changing motor speed.</p>
+        </section>
+
+        <section>
+            <h2>Buzzers</h2>
+            <p>A buzzer is an audio signaling device that converts electrical energy into a buzzing or beeping sound. There are two types:</p>
+            <ul>
+                <li><strong>Active Buzzer:</strong> Uses a DC circuit. It cannot be pulsed or turned off internally via simple frequency modulation (produces a continuous tone when powered).</li>
+                <li><strong>Passive Buzzer:</strong> Uses an AC circuit. It can be turned on and off to play different frequencies/tones.</li>
+            </ul>
+        </section>
+    </main>
+
+</body>
+</html>
