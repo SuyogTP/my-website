@@ -76,7 +76,7 @@
     }
 
     .slide-script {
-      font-size: 3.5rem; /* Huge text for easy reading */
+      font-size: 3.5rem;
       line-height: 1.4;
       font-weight: 600;
       text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
@@ -128,16 +128,22 @@
       border: 2px solid #374151;
       box-shadow: 0 10px 30px rgba(0,0,0,0.5);
       z-index: 20;
+      transition: border-color 0.3s, box-shadow 0.3s;
     }
 
-    /* Mirror the video so it feels natural to the user */
+    /* Distance visual feedback */
+    .camera-container.tracking {
+      border-color: #10b981;
+      box-shadow: 0 0 25px rgba(16, 185, 129, 0.4);
+    }
+
     .input_video, .output_canvas {
       width: 100%;
       height: 100%;
       position: absolute;
       top: 0;
       left: 0;
-      transform: scaleX(-1); /* Mirror effect */
+      transform: scaleX(-1);
     }
 
     .cam-status {
@@ -153,7 +159,6 @@
       text-shadow: 1px 1px 2px black;
     }
 
-    /* Gesture Feedback Toast */
     .toast {
       position: absolute;
       top: 40px;
@@ -179,7 +184,6 @@
     <div style="font-size:1.2rem; font-weight:bold;">Slide <span id="slideIndicator">1/8</span></div>
   </div>
 
-  <!-- Gesture Alert -->
   <div id="toast" class="toast">👉 Next Slide</div>
 
   <div class="main-content">
@@ -189,14 +193,12 @@
     </div>
   </div>
 
-  <!-- Camera / AI Feed -->
   <div class="camera-container" id="cameraBox">
     <video class="input_video" autoplay playsinline></video>
     <canvas class="output_canvas" width="320" height="240"></canvas>
     <div class="cam-status">AI Gestures Active ✋</div>
   </div>
 
-  <!-- Controls -->
   <div class="controls-bar">
     <button id="prevBtn">👈 Prev</button>
     <button id="playBtn" class="primary">▶ Speak Slide</button>
@@ -220,17 +222,16 @@
   const slideScript = document.getElementById('slideScript');
   const slideIndicator = document.getElementById('slideIndicator');
   const toast = document.getElementById('toast');
+  const cameraBox = document.getElementById('cameraBox');
   const synth = window.speechSynthesis;
 
-  // Render Slide
   function updateSlide() {
     slideTitle.textContent = slides[currentIndex].title;
     slideScript.textContent = slides[currentIndex].text;
     slideIndicator.textContent = `${currentIndex + 1}/${slides.length}`;
-    synth.cancel(); // Stop speaking if moving to new slide
+    synth.cancel();
   }
 
-  // Next / Prev Logic
   function nextSlide() {
     if (currentIndex < slides.length - 1) {
       currentIndex++;
@@ -253,7 +254,6 @@
     setTimeout(() => { toast.style.opacity = '0'; }, 1500);
   }
 
-  // Button Listeners
   document.getElementById('nextBtn').addEventListener('click', nextSlide);
   document.getElementById('prevBtn').addEventListener('click', prevSlide);
   document.getElementById('playBtn').addEventListener('click', () => {
@@ -262,7 +262,6 @@
     synth.speak(utterance);
   });
   
-  // Keyboard Navigation
   document.addEventListener('keydown', (e) => {
     if (e.key === 'ArrowRight') nextSlide();
     if (e.key === 'ArrowLeft') prevSlide();
@@ -271,14 +270,14 @@
   updateSlide();
 
   // ==========================================
-  // MEDIAPIPE AI GESTURE TRACKING
+  // DISTANCE-OPTIMIZED AI TRACKING
   // ==========================================
   const videoElement = document.getElementsByClassName('input_video')[0];
   const canvasElement = document.getElementsByClassName('output_canvas')[0];
   const canvasCtx = canvasElement.getContext('2d');
 
   let lastGestureTime = 0;
-  const gestureCooldown = 2000; // 2 seconds between gestures to prevent double-skipping
+  const gestureCooldown = 2000; 
 
   const hands = new Hands({locateFile: (file) => {
     return `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`;
@@ -287,16 +286,14 @@
   hands.setOptions({
     maxNumHands: 1,
     modelComplexity: 1,
-    minDetectionConfidence: 0.7,
-    minTrackingConfidence: 0.7
+    minDetectionConfidence: 0.5, // Lowered to detect hands further away
+    minTrackingConfidence: 0.5   // Lowered to keep lock on distant hands
   });
 
   hands.onResults(onResults);
 
   const camera = new Camera(videoElement, {
-    onFrame: async () => {
-      await hands.send({image: videoElement});
-    },
+    onFrame: async () => { await hands.send({image: videoElement}); },
     width: 320,
     height: 240
   });
@@ -307,42 +304,46 @@
     canvasCtx.save();
     canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
     
-    // We don't draw the video frame on the canvas because the video element is visible underneath
-    
     if (results.multiHandLandmarks && results.multiHandLandmarks.length > 0) {
+      // Glow the camera box so you know it sees you from afar
+      cameraBox.classList.add('tracking');
+
       const landmarks = results.multiHandLandmarks[0];
-      
-      // Draw skeleton on hands
-      drawConnectors(canvasCtx, landmarks, HAND_CONNECTIONS, {color: '#00FF00', lineWidth: 3});
-      drawLandmarks(canvasCtx, landmarks, {color: '#FF0000', lineWidth: 2});
+      drawConnectors(canvasCtx, landmarks, HAND_CONNECTIONS, {color: '#00FF00', lineWidth: 2});
+      drawLandmarks(canvasCtx, landmarks, {color: '#FF0000', lineWidth: 1});
 
       const now = Date.now();
       if (now - lastGestureTime > gestureCooldown) {
         
-        // Landmark 4 is Thumb Tip, Landmark 2 is Thumb Base
+        // DYNAMIC DISTANCE SCALING: 
+        // Measure the distance from your wrist (0) to middle finger base (9)
+        const wrist = landmarks[0];
+        const middleBase = landmarks[9];
+        const handScale = Math.hypot(middleBase.x - wrist.x, middleBase.y - wrist.y);
+        
+        // Thumb Tip (4) to Thumb Base (2)
         const thumbTip = landmarks[4];
         const thumbBase = landmarks[2];
-        
-        // Calculate difference in X and Y
         const diffX = thumbTip.x - thumbBase.x;
         const diffY = thumbTip.y - thumbBase.y;
 
-        // Ensure the thumb is pointing horizontally (X diff is greater than Y diff)
-        if (Math.abs(diffX) > 0.08 && Math.abs(diffX) > Math.abs(diffY) * 1.5) {
+        // Instead of a fixed distance, require the thumb to extend a percentage of YOUR hand size (handScale * 0.45)
+        // This ensures the math works exactly the same whether you are close or far!
+        if (Math.abs(diffX) > (handScale * 0.45) && Math.abs(diffX) > 0.015 && Math.abs(diffX) > Math.abs(diffY) * 1.5) {
           
-          // Note: The camera image is mirrored via CSS. 
-          // If you point to YOUR right, diffX in raw data is negative (left side of camera).
-          if (diffX < -0.08) {
+          if (diffX < - (handScale * 0.45)) { // Mirrored Right
             nextSlide();
             lastGestureTime = now;
           } 
-          // If you point to YOUR left, diffX is positive (right side of camera).
-          else if (diffX > 0.08) {
+          else if (diffX > (handScale * 0.45)) { // Mirrored Left
             prevSlide();
             lastGestureTime = now;
           }
         }
       }
+    } else {
+      // Turn off glow when hand is out of frame
+      cameraBox.classList.remove('tracking');
     }
     canvasCtx.restore();
   }
