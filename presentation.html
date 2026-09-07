@@ -22,6 +22,7 @@
     --cyan: #35d0e0;
     --cyan-dim: #1c8f9b;
     --amber: #f5a623;
+    --red: #ff5252;
     --radius-lg: 20px;
     --radius-md: 12px;
     --radius-sm: 8px;
@@ -45,7 +46,6 @@
     overflow: hidden;
   }
 
-  /* subtle waveform texture, evokes a sensor signal trace */
   body::before {
     content: "";
     position: fixed;
@@ -187,7 +187,11 @@
     border: 1px solid var(--border);
     box-shadow: 0 8px 24px rgba(0,0,0,0.35);
     z-index: 30;
-    transition: height 0.2s ease, opacity 0.2s ease;
+    transition: height 0.2s ease, opacity 0.2s ease, transform 0.2s ease;
+  }
+
+  .camera-container.off {
+    display: none;
   }
 
   .camera-container.minimized {
@@ -214,6 +218,11 @@
     color: var(--text-muted);
   }
 
+  .cam-controls {
+    display: flex;
+    gap: 4px;
+  }
+
   .cam-btn {
     background: var(--surface-2);
     color: var(--text);
@@ -224,6 +233,9 @@
     border-radius: 5px;
     cursor: pointer;
     font-size: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .input_video, .output_canvas {
@@ -265,7 +277,7 @@
     font-weight: 600;
     border-radius: 999px;
     cursor: pointer;
-    transition: padding 0.2s ease, background 0.15s ease, opacity 0.15s ease;
+    transition: padding 0.2s ease, background 0.15s ease, opacity 0.15s ease, color 0.15s ease;
     white-space: nowrap;
   }
 
@@ -282,6 +294,15 @@
   }
 
   .nav-btn.primary:hover:not(:disabled) { background: var(--cyan); }
+
+  .nav-btn.toggle-active {
+    border-color: rgba(53, 208, 224, 0.4);
+  }
+
+  .nav-btn.toggle-active.off {
+    color: var(--text-muted);
+    opacity: 0.7;
+  }
 
   .nav-btn .icon { font-size: 1.05em; }
 
@@ -302,7 +323,6 @@
 
   .collapse-btn:hover { color: var(--text); border-color: var(--cyan-dim); }
 
-  /* minimized dock: icon-only compact pills */
   .controls-dock.minimized {
     padding: 6px;
     gap: 4px;
@@ -360,7 +380,9 @@
   <div class="camera-container" id="cameraBox">
     <div class="camera-header">
       <span>📷 Gesture cam</span>
-      <button class="cam-btn" id="minCamBtn" aria-label="Minimize camera preview">–</button>
+      <div class="cam-controls">
+        <button class="cam-btn" id="minCamBtn" aria-label="Minimize camera preview">–</button>
+      </div>
     </div>
     <video class="input_video" autoplay playsinline muted></video>
     <canvas class="output_canvas" width="320" height="240"></canvas>
@@ -370,6 +392,11 @@
     <button id="prevBtn" class="nav-btn">
       <span class="icon">←</span><span class="label">Previous</span>
     </button>
+    
+    <button id="cameraToggleBtn" class="nav-btn toggle-active">
+      <span class="icon" id="camBtnIcon">📷</span><span class="label" id="camBtnLabel">Cam On</span>
+    </button>
+
     <button id="nextBtn" class="nav-btn primary">
       <span class="icon">→</span><span class="label">Next</span>
     </button>
@@ -383,7 +410,7 @@
     { title: "The Core Problem", speaker: "Karisha", emoji: "⚡",
       text: "When a flash flood hits, human observation is simply too slow. By the time someone notices rising water and alerts the neighborhood, it's too late. We replace manual checks with automated code." },
     { title: "System Logic & Code", speaker: "Suyog", emoji: "💻",
-      text: "Our logic runs on an Arduino loop: sensor reads depth, code checks against threshold in milliseconds, then the system fires the alarm(leds) and servo motor  instantly!" },
+      text: "Our logic runs on an Arduino loop: sensor reads depth, code checks against threshold in milliseconds, then the system fires the alarm(leds) and servo motor instantly!" },
     { title: "Hardware Architecture", speaker: "Sohan", emoji: "🛠️",
       text: "Our system layout: the eyes (water depth sensor), the brain (Arduino microcontroller), the infrastructure (power breadboard), and the muscle (led & servo gate)." },
     { title: "Live Demonstration", speaker: "Samir", emoji: "🌊",
@@ -403,7 +430,7 @@
   const prevBtn = document.getElementById('prevBtn');
   const nextBtn = document.getElementById('nextBtn');
 
-  // Build progress dots once
+  // Build progress dots
   slides.forEach((slide, i) => {
     const dot = document.createElement('button');
     dot.type = 'button';
@@ -472,65 +499,119 @@
     collapseBtn.setAttribute('aria-label', dockMinimized ? 'Expand navigation controls' : 'Minimize navigation controls');
   });
 
-  // ---------- MediaPipe hand-gesture navigation ----------
+  // ---------- MediaPipe Hand-Gesture Camera Setup ----------
   let lastGestureTime = 0;
   const GESTURE_COOLDOWN = 1000;
+  let cameraInstance = null;
+  let isCameraOn = false;
 
-  try {
-    const videoElement = document.getElementsByClassName('input_video')[0];
-    const canvasElement = document.getElementsByClassName('output_canvas')[0];
-    const canvasCtx = canvasElement.getContext('2d');
+  const videoElement = document.getElementsByClassName('input_video')[0];
+  const canvasElement = document.getElementsByClassName('output_canvas')[0];
+  const canvasCtx = canvasElement.getContext('2d');
 
-    const hands = new Hands({
-      locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`
-    });
+  const hands = new Hands({
+    locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`
+  });
 
-    hands.setOptions({
-      maxNumHands: 1,
-      modelComplexity: 1,
-      minDetectionConfidence: 0.5,
-      minTrackingConfidence: 0.5
-    });
+  hands.setOptions({
+    maxNumHands: 1,
+    modelComplexity: 1,
+    minDetectionConfidence: 0.5,
+    minTrackingConfidence: 0.5
+  });
 
-    hands.onResults((results) => {
-      canvasCtx.save();
-      canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
-      canvasCtx.drawImage(results.image, 0, 0, canvasElement.width, canvasElement.height);
+  hands.onResults((results) => {
+    if (!isCameraOn) return;
+    canvasCtx.save();
+    canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
+    canvasCtx.drawImage(results.image, 0, 0, canvasElement.width, canvasElement.height);
 
-      if (results.multiHandLandmarks && results.multiHandLandmarks.length > 0) {
-        for (const landmarks of results.multiHandLandmarks) {
-          drawConnectors(canvasCtx, landmarks, HAND_CONNECTIONS, { color: '#35d0e0', lineWidth: 2 });
-          drawLandmarks(canvasCtx, landmarks, { color: '#f5a623', lineWidth: 1, radius: 2 });
+    if (results.multiHandLandmarks && results.multiHandLandmarks.length > 0) {
+      for (const landmarks of results.multiHandLandmarks) {
+        drawConnectors(canvasCtx, landmarks, HAND_CONNECTIONS, { color: '#35d0e0', lineWidth: 2 });
+        drawLandmarks(canvasCtx, landmarks, { color: '#f5a623', lineWidth: 1, radius: 2 });
 
-          const now = Date.now();
-          if (now - lastGestureTime > GESTURE_COOLDOWN) {
-            const indexTip = landmarks[8];
-            const wrist = landmarks[0];
+        const now = Date.now();
+        if (now - lastGestureTime > GESTURE_COOLDOWN) {
+          const indexTip = landmarks[8];
+          const wrist = landmarks[0];
 
-            // Flipped due to scaleX(-1) mirror view
-            if (indexTip.x < wrist.x - 0.25) {
-              nextSlide();
-              lastGestureTime = now;
-            } else if (indexTip.x > wrist.x + 0.25) {
-              prevSlide();
-              lastGestureTime = now;
-            }
+          if (indexTip.x < wrist.x - 0.25) {
+            nextSlide();
+            lastGestureTime = now;
+          } else if (indexTip.x > wrist.x + 0.25) {
+            prevSlide();
+            lastGestureTime = now;
           }
         }
       }
-      canvasCtx.restore();
-    });
+    }
+    canvasCtx.restore();
+  });
 
-    const camera = new Camera(videoElement, {
-      onFrame: async () => { await hands.send({ image: videoElement }); },
-      width: 320,
-      height: 240
-    });
-
-    camera.start();
-  } catch (err) {
-    console.error("Camera or MediaPipe initialization failed: ", err);
+  async function startCamera() {
+    try {
+      if (!cameraInstance) {
+        cameraInstance = new Camera(videoElement, {
+          onFrame: async () => {
+            if (isCameraOn) {
+              await hands.send({ image: videoElement });
+            }
+          },
+          width: 320,
+          height: 240
+        });
+      }
+      await cameraInstance.start();
+      isCameraOn = true;
+      cameraBox.classList.remove('off');
+      updateCamBtnUI(true);
+    } catch (err) {
+      console.error("Failed to start camera: ", err);
+      isCameraOn = false;
+      updateCamBtnUI(false);
+    }
   }
+
+  function stopCamera() {
+    isCameraOn = false;
+    if (videoElement.srcObject) {
+      const tracks = videoElement.srcObject.getTracks();
+      tracks.forEach(track => track.stop());
+      videoElement.srcObject = null;
+    }
+    cameraBox.classList.add('off');
+    updateCamBtnUI(false);
+  }
+
+  function toggleCamera() {
+    if (isCameraOn) {
+      stopCamera();
+    } else {
+      startCamera();
+    }
+  }
+
+  const cameraToggleBtn = document.getElementById('cameraToggleBtn');
+  const camBtnIcon = document.getElementById('camBtnIcon');
+  const camBtnLabel = document.getElementById('camBtnLabel');
+
+  function updateCamBtnUI(active) {
+    if (active) {
+      cameraToggleBtn.classList.remove('off');
+      camBtnIcon.textContent = '📷';
+      camBtnLabel.textContent = 'Cam On';
+    } else {
+      cameraToggleBtn.classList.add('off');
+      camBtnIcon.textContent = '🚫';
+      camBtnLabel.textContent = 'Cam Off';
+    }
+  }
+
+  cameraToggleBtn.addEventListener('click', toggleCamera);
+
+  // Auto start camera on page load
+  startCamera();
 </script>
 </body>
 </html>
