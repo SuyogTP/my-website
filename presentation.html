@@ -76,7 +76,7 @@
     }
 
     .slide-script {
-      font-size: 3.5rem;
+      font-size: 3rem;
       line-height: 1.4;
       font-weight: 600;
       text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
@@ -183,8 +183,8 @@
 <body>
 
   <div class="header">
-    <h1>Innovators Team | Golden Flower Secondary</h1>
-    <div style="font-size:1.2rem; font-weight:bold;">Slide <span id="slideIndicator">1/8</span></div>
+    <h1>Innovators Team | Mero Coding Competition</h1>
+    <div style="font-size:1.2rem; font-weight:bold;">Slide <span id="slideIndicator">1/6</span></div>
   </div>
 
   <div id="toast" class="toast">👉 Next Slide</div>
@@ -211,14 +211,30 @@
 
 <script>
   const slides = [
-    { title: "Introduction", text: "Hello everyone, we are the Innovators Team from Class 9 of Golden Flower Secondary School. Today, we are here to present to you about a robot that can save lives." },
-    { title: "Slide 1: Problem Introduction", text: "Traditional water monitoring relies on slow, manual observation. This critical delay in alerting leads to severe structural damage and extreme safety hazards. We need a system that detects danger and acts instantly." },
-    { title: "Slide 2: System Solution", text: "Our project acts as an automated digital watchman. By placing sensors in flood-prone zones, the system monitors water levels in real-time, 24/7. When water breaches the threshold, it triggers an alarm immediately." },
-    { title: "Slide 3: Mechanical Defense", text: "Warning alone is not enough. Our system interfaces directly with mechanical barriers to physically block rising waters. The microcontroller dictates a motorized gate to deploy automatically." },
-    { title: "Slide 4: Module Communication", text: "All components work together: The Water Level Sensor provides input. The Breadboard distributes power. The Arduino processes data. The Buzzer and Servo Motor receive commands to actuate defense." },
-    { title: "Slide 5: Operational Flow", text: "Four automated steps: Detect rising waters. Analyze analog values. Alert via the high-decibel siren. Actuate the servo motor to deploy the physical flood gate." },
-    { title: "Slide 6: Real-World Impact", text: "804 people are confirmed dead, with 3,000 missing across the region. By combining microelectronics with smart programming, we can build automated infrastructure that saves property and lives." },
-    { title: "Slide 7: Conclusion", text: "Thank you. This concludes our presentation by the Innovators Team." }
+    { 
+      title: "Opening Hook", 
+      text: "📢 @SUYOG: Good afternoon, judges! We are Team Innovators—Suyog, Karisha, Sohan, and Samir. Today, we are presenting an Automated Early Flood Detection and Active Mitigation System!" 
+    },
+    { 
+      title: "The Core Problem", 
+      text: "⚡ @KARISHA: When a flash flood hits, human observation is simply too slow. By the time someone notices rising water and alerts the neighborhood, it’s too late. We replace manual checks with automated code." 
+    },
+    { 
+      title: "System Logic & Code", 
+      text: "💻 @SUYOG: Our logic runs on an Arduino loop: Sensor reads depth → Code checks against threshold in milliseconds → System fires alarm and servo motor driver instantly!" 
+    },
+    { 
+      title: "Hardware Architecture", 
+      text: "🛠️ @SOHAN: Our system layout: The Eyes (water depth sensor), The Brain (Arduino microcontroller), The Infrastructure (power breadboard), and The Muscle (buzzer & servo gate)." 
+    },
+    { 
+      title: "Live Demonstration", 
+      text: "🌊 @SAMIR: [Dips sensor in water] 1. Sensor detects rise. 2. Code evaluates threshold. 3. System triggers siren! [Buzzer] 4. Barrier deploys automatically! [Servo moves 90°]" 
+    },
+    { 
+      title: "Closing & Impact", 
+      text: "🏆 @KARISHA: From detection to physical defense in milliseconds—zero human delay! Thank you judges, we are now open to your questions." 
+    }
   ];
 
   let currentIndex = 0;
@@ -317,7 +333,6 @@
 
   const camera = new Camera(videoElement, {
     onFrame: async () => { 
-      // Only process frames if the system is enabled
       if (gesturesEnabled) {
         await hands.send({image: videoElement}); 
       }
@@ -333,7 +348,6 @@
   }
 
   function onResults(results) {
-    // Escape early if gestures are disabled
     if (!gesturesEnabled) return;
 
     canvasCtx.save();
