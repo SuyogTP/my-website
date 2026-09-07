@@ -153,10 +153,18 @@
     border: 1px solid rgba(53, 208, 224, 0.25);
     padding: 6px 14px;
     border-radius: 999px;
-    margin-bottom: clamp(18px, 3vw, 28px);
+    margin-bottom: clamp(12px, 2vw, 20px);
   }
 
   .speaker-tag .prompt { color: var(--text-muted); }
+
+  .delivery-hint {
+    font-size: clamp(0.75rem, 1.2vw, 0.9rem);
+    color: var(--amber);
+    margin-bottom: clamp(14px, 2vw, 22px);
+    font-family: var(--font-mono);
+    opacity: 0.9;
+  }
 
   .slide-title {
     font-size: clamp(1.3rem, 2.6vw, 2rem);
@@ -167,11 +175,32 @@
   }
 
   .slide-script {
-    font-size: clamp(1.25rem, 3.4vw, 2.65rem);
-    line-height: 1.45;
-    font-weight: 500;
-    color: var(--text);
+    font-size: clamp(1.25rem, 3.2vw, 2.5rem);
+    line-height: 1.5;
+    font-weight: 400;
+    color: #a2b4c3;
     word-wrap: break-word;
+  }
+
+  /* Imposing & emphasized speech */
+  .slide-script strong {
+    font-weight: 800;
+    color: #ffffff;
+    text-shadow: 0 0 12px rgba(53, 208, 224, 0.3);
+    border-bottom: 2px solid var(--cyan);
+    padding-bottom: 2px;
+  }
+
+  /* Physical actions / stage cues */
+  .slide-script em {
+    font-style: normal;
+    color: var(--amber);
+    font-weight: 600;
+    background: rgba(245, 166, 35, 0.12);
+    border: 1px solid rgba(245, 166, 35, 0.3);
+    padding: 2px 8px;
+    border-radius: 6px;
+    font-size: 0.85em;
   }
 
   /* ---------- Camera panel ---------- */
@@ -370,6 +399,7 @@
         <span id="speakerEmoji">📢</span>
         <span id="speakerName">Suyog</span>
       </div>
+      <div class="delivery-hint">💬 Delivery Key: <strong>Bold = Imposing &amp; Emphasized</strong> | <em>[Italics] = Action Cues</em></div>
       <h1 class="slide-title" id="slideTitle">Opening Hook</h1>
       <p class="slide-script" id="slideScript">Loading presentation…</p>
     </div>
@@ -405,18 +435,42 @@
 
 <script>
   const slides = [
-    { title: "Opening Hook", speaker: "Suyog", emoji: "📢",
-      text: "Good afternoon, judges! We are Team Innovators—Suyog, Karisha, Sohan, and Samir. Today, we are presenting an Automated Early Flood Detection and Active risk reduction System!" },
-    { title: "The Core Problem", speaker: "Karisha", emoji: "⚡",
-      text: "When a flash flood hits, human observation is simply too slow. By the time someone notices rising water and alerts the neighborhood, it's too late. We replace manual checks with automated code." },
-    { title: "System Logic & Code", speaker: "Suyog", emoji: "💻",
-      text: "Our logic runs on an Arduino loop: sensor reads depth, code checks against threshold in milliseconds, then the system fires the alarm(leds) and servo motor instantly!" },
-    { title: "Hardware Architecture", speaker: "Sohan", emoji: "🛠️",
-      text: "Our system layout: the eyes (water depth sensor), the brain (Arduino microcontroller), the infrastructure (power breadboard), and the muscle (led & servo gate)." },
-    { title: "Live Demonstration", speaker: "Samir", emoji: "🌊",
-      text: "[Dips sensor in water] 1. Sensor detects rise. 2. Code evaluates threshold. 3. System triggers led! [led] 4. Barrier deploys automatically! [Servo moves 90°]" },
-    { title: "Closing & Impact", speaker: "Karisha", emoji: "🏆",
-      text: "From detection to physical defense in milliseconds — zero human delay! Thank you, judges. We're now open to your questions." }
+    { 
+      title: "Opening Hook", 
+      speaker: "Suyog", 
+      emoji: "📢",
+      text: "Good afternoon, judges! We are <strong>Team Innovators</strong>—Suyog, Karisha, Sohan, and Samir. Today, we present an <strong>Automated Early Flood Detection and Active Risk Reduction System!</strong>" 
+    },
+    { 
+      title: "The Core Problem", 
+      speaker: "Karisha", 
+      emoji: "⚡",
+      text: "When a flash flood hits, human observation is <strong>simply too slow.</strong> By the time someone notices rising water, <strong>it's already too late.</strong> We replace manual checks with <strong>instant automated code.</strong>" 
+    },
+    { 
+      title: "System Logic & Code", 
+      speaker: "Suyog", 
+      emoji: "💻",
+      text: "Our code runs on an Arduino loop: sensors measure water depth, <strong>evaluate thresholds in milliseconds</strong>, and <strong>instantly trigger</strong> the alarm LEDs and servo barrier!" 
+    },
+    { 
+      title: "Hardware Architecture", 
+      speaker: "Sohan", 
+      emoji: "🛠️",
+      text: "Our physical layout: <strong>the eyes</strong> <em>[point to sensor]</em> water depth sensor, <strong>the brain</strong> <em>[point to Arduino]</em> microcontroller, and <strong>the muscle</strong> <em>[point to barrier]</em> active servo gate." 
+    },
+    { 
+      title: "Live Demonstration", 
+      speaker: "Samir", 
+      emoji: "🌊",
+      text: "<em>[Dips sensor in water]</em> 1. Sensor detects rise. 2. Code evaluates threshold. 3. <strong>System fires alarm!</strong> <em>[LEDs light up]</em> 4. <strong>Barrier deploys instantly!</strong> <em>[Servo moves 90°]</em>" 
+    },
+    { 
+      title: "Closing & Impact", 
+      speaker: "Karisha", 
+      emoji: "🏆",
+      text: "From detection to physical defense in milliseconds — <strong>ZERO human delay!</strong> Thank you, judges. We are now open for your questions." 
+    }
   ];
 
   let currentIndex = 0;
@@ -447,7 +501,7 @@
   function updateSlide() {
     const slide = slides[currentIndex];
     slideTitle.textContent = slide.title;
-    slideScript.textContent = slide.text;
+    slideScript.innerHTML = slide.text; // Render HTML tags (strong, em)
     speakerName.textContent = slide.speaker;
     speakerEmoji.textContent = slide.emoji;
     prevBtn.disabled = currentIndex === 0;
