@@ -1,275 +1,499 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ne">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>LPG Gas Order / ग्यास अर्डर</title>
-    <style>
-        :root {
-            --primary: #d32f2f;
-            --primary-hover: #b71c1c;
-            --secondary: #2e7d32;
-            --bg-gradient: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            --card-shadow: 0 15px 35px rgba(0, 0, 0, 0.1), 0 5px 15px rgba(0, 0, 0, 0.05);
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>ग्यास अर्डर | LPG Gas Order</title>
+<meta name="description" content="Order an LPG gas cylinder refill or new connection online.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@500;600;700;800&family=Noto+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#FBF5E8;
+    --paper-dim:#F3EAD8;
+    --ink:#2B2013;
+    --ink-soft:#6B5F4E;
+    --crimson:#C8102E;
+    --crimson-dark:#9E0B23;
+    --steel:#003893;
+    --steel-dark:#00265E;
+    --gold:#E8A33D;
+    --perf:#D8C9A6;
+    --ok-bg:#E6F3E3;
+    --ok-fg:#276B36;
+    --err-bg:#FBE7E4;
+    --err-fg:#A32B1E;
+    --radius:14px;
+  }
 
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        
-        body { 
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif; 
-            background: var(--bg-gradient); 
-            min-height: 100vh;
-            margin: 0; 
-            padding: 24px 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #2c3e50;
-        }
+  *{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
 
-        .card { 
-            width: 100%;
-            max-width: 460px; 
-            background: #ffffff; 
-            padding: 32px 24px; 
-            border-radius: 20px; 
-            box-shadow: var(--card-shadow); 
-            position: relative;
-            overflow: hidden;
-        }
+  html,body{ height:100%; }
 
-        .card::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0;
-            height: 6px;
-            background: linear-gradient(90deg, #d32f2f, #ff1744);
-        }
+  body{
+    margin:0;
+    font-family:'Noto Sans','Noto Sans Devanagari',sans-serif;
+    background:
+      radial-gradient(circle at 15% -10%, #ffffff 0%, transparent 45%),
+      var(--paper);
+    color:var(--ink);
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:28px 16px;
+  }
 
-        .header {
-            text-align: center;
-            margin-bottom: 24px;
-        }
+  .ticket{
+    width:100%;
+    max-width:420px;
+    background:#fff;
+    border-radius:var(--radius);
+    box-shadow:0 18px 40px rgba(43,32,19,0.16), 0 3px 10px rgba(43,32,19,0.08);
+    overflow:hidden;
+  }
 
-        .header-img {
-            max-width: 130px;
-            height: auto;
-            margin-bottom: 10px;
-            filter: drop-shadow(0px 8px 12px rgba(0,0,0,0.15));
-        }
+  /* ---------- Header stub ---------- */
+  .stub{
+    background:linear-gradient(155deg, var(--steel) 0%, var(--steel-dark) 100%);
+    color:#fff;
+    padding:26px 24px 34px;
+    position:relative;
+    text-align:center;
+  }
+  .flame-mark{
+    width:46px; height:46px;
+    margin:0 auto 10px;
+    display:block;
+  }
+  .stub h1{
+    margin:0;
+    font-size:1.5rem;
+    font-weight:800;
+    letter-spacing:-0.01em;
+    line-height:1.15;
+  }
+  .stub .np{
+    font-family:'Noto Sans Devanagari','Noto Sans',sans-serif;
+    font-weight:700;
+    font-size:1.05rem;
+    margin-top:3px;
+    color:#DCE6FA;
+  }
+  .brand-logo{
+    height:30px;
+    margin-top:14px;
+    opacity:0.95;
+    filter:brightness(0) invert(1);
+  }
 
-        h2 { 
-            color: #1a1a1a; 
-            margin: 0; 
-            font-size: 1.6rem; 
-            font-weight: 700;
-            letter-spacing: -0.5px;
-        }
+  /* Perforated tear edge */
+  .perf{
+    position:relative;
+    height:18px;
+    background:var(--steel-dark);
+  }
+  .perf svg{ display:block; width:100%; height:18px; }
 
-        .subtitle {
-            color: #7f8c8d;
-            font-size: 0.95rem;
-            margin-top: 4px;
-            font-weight: 500;
-        }
+  /* ---------- Body ---------- */
+  .body{ padding:26px 24px 24px; }
 
-        .form-group {
-            margin-bottom: 18px;
-        }
+  .status{
+    display:none;
+    margin-bottom:18px;
+    padding:13px 15px;
+    border-radius:10px;
+    font-weight:600;
+    font-size:0.92rem;
+    line-height:1.4;
+  }
+  .status.success{ display:block; background:var(--ok-bg); color:var(--ok-fg); }
+  .status.error{ display:block; background:var(--err-bg); color:var(--err-fg); }
+  .status.notice{ display:block; background:#FFF3DA; color:#8A5A0A; }
 
-        label { 
-            font-weight: 600; 
-            display: block; 
-            margin-bottom: 6px; 
-            color: #34495e; 
-            font-size: 0.9rem;
-        }
+  .field{ margin-bottom:16px; }
+  .field label{
+    display:block;
+    font-weight:700;
+    font-size:0.84rem;
+    color:var(--ink-soft);
+    margin-bottom:6px;
+  }
+  .field label .np{
+    font-family:'Noto Sans Devanagari',sans-serif;
+    font-weight:600;
+    margin-left:5px;
+  }
 
-        input, select { 
-            width: 100%; 
-            padding: 14px 16px; 
-            border: 2px solid #e2e8f0; 
-            border-radius: 12px; 
-            box-sizing: border-box; 
-            font-size: 16px; /* Prevents auto-zoom on iOS */
-            background: #f8fafc;
-            color: #1e293b;
-            transition: all 0.25s ease;
-            appearance: none;
-            -webkit-appearance: none;
-        }
+  input, select{
+    width:100%;
+    padding:13px 14px;
+    border:1.5px solid #E5DCC7;
+    border-radius:10px;
+    background:var(--paper-dim);
+    color:var(--ink);
+    font-size:16px;
+    font-family:inherit;
+    appearance:none;
+    -webkit-appearance:none;
+    transition:border-color .15s ease, background .15s ease, box-shadow .15s ease;
+  }
+  select{
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236B5F4E' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");
+    background-repeat:no-repeat;
+    background-position:right 14px center;
+    background-size:16px;
+    padding-right:40px;
+  }
+  input:hover, select:hover{ border-color:#D8C9A6; }
+  input:focus, select:focus{
+    outline:none;
+    border-color:var(--steel);
+    background:#fff;
+    box-shadow:0 0 0 3px rgba(0,56,147,0.14);
+  }
+  input:focus-visible, select:focus-visible, button:focus-visible{
+    outline:2.5px solid var(--gold);
+    outline-offset:2px;
+  }
+  input.invalid{ border-color:var(--crimson); background:#FDF1EF; }
+  .field-msg{
+    font-size:0.78rem;
+    color:var(--crimson-dark);
+    margin-top:5px;
+    min-height:1em;
+    display:none;
+  }
+  .field-msg.show{ display:block; }
 
-        select {
-            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%36474f' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
-            background-repeat: no-repeat;
-            background-position: right 14px center;
-            background-size: 18px;
-            padding-right: 42px;
-        }
+  /* quantity stepper */
+  .qty-row{ display:flex; align-items:center; gap:10px; }
+  .qty-row input{ text-align:center; }
+  .qty-btn{
+    flex:0 0 auto;
+    width:44px; height:44px;
+    border-radius:10px;
+    border:1.5px solid #E5DCC7;
+    background:var(--paper-dim);
+    font-size:1.2rem;
+    font-weight:700;
+    color:var(--steel);
+    cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .qty-btn:active{ background:#EDE2C9; }
 
-        input:focus, select:focus { 
-            outline: none; 
-            border-color: var(--primary); 
-            background: #ffffff; 
-            box-shadow: 0 0 0 4px rgba(211, 47, 47, 0.12);
-        }
+  button.submit{
+    width:100%;
+    padding:15px;
+    margin-top:6px;
+    border:none;
+    border-radius:11px;
+    background:linear-gradient(155deg, var(--crimson) 0%, var(--crimson-dark) 100%);
+    color:#fff;
+    font-size:1rem;
+    font-weight:800;
+    letter-spacing:0.01em;
+    cursor:pointer;
+    box-shadow:0 8px 18px rgba(200,16,46,0.28);
+    display:flex; align-items:center; justify-content:center; gap:9px;
+  }
+  button.submit:active{ transform:translateY(1px); box-shadow:0 4px 10px rgba(200,16,46,0.22); }
+  button.submit:disabled{ background:#D8CDBA; box-shadow:none; cursor:not-allowed; color:#8A7F6A; }
 
-        button { 
-            width: 100%; 
-            background: linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%); 
-            color: white; 
-            padding: 16px; 
-            border: none; 
-            border-radius: 12px; 
-            margin-top: 10px; 
-            font-size: 1.05rem; 
-            font-weight: 700; 
-            cursor: pointer; 
-            transition: all 0.2s ease;
-            box-shadow: 0 4px 12px rgba(46, 125, 50, 0.3);
-        }
+  .spinner{
+    width:16px; height:16px;
+    border:2.5px solid rgba(255,255,255,0.4);
+    border-top-color:#fff;
+    border-radius:50%;
+    animation:spin .7s linear infinite;
+    display:none;
+  }
+  button.submit[data-loading="1"] .spinner{ display:inline-block; }
+  @keyframes spin{ to{ transform:rotate(360deg); } }
 
-        button:active { 
-            transform: translateY(1px);
-            box-shadow: 0 2px 6px rgba(46, 125, 50, 0.2);
-        }
+  .hint{
+    text-align:center;
+    font-size:0.76rem;
+    color:var(--ink-soft);
+    margin-top:14px;
+  }
 
-        button:disabled { 
-            background: #cbd5e1; 
-            box-shadow: none;
-            cursor: not-allowed;
-        }
+  /* ---------- Receipt (post-submit) ---------- */
+  .receipt{ display:none; }
+  .receipt.show{ display:block; }
+  .receipt-id{
+    text-align:center;
+    padding:6px 0 18px;
+  }
+  .receipt-id .label{ font-size:0.78rem; color:var(--ink-soft); font-weight:700; }
+  .receipt-id .value{
+    font-size:1.7rem;
+    font-weight:800;
+    color:var(--steel);
+    letter-spacing:0.03em;
+    margin-top:2px;
+  }
+  .receipt-rows{
+    border-top:1.5px dashed var(--perf);
+    padding-top:14px;
+  }
+  .receipt-row{
+    display:flex;
+    justify-content:space-between;
+    gap:12px;
+    padding:7px 0;
+    font-size:0.92rem;
+  }
+  .receipt-row span:first-child{ color:var(--ink-soft); }
+  .receipt-row span:last-child{ font-weight:700; text-align:right; }
+  .new-order-btn{
+    width:100%;
+    margin-top:18px;
+    padding:13px;
+    border-radius:11px;
+    border:1.5px solid var(--steel);
+    background:#fff;
+    color:var(--steel);
+    font-weight:700;
+    font-size:0.92rem;
+    cursor:pointer;
+  }
+  .new-order-btn:active{ background:var(--paper-dim); }
 
-        .status { 
-            margin-bottom: 20px; 
-            padding: 14px 16px; 
-            border-radius: 12px; 
-            text-align: center; 
-            font-weight: 600; 
-            display: none; 
-            font-size: 0.9rem;
-            animation: fadeIn 0.3s ease;
-        }
-        .success { background: #dcfce7; color: #15803d; border: 1px solid #bbf7d0; }
-        .error { background: #fee2e2; color: #b91c1c; border: 1px solid #fecaca; }
+  form.hide, .body.hide-form{ display:none; }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-6px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-    </style>
+  @media (prefers-reduced-motion: reduce){
+    .spinner{ animation:none; }
+    .status{ transition:none; }
+  }
+</style>
 </head>
 <body>
 
-<div class="card">
-    <div class="header">
-        <!-- Gas Cylinder Banner Image -->
-        <img src="manoj_gas.png" alt="Manoj LPG Gas Cylinder" class="header-img">
-        <h2>LPG Gas Order</h2>
-        <div class="subtitle">ग्यास अर्डर फारम</div>
-    </div>
-    
-    <div id="statusBox" class="status"></div>
+<div class="ticket">
+  <div class="stub">
+    <svg class="flame-mark" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d="M24 4c1 7-6 9-6 16a6 6 0 0 0 12 0c2 2 3 5 3 8a9 9 0 1 1-18 0c0-9 7-12 9-24z" fill="#F2A93B"/>
+      <path d="M24 16c0 4-4 5-4 10a4 4 0 0 0 8 0c1 1 1.5 2.5 1.5 4a5.5 5.5 0 1 1-11 0c0-6 4-8 5.5-14z" fill="#C8102E"/>
+    </svg>
+    <h1>LPG Gas Order</h1>
+    <div class="np">ग्यास अर्डर फारम</div>
+    <img src="https://sajilogas.com/public/uploads/all/J5gslYTQGAQOcgIQ1GSrk7qrJTesLid4UCxuLgW3.png"
+         alt="" class="brand-logo" onerror="this.style.display='none'">
+  </div>
+  <div class="perf" aria-hidden="true">
+    <svg preserveAspectRatio="none" viewBox="0 0 400 18"><circle cx="0" cy="0" r="9" fill="var(--paper)"/><circle cx="20" cy="0" r="9" fill="var(--paper)"/><circle cx="40" cy="0" r="9" fill="var(--paper)"/><circle cx="60" cy="0" r="9" fill="var(--paper)"/><circle cx="80" cy="0" r="9" fill="var(--paper)"/><circle cx="100" cy="0" r="9" fill="var(--paper)"/><circle cx="120" cy="0" r="9" fill="var(--paper)"/><circle cx="140" cy="0" r="9" fill="var(--paper)"/><circle cx="160" cy="0" r="9" fill="var(--paper)"/><circle cx="180" cy="0" r="9" fill="var(--paper)"/><circle cx="200" cy="0" r="9" fill="var(--paper)"/><circle cx="220" cy="0" r="9" fill="var(--paper)"/><circle cx="240" cy="0" r="9" fill="var(--paper)"/><circle cx="260" cy="0" r="9" fill="var(--paper)"/><circle cx="280" cy="0" r="9" fill="var(--paper)"/><circle cx="300" cy="0" r="9" fill="var(--paper)"/><circle cx="320" cy="0" r="9" fill="var(--paper)"/><circle cx="340" cy="0" r="9" fill="var(--paper)"/><circle cx="360" cy="0" r="9" fill="var(--paper)"/><circle cx="380" cy="0" r="9" fill="var(--paper)"/><circle cx="400" cy="0" r="9" fill="var(--paper)"/></svg>
+  </div>
 
-    <form id="orderForm">
-        <div class="form-group">
-            <label for="name">Customer Name / नाम</label>
-            <input type="text" id="name" required placeholder="Ram Bahadur / राम बहादुर" autocomplete="name">
+  <div class="body">
+    <div id="statusBox" class="status" role="status" aria-live="polite"></div>
+
+    <form id="orderForm" novalidate>
+      <div class="field">
+        <label for="name">Customer Name <span class="np">नाम</span></label>
+        <input type="text" id="name" required placeholder="Ram Bahadur / राम बहादुर" autocomplete="name">
+        <div class="field-msg" id="nameMsg">Please enter your name.</div>
+      </div>
+
+      <div class="field">
+        <label for="phone">Phone Number <span class="np">फोन नम्बर</span></label>
+        <input type="tel" id="phone" required placeholder="98XXXXXXXX" inputmode="numeric" maxlength="10" autocomplete="tel">
+        <div class="field-msg" id="phoneMsg">Enter a valid 10-digit number starting with 96, 97 or 98.</div>
+      </div>
+
+      <div class="field">
+        <label for="brand">Gas Brand <span class="np">ब्रान्ड</span></label>
+        <select id="brand">
+          <option value="Lokpriya Gas">Lokpriya Gas / लोकप्रिय ग्यास</option>
+          <option value="Manoj Gas">Manoj Gas / मनोज ग्यास</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="type">Order Type <span class="np">प्रकार</span></label>
+        <select id="type">
+          <option value="Refill">Refill Only / साट्ने (खाली - भरिएको)</option>
+          <option value="New Cylinder">New Cylinder / नयाँ सिलिन्डर</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="quantity">Quantity <span class="np">संख्या</span></label>
+        <div class="qty-row">
+          <button type="button" class="qty-btn" id="qtyDown" aria-label="Decrease quantity">–</button>
+          <input type="number" id="quantity" min="1" max="10" value="1" required inputmode="numeric">
+          <button type="button" class="qty-btn" id="qtyUp" aria-label="Increase quantity">+</button>
         </div>
+      </div>
 
-        <div class="form-group">
-            <label for="phone">Phone Number / फोन नम्बर</label>
-            <input type="tel" id="phone" required placeholder="98XXXXXXXX" pattern="[0-9]{10}" autocomplete="tel">
-        </div>
+      <button type="submit" class="submit" id="submitBtn">
+        <span class="spinner" aria-hidden="true"></span>
+        <span id="submitLabel">Place Order / अर्डर गर्नुहोस्</span>
+      </button>
 
-        <!-- Updated Gas Brands Dropdown -->
-        <div class="form-group">
-            <label for="brand">Gas Brand / ब्रान्ड</label>
-            <select id="brand">
-                <option value="lokpriya Gas">lokpriya Gas / लोकप्रिय ग्यास</option>
-                <option value="Manoj Gas">Manoj Gas / मनोज ग्यास</option>
-            </select>
-        </div>
-
-        <div class="form-group">
-            <label for="type">Order Type / प्रकार</label>
-            <select id="type">
-                <option value="Refill">Refill Only / साट्ने (खाली-हाफ)</option>
-                <option value="New Cylinder">New Cylinder / नयाँ सिलिन्डर</option>
-            </select>
-        </div>
-
-        <div class="form-group">
-            <label for="quantity">Quantity / संख्या</label>
-            <input type="number" id="quantity" min="1" max="10" value="1" required>
-        </div>
-
-        <button type="submit" id="submitBtn">Place Order / अर्डर गर्नुहोस्</button>
+      <div class="hint">You'll get a call to confirm delivery time.</div>
     </form>
+
+    <div class="receipt" id="receipt">
+      <div class="receipt-id">
+        <div class="label">ORDER CONFIRMED</div>
+        <div class="value" id="rOrderId">—</div>
+      </div>
+      <div class="receipt-rows">
+        <div class="receipt-row"><span>Name</span><span id="rName">—</span></div>
+        <div class="receipt-row"><span>Phone</span><span id="rPhone">—</span></div>
+        <div class="receipt-row"><span>Brand</span><span id="rBrand">—</span></div>
+        <div class="receipt-row"><span>Type</span><span id="rType">—</span></div>
+        <div class="receipt-row"><span>Quantity</span><span id="rQty">—</span></div>
+        <div class="receipt-row"><span>Placed at</span><span id="rTime">—</span></div>
+      </div>
+      <button type="button" class="new-order-btn" id="newOrderBtn">Place Another Order</button>
+    </div>
+  </div>
 </div>
 
 <script>
-    const GOOGLE_APP_URL = "https://script.google.com/macros/s/AKfycbyWOTGbApokfET-VC_D4qIQjv8joI_syoVpsfxuC_I9kfdV7kCUantvs6NMdeqGmRN5/exec";
+(function(){
+  // ---- Configuration ----------------------------------------------------
+  // Replace with your deployed Google Apps Script Web App URL.
+  const GOOGLE_APP_URL = "https://script.google.com/macros/s/AKfycbyWOTGbApokfET-VC_D4qIQjv8joI_syoVpsfxuC_I9kfdV7kCUantvs6NMdeqGmRN5/exec";
+  const MIN_SECONDS_BETWEEN_ORDERS = 5;
 
-    let clientIP = "Unknown";
-    fetch('https://api.ipify.org?format=json')
-        .then(res => res.json())
-        .then(data => clientIP = data.ip)
-        .catch(() => clientIP = "Unavailable");
+  // In-memory throttle (intentionally not persisted across page loads).
+  let lastSubmitAt = 0;
+  let clientIP = "Unknown";
 
-    const form = document.getElementById('orderForm');
-    const submitBtn = document.getElementById('submitBtn');
-    const statusBox = document.getElementById('statusBox');
+  fetch('https://api.ipify.org?format=json')
+    .then(r => r.json())
+    .then(d => { clientIP = d.ip; })
+    .catch(() => { clientIP = "Unavailable"; });
 
-    form.addEventListener('submit', async function(e) {
-        e.preventDefault();
+  const form        = document.getElementById('orderForm');
+  const submitBtn   = document.getElementById('submitBtn');
+  const submitLabel = document.getElementById('submitLabel');
+  const statusBox   = document.getElementById('statusBox');
+  const receipt     = document.getElementById('receipt');
+  const bodyEl      = document.querySelector('.body');
 
-        const lastSubmit = localStorage.getItem('last_order_time');
-        const now = Date.now();
-        if (lastSubmit && (now - lastSubmit < 5000)) {
-            const waitTime = Math.ceil((5000 - (now - lastSubmit)) / 1000);
-            showStatus(`Please wait ${waitTime} seconds before ordering again. / कृपया ${waitTime} सेकेन्ड पर्खनुहोस्।`, 'error');
-            return;
-        }
+  const nameEl  = document.getElementById('name');
+  const phoneEl = document.getElementById('phone');
+  const qtyEl   = document.getElementById('quantity');
 
-        submitBtn.disabled = true;
-        submitBtn.innerText = "Processing / अर्डर हुँदैछ...";
+  document.getElementById('qtyDown').addEventListener('click', () => {
+    qtyEl.value = Math.max(1, (parseInt(qtyEl.value, 10) || 1) - 1);
+  });
+  document.getElementById('qtyUp').addEventListener('click', () => {
+    qtyEl.value = Math.min(10, (parseInt(qtyEl.value, 10) || 1) + 1);
+  });
 
-        const orderPayload = {
-            orderId: "LPG-" + Math.floor(1000 + Math.random() * 9000),
-            timestamp: new Date().toLocaleString(),
-            ip: clientIP,
-            name: document.getElementById('name').value,
-            phone: document.getElementById('phone').value,
-            brand: document.getElementById('brand').value,
-            type: document.getElementById('type').value,
-            quantity: document.getElementById('quantity').value
-        };
+  function showStatus(text, type){
+    statusBox.textContent = text;
+    statusBox.className = `status ${type}`;
+  }
+  function clearStatus(){
+    statusBox.textContent = '';
+    statusBox.className = 'status';
+  }
 
-        try {
-            await fetch(GOOGLE_APP_URL, {
-                method: 'POST',
-                mode: 'no-cors',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(orderPayload)
-            });
+  function setFieldError(input, msgEl, isValid){
+    input.classList.toggle('invalid', !isValid);
+    msgEl.classList.toggle('show', !isValid);
+    return isValid;
+  }
 
-            localStorage.setItem('last_order_time', Date.now());
-            showStatus("Order Placed Successfully! / अर्डर सफल भयो!", 'success');
-            form.reset();
-        } catch (err) {
-            showStatus("Submission failed. Check connection. / अर्डर असफल भयो।", 'error');
-        }
+  function validate(){
+    const nameValid  = nameEl.value.trim().length >= 2;
+    const phoneValid = /^9[678]\d{8}$/.test(phoneEl.value.trim());
+    const qtyValid   = qtyEl.value >= 1 && qtyEl.value <= 10;
 
-        submitBtn.disabled = false;
-        submitBtn.innerText = "Place Order / अर्डर गर्नुहोस्";
-    });
+    setFieldError(nameEl, document.getElementById('nameMsg'), nameValid);
+    setFieldError(phoneEl, document.getElementById('phoneMsg'), phoneValid);
 
-    function showStatus(text, type) {
-        statusBox.innerText = text;
-        statusBox.className = `status ${type}`;
-        statusBox.style.display = 'block';
+    return nameValid && phoneValid && qtyValid;
+  }
+
+  [nameEl, phoneEl].forEach(el => el.addEventListener('input', validate));
+
+  form.addEventListener('submit', async function(e){
+    e.preventDefault();
+    clearStatus();
+
+    if (!validate()){
+      showStatus('Please fix the highlighted fields. / कृपया फारम जाँच गर्नुहोस्।', 'error');
+      return;
     }
+
+    if (GOOGLE_APP_URL.includes('YOUR_SCRIPT_ID_HERE')){
+      showStatus('Setup needed: add your Google Apps Script URL in the code before this form can send orders.', 'notice');
+      return;
+    }
+
+    const now = Date.now();
+    if (lastSubmitAt && (now - lastSubmitAt) < MIN_SECONDS_BETWEEN_ORDERS * 1000){
+      const wait = Math.ceil((MIN_SECONDS_BETWEEN_ORDERS * 1000 - (now - lastSubmitAt)) / 1000);
+      showStatus(`Please wait ${wait}s before ordering again. / कृपया ${wait} सेकेन्ड पर्खनुहोस्।`, 'error');
+      return;
+    }
+
+    submitBtn.disabled = true;
+    submitBtn.setAttribute('data-loading', '1');
+    submitLabel.textContent = 'Placing order… / पठाउँदै...';
+
+    const payload = {
+      orderId: 'LPG-' + Math.floor(1000 + Math.random() * 9000),
+      timestamp: new Date().toLocaleString(),
+      ip: clientIP,
+      name: nameEl.value.trim(),
+      phone: phoneEl.value.trim(),
+      brand: document.getElementById('brand').value,
+      type: document.getElementById('type').value,
+      quantity: qtyEl.value
+    };
+
+    try {
+      await fetch(GOOGLE_APP_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+
+      lastSubmitAt = Date.now();
+      fillReceipt(payload);
+      form.classList.add('hide');
+      receipt.classList.add('show');
+    } catch (err){
+      showStatus('Order failed to send. Check your connection and try again. / अर्डर पठाउन सकिएन।', 'error');
+    }
+
+    submitBtn.disabled = false;
+    submitBtn.removeAttribute('data-loading');
+    submitLabel.textContent = 'Place Order / अर्डर गर्नुहोस्';
+  });
+
+  function fillReceipt(o){
+    document.getElementById('rOrderId').textContent = o.orderId;
+    document.getElementById('rName').textContent = o.name;
+    document.getElementById('rPhone').textContent = o.phone;
+    document.getElementById('rBrand').textContent = o.brand;
+    document.getElementById('rType').textContent = o.type;
+    document.getElementById('rQty').textContent = o.quantity;
+    document.getElementById('rTime').textContent = o.timestamp;
+  }
+
+  document.getElementById('newOrderBtn').addEventListener('click', () => {
+    form.reset();
+    qtyEl.value = 1;
+    [nameEl, phoneEl].forEach(el => el.classList.remove('invalid'));
+    document.querySelectorAll('.field-msg').forEach(el => el.classList.remove('show'));
+    clearStatus();
+    receipt.classList.remove('show');
+    form.classList.remove('hide');
+    nameEl.focus();
+  });
+})();
 </script>
 </body>
 </html>
