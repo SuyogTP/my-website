@@ -1,193 +1,130 @@
-import os
-import datetime
-from flask import Flask, render_template_string, request, redirect, url_for
-import pandas as pd
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LPG Gas Order / ग्यास अर्डर</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #eef2f5; padding: 15px; font-size: 18px; margin: 0; }
+        .card { max-width: 500px; margin: auto; background: white; padding: 25px; border-radius: 10px; border-top: 6px solid #d32f2f; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        h2 { text-align: center; color: #d32f2f; margin-bottom: 5px; }
+        label { font-weight: bold; display: block; margin-top: 15px; }
+        input, select { width: 100%; padding: 12px; margin-top: 5px; border: 2px solid #ccc; border-radius: 5px; box-sizing: border-box; font-size: 16px; }
+        button { width: 100%; background: #2e7d32; color: white; padding: 15px; border: none; border-radius: 5px; margin-top: 20px; font-size: 18px; font-weight: bold; cursor: pointer; }
+        button:disabled { background: #888; }
+        .status { margin-top: 15px; padding: 10px; border-radius: 5px; text-align: center; font-weight: bold; display: none; }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+    </style>
+</head>
+<body>
 
-app = Flask(__name__)
-DB_FILE = 'lpg_store_database.xlsx'
+<div class="card">
+    <h2>🔥 LPG Gas Order / ग्यास अर्डर</h2>
+    <div id="statusBox" class="status"></div>
 
-# Default stock configuration
-CYLINDER_TYPES = ["Nepal Gas", "Bhadrakali", "Suryodaya", "Everest", "Sugam", "Shakti"]
-STANDARD_DEPOSIT_NEW = 2100  # Default standard deposit for new cylinder (NPR)
-STANDARD_REFILL_PRICE = 1910 # Default standard refill price (NPR)
+    <form id="orderForm">
+        <label>Customer Name / नाम:</label>
+        <input type="text" id="name" required placeholder="Ram Bahadur / राम बहादुर">
 
-def init_excel_db():
-    """Initializes the Excel sheets if they do not exist."""
-    if not os.path.exists(DB_FILE):
-        with pd.ExcelWriter(DB_FILE, engine='openpyxl') as writer:
-            # Sheet 1: Orders Log
-            orders_df = pd.DataFrame(columns=[
-                "Order_ID", "Timestamp", "Customer_Name", "Phone_Number", 
-                "Gas_Brand", "Order_Type", "Quantity", "Standard_Price_NPR", 
-                "Manual_Price_NPR", "Total_Amount_NPR"
-            ])
-            orders_df.to_excel(writer, sheet_name='Orders', index=False)
-            
-            # Sheet 2: Inventory & Stock Status
-            inventory_data = []
-            for brand in CYLINDER_TYPES:
-                inventory_data.append({
-                    "Gas_Brand": brand,
-                    "Total_Stock": 50,
-                    "Total_Sold": 0,
-                    "Remaining_Stock": 50,
-                    "Standard_Refill_Rate": STANDARD_REFILL_PRICE,
-                    "Standard_New_Deposit": STANDARD_DEPOSIT_NEW
-                })
-            inv_df = pd.DataFrame(inventory_data)
-            inv_df.to_excel(writer, sheet_name='Inventory', index=False)
+        <label>Phone Number / फोन नम्बर:</label>
+        <input type="tel" id="phone" required placeholder="98XXXXXXXX">
 
-init_excel_db()
+        <label>Gas Brand / ब्रान्ड:</label>
+        <select id="brand">
+            <option value="Nepal Gas">Nepal Gas</option>
+            <option value="Bhadrakali">Bhadrakali</option>
+            <option value="Suryodaya">Suryodaya</option>
+            <option value="Everest">Everest</option>
+            <option value="Sugam">Sugam</option>
+            <option value="Shakti">Shakti</option>
+        </select>
 
-@app.route('/')
-def customer_portal():
-    """Customer-facing order page (accessed via QR Code)."""
-    html_template = """
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>LPG Gas Store - Nepal</title>
-        <style>
-            body { font-family: Arial, sans-serif; background: #f4f6f9; margin: 0; padding: 20px; }
-            .card { max-width: 500px; margin: auto; background: white; padding: 25px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-            h2 { text-align: center; color: #d32f2f; }
-            label { font-weight: bold; display: block; margin-top: 15px; }
-            input, select { width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
-            button { width: 100%; background: #d32f2f; color: white; padding: 12px; border: none; border-radius: 4px; margin-top: 20px; font-size: 16px; cursor: pointer; }
-            button:hover { background: #b71c1c; }
-        </style>
-    </head>
-    <body>
-        <div class="card">
-            <h2>🔥 LPG Gas Order Portal</h2>
-            <form action="/submit_order" method="POST">
-                <label for="name">Full Name</label>
-                <input type="text" id="name" name="name" required placeholder="e.g. Ram Bahadur">
+        <label>Order Type / प्रकार:</label>
+        <select id="type">
+            <option value="Refill">Refill Only / साट्ने</option>
+            <option value="New Cylinder">New Cylinder / नयाँ सिलिन्डर</option>
+        </select>
 
-                <label for="phone">Phone Number</label>
-                <input type="tel" id="phone" name="phone" required placeholder="e.g. 98XXXXXXXX">
+        <label>Quantity / संख्या:</label>
+        <input type="number" id="quantity" min="1" max="10" value="1" required>
 
-                <label for="brand">Select LPG Brand</label>
-                <select id="brand" name="brand">
-                    {% for brand in brands %}
-                    <option value="{{ brand }}">{{ brand }} Gas</option>
-                    {% endfor %}
-                </select>
+        <button type="submit" id="submitBtn">Place Order / अर्डर गर्नुहोस्</button>
+    </form>
+</div>
 
-                <label for="order_type">Order Type</label>
-                <select id="order_type" name="order_type">
-                    <option value="Refill">Refill Existing Cylinder</option>
-                    <option value="New Cylinder">New Cylinder + Gas</option>
-                </select>
+<script>
+    const API_ENDPOINT = "https://api.jsonbin.io/v3/b/6aa6d321ffd5d1605301f943"; // Replace with your Bin ID
+    const API_KEY = "$2a$10$aIpiPKEbt5kEXJ2DVkgVrONA8a83VpJklYaNkvqyDae20azlXbr0.";                              // Replace with your API Key
 
-                <label for="quantity">Quantity (Cylinders)</label>
-                <input type="number" id="quantity" name="quantity" min="1" max="10" value="1" required>
+    let clientIP = "Unknown";
+    fetch('https://api.ipify.org?format=json')
+        .then(res => res.json())
+        .then(data => clientIP = data.ip)
+        .catch(() => clientIP = "Unavailable");
 
-                <button type="submit">Place Order & Generate Receipt</button>
-            </form>
-        </div>
-    </body>
-    </html>
-    """
-    return render_template_string(html_template, brands=CYLINDER_TYPES)
+    const form = document.getElementById('orderForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const statusBox = document.getElementById('statusBox');
 
-@app.route('/submit_order', methods=['POST'])
-def submit_order():
-    """Processes order entries and updates the Excel file."""
-    name = request.form.get('name')
-    phone = request.form.get('phone')
-    brand = request.form.get('brand')
-    order_type = request.form.get('order_type')
-    quantity = int(request.form.get('quantity'))
-    
-    # Calculate Standard Rates
-    std_unit_price = STANDARD_REFILL_PRICE if order_type == 'Refill' else (STANDARD_REFILL_PRICE + STANDARD_DEPOSIT_NEW)
-    std_total_price = std_unit_price * quantity
-    manual_price = std_total_price  # Field reserved for custom manual override in admin panel
+    form.addEventListener('submit', async function(e) {
+        e.preventDefault();
 
-    # Load Database
-    orders_df = pd.read_excel(DB_FILE, sheet_name='Orders')
-    inv_df = pd.read_excel(DB_FILE, sheet_name='Inventory')
+        // 5-Second Delay / Cooldown check using browser storage
+        const lastSubmit = localStorage.getItem('last_order_time');
+        const now = Date.now();
+        if (lastSubmit && (now - lastSubmit < 5000)) {
+            const waitTime = Math.ceil((5000 - (now - lastSubmit)) / 1000);
+            showStatus(`Please wait ${waitTime} seconds before ordering again. / कृपया ${waitTime} सेकेन्ड पर्खनुहोस्।`, 'error');
+            return;
+        }
 
-    # Register New Entry
-    order_id = f"LPG-{len(orders_df) + 1001}"
-    timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        submitBtn.disabled = true;
+        submitBtn.innerText = "Processing / अर्डर हुँदैछ...";
 
-    new_order = {
-        "Order_ID": order_id,
-        "Timestamp": timestamp,
-        "Customer_Name": name,
-        "Phone_Number": phone,
-        "Gas_Brand": brand,
-        "Order_Type": order_type,
-        "Quantity": quantity,
-        "Standard_Price_NPR": std_total_price,
-        "Manual_Price_NPR": manual_price,
-        "Total_Amount_NPR": manual_price
+        const newOrder = {
+            orderId: "LPG-" + Math.floor(1000 + Math.random() * 9000),
+            timestamp: new Date().toLocaleString(),
+            ip: clientIP,
+            name: document.getElementById('name').value,
+            phone: document.getElementById('phone').value,
+            brand: document.getElementById('brand').value,
+            type: document.getElementById('type').value,
+            quantity: document.getElementById('quantity').value
+        };
+
+        try {
+            // Get existing orders from cloud storage
+            let response = await fetch(API_ENDPOINT, { headers: { '$2a$10$aIpiPKEbt5kEXJ2DVkgVrONA8a83VpJklYaNkvqyDae20azlXbr0.': API_KEY } });
+            let data = await response.json();
+            let currentOrders = data.record.orders || [];
+
+            // Add new order to array
+            currentOrders.push(newOrder);
+
+            // Update database
+            await fetch(API_ENDPOINT, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json', '$2a$10$aIpiPKEbt5kEXJ2DVkgVrONA8a83VpJklYaNkvqyDae20azlXbr0.': API_KEY },
+                body: JSON.stringify({ orders: currentOrders })
+            });
+
+            localStorage.setItem('last_order_time', Date.now());
+            showStatus("Order Placed Successfully! / अर्डर सफल भयो!", 'success');
+            form.reset();
+        } catch (err) {
+            showStatus("Order failed. Check internet connection. / अर्डर असफल भयो।", 'error');
+        }
+
+        submitBtn.disabled = false;
+        submitBtn.innerText = "Place Order / अर्डर गर्नुहोस्";
+    });
+
+    function showStatus(text, type) {
+        statusBox.innerText = text;
+        statusBox.className = `status ${type}`;
+        statusBox.style.display = 'block';
     }
-    
-    orders_df = pd.concat([orders_df, pd.DataFrame([new_order])], ignore_index=False)
-
-    # Update Inventory Tracking
-    inv_df.loc[inv_df['Gas_Brand'] == brand, 'Total_Sold'] += quantity
-    inv_df.loc[inv_df['Gas_Brand'] == brand, 'Remaining_Stock'] -= quantity
-
-    # Write back to Excel
-    with pd.ExcelWriter(DB_FILE, engine='openpyxl', mode='a', if_sheet_exists='replace') as writer:
-        orders_df.to_excel(writer, sheet_name='Orders', index=False)
-        inv_df.to_excel(writer, sheet_name='Inventory', index=False)
-
-    return redirect(url_for('view_receipt', order_id=order_id))
-
-@app.route('/receipt/<order_id>')
-def view_receipt(order_id):
-    """Generates the printable receipt template for the buyer."""
-    orders_df = pd.read_excel(DB_FILE, sheet_name='Orders')
-    order = orders_df[orders_df['Order_ID'] == order_id]
-    
-    if order.empty:
-        return "Receipt Not Found", 404
-    
-    record = order.iloc[0].to_dict()
-    
-    receipt_template = """
-    <!DOCTYPE html>
-    <html>
-    <head>
-        <title>Receipt - {{ record.Order_ID }}</title>
-        <style>
-            body { font-family: monospace; background: #eee; padding: 20px; }
-            .ticket { background: white; width: 320px; margin: auto; padding: 20px; border: 1px solid #ccc; }
-            .center { text-align: center; }
-            .line { border-top: 1px dashed #000; margin: 10px 0; }
-            .row { display: flex; justify-content: space-between; }
-        </style>
-    </head>
-    <body>
-        <div class="ticket">
-            <h3 class="center">NEPAL LPG STORE</h3>
-            <p class="center">Order Receipt</p>
-            <div class="line"></div>
-            <p><strong>Order ID:</strong> {{ record.Order_ID }}</p>
-            <p><strong>Date:</strong> {{ record.Timestamp }}</p>
-            <p><strong>Customer:</strong> {{ record.Customer_Name }}</p>
-            <p><strong>Phone:</strong> {{ record.Phone_Number }}</p>
-            <div class="line"></div>
-            <div class="row"><span>Brand:</span> <span>{{ record.Gas_Brand }}</span></div>
-            <div class="row"><span>Type:</span> <span>{{ record.Order_Type }}</span></div>
-            <div class="row"><span>Quantity:</span> <span>{{ record.Quantity }}</span></div>
-            <div class="line"></div>
-            <div class="row"><strong>Total Cost:</strong> <strong>NPR {{ record.Total_Amount_NPR }}</strong></div>
-            <div class="line"></div>
-            <p class="center">Thank you for your business!</p>
-        </div>
-    </body>
-    </html>
-    """
-    return render_template_string(receipt_template, record=record)
-
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
-      
+</script>
+</body>
+</html>
