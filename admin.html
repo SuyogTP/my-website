@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Store Admin / एडमिन प्यानल</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f8f9fa; padding: 20px; font-size: 16px; }
+        .container { max-width: 1000px; margin: auto; }
+        h1 { color: #1565c0; }
+        table { width: 100%; border-collapse: collapse; background: white; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        th, td { padding: 12px; border: 1px solid #ddd; text-align: left; }
+        th { background-color: #1976d2; color: white; }
+        tr:nth-child(even) { background-color: #f2f2f2; }
+        button { padding: 10px 15px; background: #1976d2; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; margin-bottom: 15px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📊 Store Admin Panel / एडमिन ड्यासबोर्ड</h1>
+        <button onclick="loadOrders()">🔄 Refresh Orders / अर्डर अपडेट गर्नुहोस्</button>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>Order ID</th>
+                    <th>Date & Time</th>
+                    <th>Customer IP</th>
+                    <th>Name / नाम</th>
+                    <th>Phone / फोन</th>
+                    <th>Brand</th>
+                    <th>Type</th>
+                    <th>Qty</th>
+                </tr>
+            </thead>
+            <tbody id="orderTable">
+                <tr><td colspan="8">Loading sales data... / डाटा लोड हुँदैछ...</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        const API_ENDPOINT = "https://api.jsonbin.io/v3/b/6aa6d321ffd5d1605301f943";
+        const API_KEY = "$2a$10$aIpiPKEbt5kEXJ2DVkgVrONA8a83VpJklYaNkvqyDae20azlXbr0.";
+
+        async function loadOrders() {
+            const tableBody = document.getElementById('orderTable');
+            tableBody.innerHTML = "<tr><td colspan='8'>Refreshing...</td></tr>";
+
+            try {
+                let res = await fetch(API_ENDPOINT, { headers: { 'X-Master-Key': API_KEY } });
+                let data = await res.json();
+                let orders = data.record.orders || [];
+
+                tableBody.innerHTML = "";
+                orders.reverse().forEach(o => {
+                    let row = `<tr>
+                        <td><b>${o.orderId}</b></td>
+                        <td>${o.timestamp}</td>
+                        <td><code>${o.ip}</code></td>
+                        <td>${o.name}</td>
+                        <td>${o.phone}</td>
+                        <td>${o.brand}</td>
+                        <td>${o.type}</td>
+                        <td>${o.quantity}</td>
+                    </tr>`;
+                    tableBody.innerHTML += row;
+                });
+            } catch (err) {
+                tableBody.innerHTML = "<tr><td colspan='8'>Error loading orders.</td></tr>";
+            }
+        }
+
+        loadOrders();
+    </script>
+</body>
+</html>
