@@ -1,0 +1,193 @@
+import os
+import datetime
+from flask import Flask, render_template_string, request, redirect, url_for
+import pandas as pd
+
+app = Flask(__name__)
+DB_FILE = 'lpg_store_database.xlsx'
+
+# Default stock configuration
+CYLINDER_TYPES = ["Nepal Gas", "Bhadrakali", "Suryodaya", "Everest", "Sugam", "Shakti"]
+STANDARD_DEPOSIT_NEW = 2100  # Default standard deposit for new cylinder (NPR)
+STANDARD_REFILL_PRICE = 1910 # Default standard refill price (NPR)
+
+def init_excel_db():
+    """Initializes the Excel sheets if they do not exist."""
+    if not os.path.exists(DB_FILE):
+        with pd.ExcelWriter(DB_FILE, engine='openpyxl') as writer:
+            # Sheet 1: Orders Log
+            orders_df = pd.DataFrame(columns=[
+                "Order_ID", "Timestamp", "Customer_Name", "Phone_Number", 
+                "Gas_Brand", "Order_Type", "Quantity", "Standard_Price_NPR", 
+                "Manual_Price_NPR", "Total_Amount_NPR"
+            ])
+            orders_df.to_excel(writer, sheet_name='Orders', index=False)
+            
+            # Sheet 2: Inventory & Stock Status
+            inventory_data = []
+            for brand in CYLINDER_TYPES:
+                inventory_data.append({
+                    "Gas_Brand": brand,
+                    "Total_Stock": 50,
+                    "Total_Sold": 0,
+                    "Remaining_Stock": 50,
+                    "Standard_Refill_Rate": STANDARD_REFILL_PRICE,
+                    "Standard_New_Deposit": STANDARD_DEPOSIT_NEW
+                })
+            inv_df = pd.DataFrame(inventory_data)
+            inv_df.to_excel(writer, sheet_name='Inventory', index=False)
+
+init_excel_db()
+
+@app.route('/')
+def customer_portal():
+    """Customer-facing order page (accessed via QR Code)."""
+    html_template = """
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>LPG Gas Store - Nepal</title>
+        <style>
+            body { font-family: Arial, sans-serif; background: #f4f6f9; margin: 0; padding: 20px; }
+            .card { max-width: 500px; margin: auto; background: white; padding: 25px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+            h2 { text-align: center; color: #d32f2f; }
+            label { font-weight: bold; display: block; margin-top: 15px; }
+            input, select { width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+            button { width: 100%; background: #d32f2f; color: white; padding: 12px; border: none; border-radius: 4px; margin-top: 20px; font-size: 16px; cursor: pointer; }
+            button:hover { background: #b71c1c; }
+        </style>
+    </head>
+    <body>
+        <div class="card">
+            <h2>🔥 LPG Gas Order Portal</h2>
+            <form action="/submit_order" method="POST">
+                <label for="name">Full Name</label>
+                <input type="text" id="name" name="name" required placeholder="e.g. Ram Bahadur">
+
+                <label for="phone">Phone Number</label>
+                <input type="tel" id="phone" name="phone" required placeholder="e.g. 98XXXXXXXX">
+
+                <label for="brand">Select LPG Brand</label>
+                <select id="brand" name="brand">
+                    {% for brand in brands %}
+                    <option value="{{ brand }}">{{ brand }} Gas</option>
+                    {% endfor %}
+                </select>
+
+                <label for="order_type">Order Type</label>
+                <select id="order_type" name="order_type">
+                    <option value="Refill">Refill Existing Cylinder</option>
+                    <option value="New Cylinder">New Cylinder + Gas</option>
+                </select>
+
+                <label for="quantity">Quantity (Cylinders)</label>
+                <input type="number" id="quantity" name="quantity" min="1" max="10" value="1" required>
+
+                <button type="submit">Place Order & Generate Receipt</button>
+            </form>
+        </div>
+    </body>
+    </html>
+    """
+    return render_template_string(html_template, brands=CYLINDER_TYPES)
+
+@app.route('/submit_order', methods=['POST'])
+def submit_order():
+    """Processes order entries and updates the Excel file."""
+    name = request.form.get('name')
+    phone = request.form.get('phone')
+    brand = request.form.get('brand')
+    order_type = request.form.get('order_type')
+    quantity = int(request.form.get('quantity'))
+    
+    # Calculate Standard Rates
+    std_unit_price = STANDARD_REFILL_PRICE if order_type == 'Refill' else (STANDARD_REFILL_PRICE + STANDARD_DEPOSIT_NEW)
+    std_total_price = std_unit_price * quantity
+    manual_price = std_total_price  # Field reserved for custom manual override in admin panel
+
+    # Load Database
+    orders_df = pd.read_excel(DB_FILE, sheet_name='Orders')
+    inv_df = pd.read_excel(DB_FILE, sheet_name='Inventory')
+
+    # Register New Entry
+    order_id = f"LPG-{len(orders_df) + 1001}"
+    timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+    new_order = {
+        "Order_ID": order_id,
+        "Timestamp": timestamp,
+        "Customer_Name": name,
+        "Phone_Number": phone,
+        "Gas_Brand": brand,
+        "Order_Type": order_type,
+        "Quantity": quantity,
+        "Standard_Price_NPR": std_total_price,
+        "Manual_Price_NPR": manual_price,
+        "Total_Amount_NPR": manual_price
+    }
+    
+    orders_df = pd.concat([orders_df, pd.DataFrame([new_order])], ignore_index=False)
+
+    # Update Inventory Tracking
+    inv_df.loc[inv_df['Gas_Brand'] == brand, 'Total_Sold'] += quantity
+    inv_df.loc[inv_df['Gas_Brand'] == brand, 'Remaining_Stock'] -= quantity
+
+    # Write back to Excel
+    with pd.ExcelWriter(DB_FILE, engine='openpyxl', mode='a', if_sheet_exists='replace') as writer:
+        orders_df.to_excel(writer, sheet_name='Orders', index=False)
+        inv_df.to_excel(writer, sheet_name='Inventory', index=False)
+
+    return redirect(url_for('view_receipt', order_id=order_id))
+
+@app.route('/receipt/<order_id>')
+def view_receipt(order_id):
+    """Generates the printable receipt template for the buyer."""
+    orders_df = pd.read_excel(DB_FILE, sheet_name='Orders')
+    order = orders_df[orders_df['Order_ID'] == order_id]
+    
+    if order.empty:
+        return "Receipt Not Found", 404
+    
+    record = order.iloc[0].to_dict()
+    
+    receipt_template = """
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>Receipt - {{ record.Order_ID }}</title>
+        <style>
+            body { font-family: monospace; background: #eee; padding: 20px; }
+            .ticket { background: white; width: 320px; margin: auto; padding: 20px; border: 1px solid #ccc; }
+            .center { text-align: center; }
+            .line { border-top: 1px dashed #000; margin: 10px 0; }
+            .row { display: flex; justify-content: space-between; }
+        </style>
+    </head>
+    <body>
+        <div class="ticket">
+            <h3 class="center">NEPAL LPG STORE</h3>
+            <p class="center">Order Receipt</p>
+            <div class="line"></div>
+            <p><strong>Order ID:</strong> {{ record.Order_ID }}</p>
+            <p><strong>Date:</strong> {{ record.Timestamp }}</p>
+            <p><strong>Customer:</strong> {{ record.Customer_Name }}</p>
+            <p><strong>Phone:</strong> {{ record.Phone_Number }}</p>
+            <div class="line"></div>
+            <div class="row"><span>Brand:</span> <span>{{ record.Gas_Brand }}</span></div>
+            <div class="row"><span>Type:</span> <span>{{ record.Order_Type }}</span></div>
+            <div class="row"><span>Quantity:</span> <span>{{ record.Quantity }}</span></div>
+            <div class="line"></div>
+            <div class="row"><strong>Total Cost:</strong> <strong>NPR {{ record.Total_Amount_NPR }}</strong></div>
+            <div class="line"></div>
+            <p class="center">Thank you for your business!</p>
+        </div>
+    </body>
+    </html>
+    """
+    return render_template_string(receipt_template, record=record)
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000, debug=True)
+      
