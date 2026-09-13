@@ -2,51 +2,172 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Critical viewport tag for modern iPhones & Androids -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>LPG Gas Order / ग्यास अर्डर</title>
     <style>
-        body { font-family: Arial, sans-serif; background: #eef2f5; padding: 15px; font-size: 18px; margin: 0; }
-        .card { max-width: 500px; margin: auto; background: white; padding: 25px; border-radius: 10px; border-top: 6px solid #d32f2f; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
-        h2 { text-align: center; color: #d32f2f; margin-bottom: 5px; }
-        label { font-weight: bold; display: block; margin-top: 15px; }
-        input, select { width: 100%; padding: 12px; margin-top: 5px; border: 2px solid #ccc; border-radius: 5px; box-sizing: border-box; font-size: 16px; }
-        button { width: 100%; background: #2e7d32; color: white; padding: 15px; border: none; border-radius: 5px; margin-top: 20px; font-size: 18px; font-weight: bold; cursor: pointer; }
-        button:disabled { background: #888; }
-        .status { margin-top: 15px; padding: 10px; border-radius: 5px; text-align: center; font-weight: bold; display: none; }
-        .success { background: #d4edda; color: #155724; }
-        .error { background: #f8d7da; color: #721c24; }
+        /* Base Styling & Smooth Mobile Rendering */
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
+            background: #f0f2f5; 
+            margin: 0; 
+            padding: 20px 12px;
+            color: #1c1e21;
+        }
+
+        /* Adaptive Container: Centers on Laptop, Stretches on Mobile */
+        .card { 
+            max-width: 500px; 
+            margin: 0 auto; 
+            background: #ffffff; 
+            padding: 24px; 
+            border-radius: 16px; 
+            border-top: 6px solid #d32f2f; 
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08); 
+        }
+
+        h2 { 
+            text-align: center; 
+            color: #d32f2f; 
+            margin: 0 0 8px 0; 
+            font-size: 1.6rem; 
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #65676b;
+            font-size: 0.95rem;
+            margin-bottom: 20px;
+        }
+
+        label { 
+            font-weight: 600; 
+            display: block; 
+            margin-top: 16px; 
+            color: #333; 
+            font-size: 1rem;
+        }
+
+        /* iOS/Mobile UI Inputs Optimization */
+        input, select { 
+            width: 100%; 
+            padding: 14px; 
+            margin-top: 6px; 
+            border: 2px solid #e4e6eb; 
+            border-radius: 10px; 
+            box-sizing: border-box; 
+            font-size: 16px; /* Prevents auto-zoom on iPhone Safari */
+            background: #f8f9fa;
+            transition: border-color 0.2s, background-color 0.2s;
+            appearance: none;
+            -webkit-appearance: none;
+        }
+
+        /* Custom dropdown arrow for mobile */
+        select {
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%333333' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 14px center;
+            background-size: 18px;
+            padding-right: 40px;
+        }
+
+        input:focus, select:focus { 
+            outline: none; 
+            border-color: #d32f2f; 
+            background: #ffffff; 
+        }
+
+        /* Large Touch-Friendly Submit Button */
+        button { 
+            width: 100%; 
+            background: #2e7d32; 
+            color: white; 
+            padding: 16px; 
+            border: none; 
+            border-radius: 10px; 
+            margin-top: 24px; 
+            font-size: 1.1rem; 
+            font-weight: 700; 
+            cursor: pointer; 
+            transition: background-color 0.2s, transform 0.1s;
+            box-shadow: 0 4px 12px rgba(46, 125, 50, 0.25);
+        }
+
+        button:active { 
+            transform: scale(0.98); 
+            background: #1b5e20;
+        }
+
+        button:disabled { 
+            background: #a5d6a7; 
+            box-shadow: none;
+            cursor: not-allowed;
+        }
+
+        .status { 
+            margin-top: 15px; 
+            padding: 14px; 
+            border-radius: 10px; 
+            text-align: center; 
+            font-weight: 600; 
+            display: none; 
+            font-size: 0.95rem;
+        }
+        .success { background: #e8f5e9; color: #1b5e20; border: 1px solid #c8e6c9; }
+        .error { background: #ffebee; color: #c62828; border: 1px solid #ffcdd2; }
+
+        /* Media Queries for Responsive Screens */
+        /* iPhone & Mobile Devices */
+        @media (max-width: 480px) {
+            body { padding: 10px 8px; }
+            .card { padding: 18px 16px; border-radius: 12px; }
+            h2 { font-size: 1.4rem; }
+            button { padding: 15px; font-size: 1rem; }
+        }
+
+        /* Laptops & Tablets */
+        @media (min-width: 768px) {
+            body { padding-top: 50px; }
+            .card { padding: 32px; border-radius: 20px; }
+            h2 { font-size: 1.8rem; }
+            button:hover { background: #1b5e20; }
+        }
     </style>
 </head>
 <body>
 
 <div class="card">
-    <h2>🔥 LPG Gas Order / ग्यास अर्डर</h2>
+    <h2>🔥 LPG Gas Order</h2>
+    <div class="subtitle">ग्यास अर्डर फारम</div>
+    
     <div id="statusBox" class="status"></div>
 
     <form id="orderForm">
-        <label>Customer Name / नाम:</label>
-        <input type="text" id="name" required placeholder="Ram Bahadur / राम बहादुर">
+        <label for="name">Customer Name / नाम:</label>
+        <input type="text" id="name" required placeholder="e.g. Ram Bahadur / राम बहादुर" autocomplete="name">
 
-        <label>Phone Number / फोन नम्बर:</label>
-        <input type="tel" id="phone" required placeholder="98XXXXXXXX">
+        <label for="phone">Phone Number / फोन नम्बर:</label>
+        <input type="tel" id="phone" required placeholder="98XXXXXXXX" pattern="[0-9]{10}" autocomplete="tel">
 
-        <label>Gas Brand / ब्रान्ड:</label>
+        <label for="brand">Gas Brand / ब्रान्ड:</label>
         <select id="brand">
-            <option value="Nepal Gas">Nepal Gas</option>
-            <option value="Bhadrakali">Bhadrakali</option>
-            <option value="Suryodaya">Suryodaya</option>
-            <option value="Everest">Everest</option>
-            <option value="Sugam">Sugam</option>
-            <option value="Shakti">Shakti</option>
+            <option value="Nepal Gas">Nepal Gas / नेपाल ग्यास</option>
+            <option value="Bhadrakali">Bhadrakali / भद्रकाली</option>
+            <option value="Suryodaya">Suryodaya / सूर्योदय</option>
+            <option value="Everest">Everest / एभरेष्ट</option>
+            <option value="Sugam">Sugam / सुगम</option>
+            <option value="Shakti">Shakti / शक्ति</option>
         </select>
 
-        <label>Order Type / प्रकार:</label>
+        <label for="type">Order Type / प्रकार:</label>
         <select id="type">
-            <option value="Refill">Refill Only / साट्ने</option>
+            <option value="Refill">Refill Only / साट्ने (खाली-हाफ)</option>
             <option value="New Cylinder">New Cylinder / नयाँ सिलिन्डर</option>
         </select>
 
-        <label>Quantity / संख्या:</label>
+        <label for="quantity">Quantity / संख्या:</label>
         <input type="number" id="quantity" min="1" max="10" value="1" required>
 
         <button type="submit" id="submitBtn">Place Order / अर्डर गर्नुहोस्</button>
@@ -54,8 +175,8 @@
 </div>
 
 <script>
-    const API_ENDPOINT = "https://api.jsonbin.io/v3/b/6aa6d321ffd5d1605301f943"; // Replace with your Bin ID
-    const API_KEY = "$2a$10$aIpiPKEbt5kEXJ2DVkgVrONA8a83VpJklYaNkvqyDae20azlXbr0.";                              // Replace with your API Key
+    // ⚠️ REPLACE THIS WITH YOUR GOOGLE WEB APP URL FROM GOOGLE APPS SCRIPT
+    const GOOGLE_APP_URL = "https://script.google.com/macros/s/AKfycbyWOTGbApokfET-VC_D4qIQjv8joI_syoVpsfxuC_I9kfdV7kCUantvs6NMdeqGmRN5/exec";
 
     let clientIP = "Unknown";
     fetch('https://api.ipify.org?format=json')
@@ -70,7 +191,7 @@
     form.addEventListener('submit', async function(e) {
         e.preventDefault();
 
-        // 5-Second Delay / Cooldown check using browser storage
+        // 5-Second Cooldown Protection
         const lastSubmit = localStorage.getItem('last_order_time');
         const now = Date.now();
         if (lastSubmit && (now - lastSubmit < 5000)) {
@@ -82,7 +203,7 @@
         submitBtn.disabled = true;
         submitBtn.innerText = "Processing / अर्डर हुँदैछ...";
 
-        const newOrder = {
+        const orderPayload = {
             orderId: "LPG-" + Math.floor(1000 + Math.random() * 9000),
             timestamp: new Date().toLocaleString(),
             ip: clientIP,
@@ -94,26 +215,18 @@
         };
 
         try {
-            // Get existing orders from cloud storage
-            let response = await fetch(API_ENDPOINT, { headers: { '$2a$10$aIpiPKEbt5kEXJ2DVkgVrONA8a83VpJklYaNkvqyDae20azlXbr0.': API_KEY } });
-            let data = await response.json();
-            let currentOrders = data.record.orders || [];
-
-            // Add new order to array
-            currentOrders.push(newOrder);
-
-            // Update database
-            await fetch(API_ENDPOINT, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json', '$2a$10$aIpiPKEbt5kEXJ2DVkgVrONA8a83VpJklYaNkvqyDae20azlXbr0.': API_KEY },
-                body: JSON.stringify({ orders: currentOrders })
+            await fetch(GOOGLE_APP_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(orderPayload)
             });
 
             localStorage.setItem('last_order_time', Date.now());
             showStatus("Order Placed Successfully! / अर्डर सफल भयो!", 'success');
             form.reset();
         } catch (err) {
-            showStatus("Order failed. Check internet connection. / अर्डर असफल भयो।", 'error');
+            showStatus("Submission failed. Check connection. / अर्डर असफल भयो।", 'error');
         }
 
         submitBtn.disabled = false;
@@ -126,5 +239,6 @@
         statusBox.style.display = 'block';
     }
 </script>
+
 </body>
 </html>
