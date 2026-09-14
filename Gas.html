@@ -3,513 +3,329 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>ग्यास अर्डर | LPG Gas Order</title>
-<meta name="description" content="Order an LPG gas cylinder refill or new connection online.">
+<title>ग्यास अर्डर तथा बुकिङ | LPG Gas Order & Booking</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@500;600;700;800&family=Noto+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root{
-    --paper:#FBF5E8;
-    --paper-dim:#F3EAD8;
-    --ink:#2B2013;
-    --ink-soft:#6B5F4E;
-    --crimson:#C8102E;
-    --crimson-dark:#9E0B23;
-    --steel:#003893;
-    --steel-dark:#00265E;
-    --gold:#E8A33D;
-    --perf:#D8C9A6;
-    --ok-bg:#E6F3E3;
-    --ok-fg:#276B36;
-    --err-bg:#FBE7E4;
-    --err-fg:#A32B1E;
-    --radius:14px;
+    --paper:#FBF5E8; --paper-dim:#F3EAD8; --ink:#2B2013; --ink-soft:#6B5F4E;
+    --crimson:#C8102E; --crimson-dark:#9E0B23; --steel:#003893; --steel-dark:#00265E;
+    --gold:#E8A33D; --perf:#D8C9A6; --ok-bg:#E6F3E3; --ok-fg:#276B36; --err-bg:#FBE7E4; --err-fg:#A32B1E; --radius:14px;
   }
-
   *{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
-
   html,body{ height:100%; }
-
   body{
-    margin:0;
-    font-family:'Noto Sans','Noto Sans Devanagari',sans-serif;
-    background:
-      radial-gradient(circle at 15% -10%, #ffffff 0%, transparent 45%),
-      var(--paper);
-    color:var(--ink);
-    min-height:100vh;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    padding:28px 16px;
+    margin:0; font-family:'Noto Sans','Noto Sans Devanagari',sans-serif;
+    background: radial-gradient(circle at 15% -10%, #ffffff 0%, transparent 45%), var(--paper);
+    color:var(--ink); min-height:100vh; display:flex; align-items:center; justify-content:center; padding:28px 16px;
   }
-
   .ticket{
-    width:100%;
-    max-width:420px;
-    background:#fff;
-    border-radius:var(--radius);
-    box-shadow:0 18px 40px rgba(43,32,19,0.16), 0 3px 10px rgba(43,32,19,0.08);
-    overflow:hidden;
+    width:100%; max-width:420px; background:#fff; border-radius:var(--radius);
+    box-shadow:0 18px 40px rgba(43,32,19,0.16), 0 3px 10px rgba(43,32,19,0.08); overflow:hidden;
   }
-
-  /* ---------- Header stub ---------- */
+  
+  /* Header stub */
   .stub{
     background:linear-gradient(155deg, var(--steel) 0%, var(--steel-dark) 100%);
-    color:#fff;
-    padding:26px 24px 34px;
-    position:relative;
-    text-align:center;
+    color:#fff; padding:26px 24px 34px; position:relative; text-align:center;
   }
-  .flame-mark{
-    width:46px; height:46px;
-    margin:0 auto 10px;
-    display:block;
-  }
-  .stub h1{
-    margin:0;
-    font-size:1.5rem;
-    font-weight:800;
-    letter-spacing:-0.01em;
-    line-height:1.15;
-  }
-  .stub .np{
-    font-family:'Noto Sans Devanagari','Noto Sans',sans-serif;
-    font-weight:700;
-    font-size:1.05rem;
-    margin-top:3px;
-    color:#DCE6FA;
-  }
-  .brand-logo{
-    height:30px;
-    margin-top:14px;
-    opacity:0.95;
-    filter:brightness(0) invert(1);
-  }
-
-  /* Perforated tear edge */
-  .perf{
-    position:relative;
-    height:18px;
-    background:var(--steel-dark);
-  }
+  .flame-mark{ width:46px; height:46px; margin:0 auto 10px; display:block; }
+  .stub h1{ margin:0; font-size:1.5rem; font-weight:800; letter-spacing:-0.01em; line-height:1.15; }
+  .stub .np{ font-family:'Noto Sans Devanagari',sans-serif; font-weight:700; font-size:1.05rem; margin-top:3px; color:#DCE6FA; }
+  .perf{ position:relative; height:18px; background:var(--steel-dark); }
   .perf svg{ display:block; width:100%; height:18px; }
 
-  /* ---------- Body ---------- */
-  .body{ padding:26px 24px 24px; }
-
-  .status{
-    display:none;
-    margin-bottom:18px;
-    padding:13px 15px;
-    border-radius:10px;
-    font-weight:600;
-    font-size:0.92rem;
-    line-height:1.4;
+  /* Body */
+  .body{ padding:20px 24px 24px; }
+  
+  /* View Switcher */
+  .view-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 16px; }
+  .view-title { font-weight: 800; color: var(--steel-dark); font-size: 1.1rem; margin: 0; }
+  .switch-link { 
+    font-size: 0.85rem; font-weight: 700; color: var(--steel); 
+    text-decoration: underline; text-underline-offset: 3px; cursor: pointer; 
   }
+  .switch-link:hover { color: var(--crimson); }
+
+  .status{ display:none; margin-bottom:18px; padding:13px 15px; border-radius:10px; font-weight:600; font-size:0.92rem; line-height:1.4; }
   .status.success{ display:block; background:var(--ok-bg); color:var(--ok-fg); }
   .status.error{ display:block; background:var(--err-bg); color:var(--err-fg); }
-  .status.notice{ display:block; background:#FFF3DA; color:#8A5A0A; }
 
   .field{ margin-bottom:16px; }
-  .field label{
-    display:block;
-    font-weight:700;
-    font-size:0.84rem;
-    color:var(--ink-soft);
-    margin-bottom:6px;
-  }
-  .field label .np{
-    font-family:'Noto Sans Devanagari',sans-serif;
-    font-weight:600;
-    margin-left:5px;
-  }
+  .field label{ display:block; font-weight:700; font-size:0.84rem; color:var(--ink-soft); margin-bottom:6px; }
+  .field label .np{ font-family:'Noto Sans Devanagari',sans-serif; font-weight:600; margin-left:5px; }
 
   input, select{
-    width:100%;
-    padding:13px 14px;
-    border:1.5px solid #E5DCC7;
-    border-radius:10px;
-    background:var(--paper-dim);
-    color:var(--ink);
-    font-size:16px;
-    font-family:inherit;
-    appearance:none;
-    -webkit-appearance:none;
-    transition:border-color .15s ease, background .15s ease, box-shadow .15s ease;
+    width:100%; padding:13px 14px; border:1.5px solid #E5DCC7; border-radius:10px;
+    background:var(--paper-dim); color:var(--ink); font-size:16px; font-family:inherit;
+    appearance:none; -webkit-appearance:none; transition:border-color .15s ease;
   }
   select{
     background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236B5F4E' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");
-    background-repeat:no-repeat;
-    background-position:right 14px center;
-    background-size:16px;
-    padding-right:40px;
+    background-repeat:no-repeat; background-position:right 14px center; background-size:16px; padding-right:40px;
   }
-  input:hover, select:hover{ border-color:#D8C9A6; }
-  input:focus, select:focus{
-    outline:none;
-    border-color:var(--steel);
-    background:#fff;
-    box-shadow:0 0 0 3px rgba(0,56,147,0.14);
-  }
-  input:focus-visible, select:focus-visible, button:focus-visible{
-    outline:2.5px solid var(--gold);
-    outline-offset:2px;
-  }
+  input:focus, select:focus{ outline:none; border-color:var(--steel); background:#fff; box-shadow:0 0 0 3px rgba(0,56,147,0.14); }
   input.invalid{ border-color:var(--crimson); background:#FDF1EF; }
-  .field-msg{
-    font-size:0.78rem;
-    color:var(--crimson-dark);
-    margin-top:5px;
-    min-height:1em;
-    display:none;
-  }
+  
+  .field-msg{ font-size:0.78rem; color:var(--crimson-dark); margin-top:5px; display:none; }
   .field-msg.show{ display:block; }
 
-  /* quantity stepper */
   .qty-row{ display:flex; align-items:center; gap:10px; }
   .qty-row input{ text-align:center; }
   .qty-btn{
-    flex:0 0 auto;
-    width:44px; height:44px;
-    border-radius:10px;
-    border:1.5px solid #E5DCC7;
-    background:var(--paper-dim);
-    font-size:1.2rem;
-    font-weight:700;
-    color:var(--steel);
-    cursor:pointer;
-    display:flex; align-items:center; justify-content:center;
+    flex:0 0 auto; width:44px; height:44px; border-radius:10px; border:1.5px solid #E5DCC7;
+    background:var(--paper-dim); font-size:1.2rem; font-weight:700; color:var(--steel); cursor:pointer;
   }
-  .qty-btn:active{ background:#EDE2C9; }
 
   button.submit{
-    width:100%;
-    padding:15px;
-    margin-top:6px;
-    border:none;
-    border-radius:11px;
+    width:100%; padding:15px; margin-top:6px; border:none; border-radius:11px;
     background:linear-gradient(155deg, var(--crimson) 0%, var(--crimson-dark) 100%);
-    color:#fff;
-    font-size:1rem;
-    font-weight:800;
-    letter-spacing:0.01em;
-    cursor:pointer;
-    box-shadow:0 8px 18px rgba(200,16,46,0.28);
-    display:flex; align-items:center; justify-content:center; gap:9px;
+    color:#fff; font-size:1rem; font-weight:800; cursor:pointer; box-shadow:0 8px 18px rgba(200,16,46,0.28);
   }
-  button.submit:active{ transform:translateY(1px); box-shadow:0 4px 10px rgba(200,16,46,0.22); }
-  button.submit:disabled{ background:#D8CDBA; box-shadow:none; cursor:not-allowed; color:#8A7F6A; }
+  
+  .hide { display: none !important; }
 
-  .spinner{
-    width:16px; height:16px;
-    border:2.5px solid rgba(255,255,255,0.4);
-    border-top-color:#fff;
-    border-radius:50%;
-    animation:spin .7s linear infinite;
-    display:none;
-  }
-  button.submit[data-loading="1"] .spinner{ display:inline-block; }
-  @keyframes spin{ to{ transform:rotate(360deg); } }
-
-  .hint{
-    text-align:center;
-    font-size:0.76rem;
-    color:var(--ink-soft);
-    margin-top:14px;
-  }
-
-  /* ---------- Receipt (post-submit) ---------- */
-  .receipt{ display:none; }
-  .receipt.show{ display:block; }
-  .receipt-id{
-    text-align:center;
-    padding:6px 0 18px;
-  }
+  /* Receipt */
+  .receipt-id{ text-align:center; padding:6px 0 18px; }
   .receipt-id .label{ font-size:0.78rem; color:var(--ink-soft); font-weight:700; }
-  .receipt-id .value{
-    font-size:1.7rem;
-    font-weight:800;
-    color:var(--steel);
-    letter-spacing:0.03em;
-    margin-top:2px;
-  }
-  .receipt-rows{
-    border-top:1.5px dashed var(--perf);
-    padding-top:14px;
-  }
-  .receipt-row{
-    display:flex;
-    justify-content:space-between;
-    gap:12px;
-    padding:7px 0;
-    font-size:0.92rem;
-  }
-  .receipt-row span:first-child{ color:var(--ink-soft); }
+  .receipt-id .value{ font-size:1.7rem; font-weight:800; color:var(--steel); margin-top:2px; }
+  .receipt-rows{ border-top:1.5px dashed var(--perf); padding-top:14px; }
+  .receipt-row{ display:flex; justify-content:space-between; gap:12px; padding:7px 0; font-size:0.92rem; }
   .receipt-row span:last-child{ font-weight:700; text-align:right; }
-  .new-order-btn{
-    width:100%;
-    margin-top:18px;
-    padding:13px;
-    border-radius:11px;
-    border:1.5px solid var(--steel);
-    background:#fff;
-    color:var(--steel);
-    font-weight:700;
-    font-size:0.92rem;
-    cursor:pointer;
-  }
-  .new-order-btn:active{ background:var(--paper-dim); }
-
-  form.hide, .body.hide-form{ display:none; }
-
-  @media (prefers-reduced-motion: reduce){
-    .spinner{ animation:none; }
-    .status{ transition:none; }
-  }
+  .new-order-btn{ width:100%; margin-top:18px; padding:13px; border-radius:11px; border:1.5px solid var(--steel); background:#fff; color:var(--steel); font-weight:700; cursor:pointer; }
 </style>
 </head>
 <body>
 
 <div class="ticket">
   <div class="stub">
-    <svg class="flame-mark" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <svg class="flame-mark" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path d="M24 4c1 7-6 9-6 16a6 6 0 0 0 12 0c2 2 3 5 3 8a9 9 0 1 1-18 0c0-9 7-12 9-24z" fill="#F2A93B"/>
       <path d="M24 16c0 4-4 5-4 10a4 4 0 0 0 8 0c1 1 1.5 2.5 1.5 4a5.5 5.5 0 1 1-11 0c0-6 4-8 5.5-14z" fill="#C8102E"/>
     </svg>
-    <h1>LPG Gas Order</h1>
-    <div class="np">ग्यास अर्डर फारम</div>
-    <img src="https://sajilogas.com/public/uploads/all/J5gslYTQGAQOcgIQ1GSrk7qrJTesLid4UCxuLgW3.png"
-         alt="" class="brand-logo" onerror="this.style.display='none'">
+    <h1>LPG Gas Services</h1>
+    <div class="np">ग्यास अर्डर तथा बुकिङ</div>
   </div>
-  <div class="perf" aria-hidden="true">
-    <svg preserveAspectRatio="none" viewBox="0 0 400 18"><circle cx="0" cy="0" r="9" fill="var(--paper)"/><circle cx="20" cy="0" r="9" fill="var(--paper)"/><circle cx="40" cy="0" r="9" fill="var(--paper)"/><circle cx="60" cy="0" r="9" fill="var(--paper)"/><circle cx="80" cy="0" r="9" fill="var(--paper)"/><circle cx="100" cy="0" r="9" fill="var(--paper)"/><circle cx="120" cy="0" r="9" fill="var(--paper)"/><circle cx="140" cy="0" r="9" fill="var(--paper)"/><circle cx="160" cy="0" r="9" fill="var(--paper)"/><circle cx="180" cy="0" r="9" fill="var(--paper)"/><circle cx="200" cy="0" r="9" fill="var(--paper)"/><circle cx="220" cy="0" r="9" fill="var(--paper)"/><circle cx="240" cy="0" r="9" fill="var(--paper)"/><circle cx="260" cy="0" r="9" fill="var(--paper)"/><circle cx="280" cy="0" r="9" fill="var(--paper)"/><circle cx="300" cy="0" r="9" fill="var(--paper)"/><circle cx="320" cy="0" r="9" fill="var(--paper)"/><circle cx="340" cy="0" r="9" fill="var(--paper)"/><circle cx="360" cy="0" r="9" fill="var(--paper)"/><circle cx="380" cy="0" r="9" fill="var(--paper)"/><circle cx="400" cy="0" r="9" fill="var(--paper)"/></svg>
+  <div class="perf">
+    <svg preserveAspectRatio="none" viewBox="0 0 400 18"><circle cx="20" cy="0" r="9" fill="var(--paper)"/><circle cx="60" cy="0" r="9" fill="var(--paper)"/><circle cx="100" cy="0" r="9" fill="var(--paper)"/><circle cx="140" cy="0" r="9" fill="var(--paper)"/><circle cx="180" cy="0" r="9" fill="var(--paper)"/><circle cx="220" cy="0" r="9" fill="var(--paper)"/><circle cx="260" cy="0" r="9" fill="var(--paper)"/><circle cx="300" cy="0" r="9" fill="var(--paper)"/><circle cx="340" cy="0" r="9" fill="var(--paper)"/><circle cx="380" cy="0" r="9" fill="var(--paper)"/></svg>
   </div>
 
   <div class="body">
-    <div id="statusBox" class="status" role="status" aria-live="polite"></div>
+    <div id="statusBox" class="status"></div>
 
-    <form id="orderForm" novalidate>
-      <div class="field">
-        <label for="name">Customer Name <span class="np">नाम</span></label>
-        <input type="text" id="name" required placeholder="Ram Bahadur / राम बहादुर" autocomplete="name">
-        <div class="field-msg" id="nameMsg">Please enter your name.</div>
+    <div id="formContainer">
+      <div class="view-header">
+        <h2 class="view-title" id="viewTitle">Direct Order</h2>
+        <a class="switch-link" id="toggleViewBtn">Go to Booking &rarr;</a>
       </div>
 
-      <div class="field">
-        <label for="phone">Phone Number <span class="np">फोन नम्बर</span></label>
-        <input type="tel" id="phone" required placeholder="98XXXXXXXX" inputmode="numeric" maxlength="10" autocomplete="tel">
-        <div class="field-msg" id="phoneMsg">Enter a valid 10-digit number starting with 96, 97 or 98.</div>
-      </div>
-
-      <div class="field">
-        <label for="brand">Gas Brand <span class="np">ब्रान्ड</span></label>
-        <select id="brand">
-          <option value="Lohit Gas">Lohit Gas / लोहित ग्यास</option>
-          <option value="Manoj Gas">Manoj Gas / मनोज ग्यास</option>
-          <option value="Lokpriya Gas">Lokpriya Gas / लोकप्रिय ग्यास</option>
-        </select>
-      </div>
-
-      <div class="field">
-        <label for="type">Order Type <span class="np">प्रकार</span></label>
-        <select id="type">
-          <option value="Refill">Refill Only / साट्ने (खाली - भरिएको)</option>
-          <option value="New Cylinder">New Cylinder / नयाँ सिलिन्डर</option>
-        </select>
-      </div>
-
-      <!-- थपिएको: खाली सिलिन्डर दिने अवस्था -->
-      <div class="field">
-        <label for="emptyCylinder">Empty Cylinder <span class="np">खाली सिलिन्डर अवस्था</span></label>
-        <select id="emptyCylinder">
-          <option value="Returned Now">Returned Now / दिन तयार छ</option>
-          <option value="Pending Return">Pending / खाली पछि बुझाउने</option>
-          <option value="Not Needed (New)">Not Needed / पर्दैन (नयाँ खरिद)</option>
-        </select>
-      </div>
-
-      <!-- थपिएको: भुक्तानी स्थिति -->
-      <div class="field">
-        <label for="paymentStatus">Payment Status <span class="np">भुक्तानी स्थिति</span></label>
-        <select id="paymentStatus">
-          <option value="Paid">Paid / नगद बुझाइयो</option>
-          <option value="Unpaid - Credit">Unpaid / उधारो (पछि दिने)</option>
-        </select>
-      </div>
-
-      <div class="field">
-        <label for="quantity">Quantity <span class="np">संख्या</span></label>
-        <div class="qty-row">
-          <button type="button" class="qty-btn" id="qtyDown" aria-label="Decrease quantity">–</button>
-          <input type="number" id="quantity" min="1" max="10" value="1" required inputmode="numeric">
-          <button type="button" class="qty-btn" id="qtyUp" aria-label="Increase quantity">+</button>
+      <form id="gasForm" novalidate>
+        <!-- Common Fields -->
+        <div class="field">
+          <label>Customer Name <span class="np">नाम</span></label>
+          <input type="text" id="name" required placeholder="Ram Bahadur">
+          <div class="field-msg" id="nameMsg">Please enter your name.</div>
         </div>
-      </div>
 
-      <button type="submit" class="submit" id="submitBtn">
-        <span class="spinner" aria-hidden="true"></span>
-        <span id="submitLabel">Place Order / अर्डर गर्नुहोस्</span>
-      </button>
+        <div class="field">
+          <label>Phone Number <span class="np">फोन नम्बर</span></label>
+          <input type="tel" id="phone" required placeholder="98XXXXXXXX" maxlength="10">
+          <div class="field-msg" id="phoneMsg">Valid 10-digit number required.</div>
+        </div>
 
-      <div class="hint">You'll get a call to confirm delivery time.</div>
-    </form>
+        <div class="field">
+          <label>Gas Brand <span class="np">ब्रान्ड</span></label>
+          <select id="brand">
+            <option value="Lokpriya Gas">Lokpriya Gas / लोकप्रिय ग्यास</option>
+            <option value="Manoj Gas">Manoj Gas / मनोज ग्यास</option>
+          </select>
+        </div>
 
-    <div class="receipt" id="receipt">
+        <!-- Direct Order Specific -->
+        <div id="directOrderFields">
+          <div class="field">
+            <label>Order Type <span class="np">प्रकार</span></label>
+            <select id="type">
+              <option value="Immediate Refill">Refill Ready / अहिले साट्ने</option>
+              <option value="New Cylinder">New Cylinder / नयाँ किन्ने</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Booking Specific (Hidden by default) -->
+        <div id="bookingFields" class="hide">
+          <div class="field">
+            <label>Empty Cylinder Status <span class="np">खाली सिलिन्डर</span></label>
+            <select id="emptyCylinder">
+              <option value="Dropped Off">Dropped Off / खाली छाडेको छ</option>
+              <option value="Will Drop Later">Will Drop Later / पछि लिएर आउने</option>
+            </select>
+          </div>
+          
+          <div class="field">
+            <label>Payment Status <span class="np">भुक्तानी स्थिति</span></label>
+            <select id="paymentStatus">
+              <option value="Unpaid">Unpaid / पैसा तिर्न बाँकी</option>
+              <option value="Paid in Advance">Paid in Advance / नगद बुझाइसक्यो</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Common Quantity -->
+        <div class="field">
+          <label>Quantity <span class="np">संख्या</span></label>
+          <div class="qty-row">
+            <button type="button" class="qty-btn" id="qtyDown">–</button>
+            <input type="number" id="quantity" min="1" max="10" value="1">
+            <button type="button" class="qty-btn" id="qtyUp">+</button>
+          </div>
+        </div>
+
+        <button type="submit" class="submit" id="submitBtn">Place Order</button>
+      </form>
+    </div>
+
+    <!-- Receipt View -->
+    <div id="receipt" class="hide">
       <div class="receipt-id">
-        <div class="label">ORDER CONFIRMED</div>
+        <div class="label" id="rCategoryLabel">ORDER CONFIRMED</div>
         <div class="value" id="rOrderId">—</div>
       </div>
       <div class="receipt-rows">
         <div class="receipt-row"><span>Name</span><span id="rName">—</span></div>
         <div class="receipt-row"><span>Phone</span><span id="rPhone">—</span></div>
         <div class="receipt-row"><span>Brand</span><span id="rBrand">—</span></div>
-        <div class="receipt-row"><span>Type</span><span id="rType">—</span></div>
-        <div class="receipt-row"><span>Empty Cylinder</span><span id="rEmpty">—</span></div>
-        <div class="receipt-row"><span>Payment</span><span id="rPayment">—</span></div>
+        <div class="receipt-row" id="rTypeRow"><span>Type</span><span id="rType">—</span></div>
+        <div class="receipt-row hide" id="rEmptyRow"><span>Empty Cylinder</span><span id="rEmpty">—</span></div>
+        <div class="receipt-row hide" id="rPaymentRow"><span>Payment</span><span id="rPayment">—</span></div>
         <div class="receipt-row"><span>Quantity</span><span id="rQty">—</span></div>
-        <div class="receipt-row"><span>Placed at</span><span id="rTime">—</span></div>
       </div>
-      <button type="button" class="new-order-btn" id="newOrderBtn">Place Another Order</button>
+      <button type="button" class="new-order-btn" id="newOrderBtn">Done</button>
     </div>
+
   </div>
 </div>
 
 <script>
 (function(){
-  const GOOGLE_APP_URL = "https://script.google.com/macros/s/AKfycbyDwzk5dSBcLzhUgh-bv0bIksfxu0nj__RbbBsucnIkw5hadijeVaKD54ymP1y-tTCy/exec";
-  const MIN_SECONDS_BETWEEN_ORDERS = 5;
+  const GOOGLE_APP_URL = "YOUR_SCRIPT_URL_HERE"; // Update your Apps Script URL here!
+  
+  // UI Elements
+  const form = document.getElementById('gasForm');
+  const directFields = document.getElementById('directOrderFields');
+  const bookingFields = document.getElementById('bookingFields');
+  const viewTitle = document.getElementById('viewTitle');
+  const toggleBtn = document.getElementById('toggleViewBtn');
+  const submitBtn = document.getElementById('submitBtn');
+  const statusBox = document.getElementById('statusBox');
+  
+  // State
+  let isBookingMode = false;
 
-  let lastSubmitAt = 0;
-  let clientIP = "Unknown";
-
-  fetch('https://api.ipify.org?format=json')
-    .then(r => r.json())
-    .then(d => { clientIP = d.ip; })
-    .catch(() => { clientIP = "Unavailable"; });
-
-  const form        = document.getElementById('orderForm');
-  const submitBtn   = document.getElementById('submitBtn');
-  const submitLabel = document.getElementById('submitLabel');
-  const statusBox   = document.getElementById('statusBox');
-  const receipt     = document.getElementById('receipt');
-
-  const nameEl  = document.getElementById('name');
-  const phoneEl = document.getElementById('phone');
-  const qtyEl   = document.getElementById('quantity');
-
-  document.getElementById('qtyDown').addEventListener('click', () => {
-    qtyEl.value = Math.max(1, (parseInt(qtyEl.value, 10) || 1) - 1);
-  });
-  document.getElementById('qtyUp').addEventListener('click', () => {
-    qtyEl.value = Math.min(10, (parseInt(qtyEl.value, 10) || 1) + 1);
-  });
-
-  function showStatus(text, type){
-    statusBox.textContent = text;
-    statusBox.className = `status ${type}`;
-  }
-  function clearStatus(){
-    statusBox.textContent = '';
-    statusBox.className = 'status';
-  }
-
-  function setFieldError(input, msgEl, isValid){
-    input.classList.toggle('invalid', !isValid);
-    msgEl.classList.toggle('show', !isValid);
-    return isValid;
-  }
-
-  function validate(){
-    const nameValid  = nameEl.value.trim().length >= 2;
-    const phoneValid = /^9[678]\d{8}$/.test(phoneEl.value.trim());
-    const qtyValid   = qtyEl.value >= 1 && qtyEl.value <= 10;
-
-    setFieldError(nameEl, document.getElementById('nameMsg'), nameValid);
-    setFieldError(phoneEl, document.getElementById('phoneMsg'), phoneValid);
-
-    return nameValid && phoneValid && qtyValid;
-  }
-
-  [nameEl, phoneEl].forEach(el => el.addEventListener('input', validate));
-
-  form.addEventListener('submit', async function(e){
-    e.preventDefault();
-    clearStatus();
-
-    if (!validate()){
-      showStatus('Please fix the highlighted fields. / कृपया फारम जाँच गर्नुहोस्।', 'error');
-      return;
+  // View Switcher Logic
+  toggleBtn.addEventListener('click', () => {
+    isBookingMode = !isBookingMode;
+    if(isBookingMode) {
+      viewTitle.textContent = "Advance Booking";
+      toggleBtn.innerHTML = "&larr; Back to Order";
+      directFields.classList.add('hide');
+      bookingFields.classList.remove('hide');
+      submitBtn.textContent = "Confirm Booking";
+    } else {
+      viewTitle.textContent = "Direct Order";
+      toggleBtn.innerHTML = "Go to Booking &rarr;";
+      directFields.classList.remove('hide');
+      bookingFields.classList.add('hide');
+      submitBtn.textContent = "Place Order";
     }
+  });
 
-    const now = Date.now();
-    if (lastSubmitAt && (now - lastSubmitAt) < MIN_SECONDS_BETWEEN_ORDERS * 1000){
-      const wait = Math.ceil((MIN_SECONDS_BETWEEN_ORDERS * 1000 - (now - lastSubmitAt)) / 1000);
-      showStatus(`Please wait ${wait}s before ordering again. / कृपया ${wait} सेकेन्ड पर्खनुहोस्।`, 'error');
+  // Qty Logic
+  const qtyEl = document.getElementById('quantity');
+  document.getElementById('qtyDown').onclick = () => qtyEl.value = Math.max(1, (parseInt(qtyEl.value)||1) - 1);
+  document.getElementById('qtyUp').onclick = () => qtyEl.value = Math.min(10, (parseInt(qtyEl.value)||1) + 1);
+
+  // Validation
+  const nameEl = document.getElementById('name'), phoneEl = document.getElementById('phone');
+  function validate() {
+    let nValid = nameEl.value.trim().length >= 2;
+    let pValid = /^9[678]\d{8}$/.test(phoneEl.value.trim());
+    nameEl.classList.toggle('invalid', !nValid); document.getElementById('nameMsg').classList.toggle('show', !nValid);
+    phoneEl.classList.toggle('invalid', !pValid); document.getElementById('phoneMsg').classList.toggle('show', !pValid);
+    return nValid && pValid;
+  }
+
+  // Submit Handler
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    statusBox.style.display = 'none';
+
+    if(!validate()) {
+      statusBox.textContent = "Please fix highlighted fields.";
+      statusBox.className = "status error";
       return;
     }
 
     submitBtn.disabled = true;
-    submitBtn.setAttribute('data-loading', '1');
-    submitLabel.textContent = 'Placing order… / पठाउँदै...';
+    submitBtn.textContent = "Sending...";
 
     const payload = {
-      orderId: 'LPG-' + Math.floor(1000 + Math.random() * 9000),
+      orderId: (isBookingMode ? 'BKG-' : 'ORD-') + Math.floor(1000 + Math.random() * 9000),
       timestamp: new Date().toLocaleString(),
-      ip: clientIP,
+      orderCategory: isBookingMode ? "Advance Booking" : "Direct Order",
       name: nameEl.value.trim(),
       phone: phoneEl.value.trim(),
       brand: document.getElementById('brand').value,
-      type: document.getElementById('type').value,
-      emptyCylinder: document.getElementById('emptyCylinder').value,
-      paymentStatus: document.getElementById('paymentStatus').value,
-      quantity: qtyEl.value
+      quantity: qtyEl.value,
+      type: isBookingMode ? "N/A" : document.getElementById('type').value,
+      emptyCylinder: isBookingMode ? document.getElementById('emptyCylinder').value : "N/A",
+      paymentStatus: isBookingMode ? document.getElementById('paymentStatus').value : "N/A"
     };
 
     try {
       await fetch(GOOGLE_APP_URL, {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
+        method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload)
       });
-
-      lastSubmitAt = Date.now();
-      fillReceipt(payload);
-      form.classList.add('hide');
-      receipt.classList.add('show');
-    } catch (err){
-      showStatus('Order failed to send. Check your connection and try again. / अर्डर पठाउन सकिएन।', 'error');
+      showReceipt(payload);
+    } catch(err) {
+      statusBox.textContent = "Failed to submit. Try again.";
+      statusBox.className = "status error";
     }
-
     submitBtn.disabled = false;
-    submitBtn.removeAttribute('data-loading');
-    submitLabel.textContent = 'Place Order / अर्डर गर्नुहोस्';
+    submitBtn.textContent = isBookingMode ? "Confirm Booking" : "Place Order";
   });
 
-  function fillReceipt(o){
+  function showReceipt(o) {
+    document.getElementById('formContainer').classList.add('hide');
+    document.getElementById('receipt').classList.remove('hide');
+    
+    document.getElementById('rCategoryLabel').textContent = o.orderCategory.toUpperCase() + " CONFIRMED";
     document.getElementById('rOrderId').textContent = o.orderId;
     document.getElementById('rName').textContent = o.name;
     document.getElementById('rPhone').textContent = o.phone;
     document.getElementById('rBrand').textContent = o.brand;
-    document.getElementById('rType').textContent = o.type;
-    document.getElementById('rEmpty').textContent = o.emptyCylinder;
-    document.getElementById('rPayment').textContent = o.paymentStatus;
     document.getElementById('rQty').textContent = o.quantity;
-    document.getElementById('rTime').textContent = o.timestamp;
+
+    if(isBookingMode) {
+      document.getElementById('rTypeRow').classList.add('hide');
+      document.getElementById('rEmptyRow').classList.remove('hide');
+      document.getElementById('rPaymentRow').classList.remove('hide');
+      document.getElementById('rEmpty').textContent = o.emptyCylinder;
+      document.getElementById('rPayment').textContent = o.paymentStatus;
+    } else {
+      document.getElementById('rTypeRow').classList.remove('hide');
+      document.getElementById('rEmptyRow').classList.add('hide');
+      document.getElementById('rPaymentRow').classList.add('hide');
+      document.getElementById('rType').textContent = o.type;
+    }
   }
 
-  document.getElementById('newOrderBtn').addEventListener('click', () => {
-    form.reset();
-    qtyEl.value = 1;
-    [nameEl, phoneEl].forEach(el => el.classList.remove('invalid'));
-    document.querySelectorAll('.field-msg').forEach(el => el.classList.remove('show'));
-    clearStatus();
-    receipt.classList.remove('show');
-    form.classList.remove('hide');
-    nameEl.focus();
-  });
+  document.getElementById('newOrderBtn').onclick = () => {
+    form.reset(); qtyEl.value = 1;
+    document.getElementById('receipt').classList.add('hide');
+    document.getElementById('formContainer').classList.remove('hide');
+  };
 })();
 </script>
 </body>
