@@ -9,22 +9,20 @@
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@500;600;700;800&family=Noto+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root {
-    --paper: #FBF5E8;
-    --paper-dim: #F3EAD8;
-    --ink: #2B2013;
-    --ink-soft: #6B5F4E;
-    --crimson: #C8102E;
-    --crimson-dark: #9E0B23;
-    --steel: #003893;
-    --steel-dark: #00265E;
-    --gold: #E8A33D;
-    --perf: #D8C9A6;
-    --ok-bg: #E6F3E3;
-    --ok-fg: #276B36;
-    --err-bg: #FBE7E4;
-    --err-fg: #A32B1E;
-    --radius: 16px;
-    --border: #E5DCC7;
+    --bg-page: #E4E8ED;
+    --paper: #F8FAFC;
+    --ink: #0F172A;
+    --ink-soft: #475569;
+    --brand-red: #DC2626;
+    --brand-red-dark: #B91C1C;
+    --brand-blue: #1D4ED8;
+    --accent: #F59E0B;
+    --ok-bg: #ECFDF5;
+    --ok-fg: #047857;
+    --err-bg: #FEF2F2;
+    --err-fg: #B91C1C;
+    --radius: 18px;
+    --border: #E2E8F0;
   }
 
   * {
@@ -39,9 +37,9 @@
   body {
     margin: 0;
     font-family: 'Noto Sans', 'Noto Sans Devanagari', sans-serif;
-    background:
-      radial-gradient(circle at 15% -10%, #ffffff 0%, transparent 45%),
-      var(--paper);
+    background-color: var(--bg-page);
+    background-image: radial-gradient(#CBD5E1 1px, transparent 0);
+    background-size: 24px 24px;
     color: var(--ink);
     min-height: 100vh;
     display: flex;
@@ -55,26 +53,45 @@
     max-width: 420px;
     background: #fff;
     border-radius: var(--radius);
-    box-shadow:
-      0 20px 44px rgba(43, 32, 19, 0.14),
-      0 4px 12px rgba(43, 32, 19, 0.06);
+    box-shadow: 
+      0 24px 48px -12px rgba(15, 23, 42, 0.25), 
+      0 0 0 1px rgba(15, 23, 42, 0.05);
     overflow: hidden;
   }
 
-  /* Header */
+  /* --- The Shop Awning Header --- */
   .stub {
-    background: linear-gradient(155deg, var(--steel) 0%, var(--steel-dark) 100%);
+    /* 3D shading + Red/Blue storefront stripes */
+    background: 
+      linear-gradient(to bottom, rgba(255,255,255,0.15) 0%, rgba(0,0,0,0.3) 100%),
+      repeating-linear-gradient(
+        to right,
+        var(--brand-red) 0,
+        var(--brand-red) 40px,
+        var(--brand-blue) 40px,
+        var(--brand-blue) 80px
+      );
     color: #fff;
-    padding: 28px 24px 36px;
+    padding: 32px 24px 44px;
     position: relative;
     text-align: center;
   }
 
+  .flame-container {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto 16px;
+    background: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+  }
+
   .flame-mark {
-    width: 48px;
-    height: 48px;
-    margin: 0 auto 12px;
-    display: block;
+    width: 36px;
+    height: 36px;
   }
 
   .stub h1 {
@@ -83,6 +100,7 @@
     font-weight: 800;
     letter-spacing: -0.02em;
     line-height: 1.2;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.4);
   }
 
   .stub .np {
@@ -90,142 +108,153 @@
     font-weight: 700;
     font-size: 1.05rem;
     margin-top: 4px;
-    color: #DCE6FA;
+    color: #E2E8F0;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.4);
   }
 
+  /* Pure CSS Scalloped Flaps (No SVG) */
   .perf {
+    height: 20px;
+    background: #fff;
     position: relative;
-    height: 18px;
-    background: var(--steel-dark);
   }
 
-  .perf svg {
-    display: block;
-    width: 100%;
-    height: 18px;
+  .perf::before {
+    content: "";
+    position: absolute;
+    top: -20px; 
+    left: 0; 
+    right: 0;
+    height: 20px;
+    /* This creates white arcs pushing UP, leaving colored flaps hanging DOWN */
+    background-image: radial-gradient(circle at 20px 20px, #fff 20px, transparent 20.5px);
+    background-size: 40px 20px; 
+    background-position: -20px top; 
+    background-repeat: repeat-x;
   }
 
-  /* Body */
+  /* --- Body & Form --- */
   .body {
-    padding: 22px 24px 28px;
+    padding: 16px 28px 32px;
   }
 
-  /* View Switcher */
   .view-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
+    margin-bottom: 24px;
     gap: 12px;
   }
 
   .view-title {
     font-weight: 800;
-    color: var(--steel-dark);
-    font-size: 1.15rem;
+    color: var(--ink);
+    font-size: 1.25rem;
     margin: 0;
   }
 
   .switch-link {
     font-size: 0.85rem;
     font-weight: 700;
-    color: var(--steel);
+    color: var(--brand-blue);
     text-decoration: none;
-    padding: 6px 10px;
+    padding: 8px 12px;
     border-radius: 8px;
-    background: rgba(0, 56, 147, 0.08);
-    transition: background 0.15s ease, color 0.15s ease;
+    background: rgba(29, 78, 216, 0.08);
+    transition: all 0.2s ease;
     white-space: nowrap;
     cursor: pointer;
   }
 
   .switch-link:hover {
-    background: rgba(0, 56, 147, 0.14);
-    color: var(--crimson);
+    background: rgba(29, 78, 216, 0.15);
+    color: var(--brand-red);
   }
 
-  /* Status */
+  /* Status Messages */
   .status {
     display: none;
-    margin-bottom: 18px;
-    padding: 13px 15px;
-    border-radius: 10px;
+    margin-bottom: 20px;
+    padding: 14px 16px;
+    border-radius: 12px;
     font-weight: 600;
     font-size: 0.92rem;
     line-height: 1.4;
+    border: 1px solid transparent;
   }
 
   .status.success {
     display: block;
     background: var(--ok-bg);
     color: var(--ok-fg);
+    border-color: #A7F3D0;
   }
 
   .status.error {
     display: block;
     background: var(--err-bg);
     color: var(--err-fg);
+    border-color: #FECACA;
   }
 
-  /* Fields */
+  /* Input Fields */
   .field {
-    margin-bottom: 18px;
+    margin-bottom: 20px;
   }
 
   .field label {
     display: block;
     font-weight: 700;
-    font-size: 0.84rem;
-    color: var(--ink-soft);
-    margin-bottom: 7px;
+    font-size: 0.88rem;
+    color: var(--ink);
+    margin-bottom: 8px;
   }
 
   .field label .np {
     font-family: 'Noto Sans Devanagari', sans-serif;
     font-weight: 600;
     margin-left: 4px;
-    opacity: 0.9;
+    color: var(--ink-soft);
   }
 
-  input,
-  select {
+  input, select {
     width: 100%;
-    padding: 13px 14px;
-    border: 1.5px solid var(--border);
-    border-radius: 11px;
-    background: var(--paper-dim);
+    padding: 14px 16px;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    background: #fff;
     color: var(--ink);
     font-size: 16px;
+    font-weight: 500;
     font-family: inherit;
     appearance: none;
     -webkit-appearance: none;
-    transition: border-color 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
+    transition: all 0.2s ease;
   }
 
   select {
-    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236B5F4E' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23475569' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");
     background-repeat: no-repeat;
-    background-position: right 14px center;
+    background-position: right 16px center;
     background-size: 16px;
-    padding-right: 42px;
+    padding-right: 48px;
   }
 
-  input:focus,
-  select:focus {
+  input:focus, select:focus {
     outline: none;
-    border-color: var(--steel);
-    background: #fff;
-    box-shadow: 0 0 0 3px rgba(0, 56, 147, 0.15);
+    border-color: var(--brand-blue);
+    box-shadow: 0 0 0 4px rgba(29, 78, 216, 0.12);
   }
 
   input.invalid {
-    border-color: var(--crimson);
-    background: #FDF1EF;
+    border-color: var(--brand-red);
+    background: #FEF2F2;
   }
 
   .field-msg {
-    font-size: 0.78rem;
-    color: var(--crimson-dark);
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--brand-red-dark);
     margin-top: 6px;
     display: none;
   }
@@ -234,71 +263,76 @@
     display: block;
   }
 
-  /* Quantity */
+  /* Quantity Control */
   .qty-row {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
   }
 
   .qty-row input {
     text-align: center;
     font-weight: 700;
     max-width: 80px;
+    font-size: 18px;
   }
 
-  /* Remove spin buttons for cleaner UI */
   input[type="number"]::-webkit-inner-spin-button,
   input[type="number"]::-webkit-outer-spin-button {
     -webkit-appearance: none;
     margin: 0;
   }
-  input[type="number"] {
-    -moz-appearance: textfield;
-  }
+  input[type="number"] { -moz-appearance: textfield; }
 
   .qty-btn {
     flex: 0 0 auto;
-    width: 46px;
-    height: 46px;
-    border-radius: 11px;
-    border: 1.5px solid var(--border);
-    background: var(--paper-dim);
-    font-size: 1.25rem;
+    width: 52px;
+    height: 52px;
+    border-radius: 12px;
+    border: 2px solid var(--border);
+    background: var(--paper);
+    font-size: 1.5rem;
     font-weight: 700;
-    color: var(--steel);
+    color: var(--ink);
     cursor: pointer;
-    transition: background 0.15s ease, border-color 0.15s ease;
+    transition: all 0.15s ease;
   }
 
   .qty-btn:hover {
-    background: #fff;
-    border-color: var(--steel);
+    background: var(--border);
   }
 
   .qty-btn:active {
-    background: rgba(0, 56, 147, 0.08);
+    transform: scale(0.96);
   }
 
-  /* Submit */
+  /* Submit Button */
   button.submit {
     width: 100%;
-    padding: 15px;
-    margin-top: 8px;
+    padding: 16px;
+    margin-top: 12px;
     border: none;
     border-radius: 12px;
-    background: linear-gradient(155deg, var(--crimson) 0%, var(--crimson-dark) 100%);
+    background: linear-gradient(180deg, var(--brand-red) 0%, #B91C1C 100%);
     color: #fff;
-    font-size: 1.02rem;
+    font-size: 1.05rem;
     font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
     cursor: pointer;
-    box-shadow: 0 8px 20px rgba(200, 16, 46, 0.28);
-    transition: transform 0.12s ease, box-shadow 0.12s ease;
+    box-shadow: 
+      0 4px 6px -1px rgba(220, 38, 38, 0.3), 
+      0 2px 4px -1px rgba(220, 38, 38, 0.2), 
+      inset 0 1px 0 rgba(255,255,255,0.25);
+    transition: all 0.2s ease;
   }
 
   button.submit:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 10px 24px rgba(200, 16, 46, 0.32);
+    transform: translateY(-2px);
+    box-shadow: 
+      0 8px 12px -2px rgba(220, 38, 38, 0.35), 
+      0 4px 6px -2px rgba(220, 38, 38, 0.25), 
+      inset 0 1px 0 rgba(255,255,255,0.3);
   }
 
   button.submit:active {
@@ -311,32 +345,38 @@
     transform: none;
   }
 
-  .hide {
-    display: none !important;
+  .hide { display: none !important; }
+
+  /* Receipt / Ticket Inner */
+  #receipt {
+    background: #fff;
+    border: 2px dashed var(--border);
+    border-radius: 16px;
+    padding: 24px;
+    margin-top: 8px;
   }
 
-  /* Receipt */
   .receipt-id {
     text-align: center;
-    padding: 4px 0 20px;
+    padding-bottom: 20px;
   }
 
   .receipt-id .label {
-    font-size: 0.78rem;
+    font-size: 0.8rem;
     color: var(--ink-soft);
-    font-weight: 700;
-    letter-spacing: 0.04em;
+    font-weight: 800;
+    letter-spacing: 0.05em;
   }
 
   .receipt-id .value {
-    font-size: 1.75rem;
+    font-size: 1.85rem;
     font-weight: 800;
-    color: var(--steel);
+    color: var(--brand-blue);
     margin-top: 4px;
   }
 
   .receipt-rows {
-    border-top: 1.5px dashed var(--perf);
+    border-top: 2px dashed var(--border);
     padding-top: 16px;
   }
 
@@ -344,36 +384,38 @@
     display: flex;
     justify-content: space-between;
     gap: 14px;
-    padding: 9px 0;
-    font-size: 0.94rem;
+    padding: 10px 0;
+    font-size: 0.98rem;
   }
 
   .receipt-row span:first-child {
     color: var(--ink-soft);
-    font-weight: 500;
+    font-weight: 600;
   }
 
   .receipt-row span:last-child {
-    font-weight: 700;
+    font-weight: 800;
     text-align: right;
+    color: var(--ink);
   }
 
   .new-order-btn {
     width: 100%;
-    margin-top: 22px;
-    padding: 14px;
+    margin-top: 24px;
+    padding: 16px;
     border-radius: 12px;
-    border: 1.5px solid var(--steel);
+    border: 2px solid var(--brand-blue);
     background: #fff;
-    color: var(--steel);
-    font-weight: 700;
-    font-size: 0.98rem;
+    color: var(--brand-blue);
+    font-weight: 800;
+    font-size: 1rem;
+    text-transform: uppercase;
     cursor: pointer;
-    transition: background 0.15s ease, color 0.15s ease;
+    transition: all 0.2s ease;
   }
 
   .new-order-btn:hover {
-    background: var(--steel);
+    background: var(--brand-blue);
     color: #fff;
   }
 </style>
@@ -381,28 +423,17 @@
 <body>
 <div class="ticket">
   <div class="stub">
-    <svg class="flame-mark" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M24 4c1 7-6 9-6 16a6 6 0 0 0 12 0c2 2 3 5 3 8a9 9 0 1 1-18 0c0-9 7-12 9-24z" fill="#F2A93B"/>
-      <path d="M24 16c0 4-4 5-4 10a4 4 0 0 0 8 0c1 1 1.5 2.5 1.5 4a5.5 5.5 0 1 1-11 0c0-6 4-8 5.5-14z" fill="#C8102E"/>
-    </svg>
+    <div class="flame-container">
+      <svg class="flame-mark" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M24 4c1 7-6 9-6 16a6 6 0 0 0 12 0c2 2 3 5 3 8a9 9 0 1 1-18 0c0-9 7-12 9-24z" fill="#F59E0B"/>
+        <path d="M24 16c0 4-4 5-4 10a4 4 0 0 0 8 0c1 1 1.5 2.5 1.5 4a5.5 5.5 0 1 1-11 0c0-6 4-8 5.5-14z" fill="#DC2626"/>
+      </svg>
+    </div>
     <h1>LPG Gas Services</h1>
     <div class="np">ग्यास अर्डर तथा बुकिङ</div>
   </div>
 
-  <div class="perf">
-    <svg preserveAspectRatio="none" viewBox="0 0 400 18">
-      <circle cx="20" cy="0" r="9" fill="var(--paper)"/>
-      <circle cx="60" cy="0" r="9" fill="var(--paper)"/>
-      <circle cx="100" cy="0" r="9" fill="var(--paper)"/>
-      <circle cx="140" cy="0" r="9" fill="var(--paper)"/>
-      <circle cx="180" cy="0" r="9" fill="var(--paper)"/>
-      <circle cx="220" cy="0" r="9" fill="var(--paper)"/>
-      <circle cx="260" cy="0" r="9" fill="var(--paper)"/>
-      <circle cx="300" cy="0" r="9" fill="var(--paper)"/>
-      <circle cx="340" cy="0" r="9" fill="var(--paper)"/>
-      <circle cx="380" cy="0" r="9" fill="var(--paper)"/>
-    </svg>
-  </div>
+  <div class="perf"></div>
 
   <div class="body">
     <div id="statusBox" class="status"></div>
@@ -410,11 +441,10 @@
     <div id="formContainer">
       <div class="view-header">
         <h2 class="view-title" id="viewTitle">Direct Order</h2>
-        <a class="switch-link" id="toggleViewBtn">Go to Booking →</a>
+        <a class="switch-link" id="toggleViewBtn">Booking Mode →</a>
       </div>
 
       <form id="gasForm" novalidate>
-        <!-- Common Fields -->
         <div class="field">
           <label>Customer Name <span class="np">नाम</span></label>
           <input type="text" id="name" required placeholder="Ram Bahadur" autocomplete="name">
@@ -435,7 +465,6 @@
           </select>
         </div>
 
-        <!-- Direct Order Specific -->
         <div id="directOrderFields">
           <div class="field">
             <label>Order Type <span class="np">प्रकार</span></label>
@@ -446,7 +475,6 @@
           </div>
         </div>
 
-        <!-- Booking Specific -->
         <div id="bookingFields" class="hide">
           <div class="field">
             <label>Empty Cylinder Status <span class="np">खाली सिलिन्डर</span></label>
@@ -455,7 +483,6 @@
               <option value="Will Drop Later">Will Drop Later / पछि लिएर आउने</option>
             </select>
           </div>
-
           <div class="field">
             <label>Payment Status <span class="np">भुक्तानी स्थिति</span></label>
             <select id="paymentStatus">
@@ -465,7 +492,6 @@
           </div>
         </div>
 
-        <!-- Quantity (Editable & Strictly Numeric) -->
         <div class="field">
           <label>Quantity <span class="np">संख्या</span></label>
           <div class="qty-row">
@@ -490,7 +516,7 @@
         <div class="receipt-row"><span>Phone</span><span id="rPhone">—</span></div>
         <div class="receipt-row"><span>Brand</span><span id="rBrand">—</span></div>
         <div class="receipt-row" id="rTypeRow"><span>Type</span><span id="rType">—</span></div>
-        <div class="receipt-row hide" id="rEmptyRow"><span>Empty Cylinder</span><span id="rEmpty">—</span></div>
+        <div class="receipt-row hide" id="rEmptyRow"><span>Empty</span><span id="rEmpty">—</span></div>
         <div class="receipt-row hide" id="rPaymentRow"><span>Payment</span><span id="rPayment">—</span></div>
         <div class="receipt-row"><span>Quantity</span><span id="rQty">—</span></div>
       </div>
@@ -513,45 +539,32 @@
 
   let isBookingMode = false;
 
-  // View switcher
   toggleBtn.addEventListener('click', () => {
     isBookingMode = !isBookingMode;
-
     if (isBookingMode) {
       viewTitle.textContent = "Advance Booking";
-      toggleBtn.innerHTML = "← Back to Order";
+      toggleBtn.innerHTML = "← Order Mode";
       directFields.classList.add('hide');
       bookingFields.classList.remove('hide');
       submitBtn.textContent = "Confirm Booking";
     } else {
       viewTitle.textContent = "Direct Order";
-      toggleBtn.innerHTML = "Go to Booking →";
+      toggleBtn.innerHTML = "Booking Mode →";
       directFields.classList.remove('hide');
       bookingFields.classList.add('hide');
       submitBtn.textContent = "Place Order";
     }
   });
 
-  // Quantity controls and strict numeric sanitization
   const qtyEl = document.getElementById('quantity');
-
-  // Prevent typing invalid characters like 'e', 'E', '+', '-', '.'
   qtyEl.addEventListener('keydown', (e) => {
-    if (['e', 'E', '+', '-', '.'].includes(e.key)) {
-      e.preventDefault();
-    }
+    if (['e', 'E', '+', '-', '.'].includes(e.key)) e.preventDefault();
   });
-
-  // Strip non-digits on input paste or direct edit
   qtyEl.addEventListener('input', () => {
     qtyEl.value = qtyEl.value.replace(/[^0-9]/g, '');
   });
-
-  // Default to 1 if input is left blank or set below 1 on blur
   qtyEl.addEventListener('blur', () => {
-    if (!qtyEl.value || parseInt(qtyEl.value, 10) < 1) {
-      qtyEl.value = 1;
-    }
+    if (!qtyEl.value || parseInt(qtyEl.value, 10) < 1) qtyEl.value = 1;
   });
 
   document.getElementById('qtyDown').onclick = () => {
@@ -561,24 +574,19 @@
     qtyEl.value = (parseInt(qtyEl.value, 10) || 0) + 1;
   };
 
-  // Validation
   const nameEl = document.getElementById('name');
   const phoneEl = document.getElementById('phone');
 
   function validate() {
     const nValid = nameEl.value.trim().length >= 2;
     const pValid = /^9[678]\d{8}$/.test(phoneEl.value.trim());
-
     nameEl.classList.toggle('invalid', !nValid);
     document.getElementById('nameMsg').classList.toggle('show', !nValid);
-
     phoneEl.classList.toggle('invalid', !pValid);
     document.getElementById('phoneMsg').classList.toggle('show', !pValid);
-
     return nValid && pValid;
   }
 
-  // Submit
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
     statusBox.style.display = 'none';
@@ -591,7 +599,7 @@
     }
 
     submitBtn.disabled = true;
-    submitBtn.textContent = "Sending...";
+    submitBtn.textContent = "Processing...";
 
     const payload = {
       orderId: (isBookingMode ? 'BKG-' : 'ORD-') + Math.floor(1000 + Math.random() * 9000),
