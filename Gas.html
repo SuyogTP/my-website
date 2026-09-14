@@ -8,96 +8,366 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@500;600;700;800&family=Noto+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-  :root{
-    --paper:#FBF5E8; --paper-dim:#F3EAD8; --ink:#2B2013; --ink-soft:#6B5F4E;
-    --crimson:#C8102E; --crimson-dark:#9E0B23; --steel:#003893; --steel-dark:#00265E;
-    --gold:#E8A33D; --perf:#D8C9A6; --ok-bg:#E6F3E3; --ok-fg:#276B36; --err-bg:#FBE7E4; --err-fg:#A32B1E; --radius:14px;
+  :root {
+    --paper: #FBF5E8;
+    --paper-dim: #F3EAD8;
+    --ink: #2B2013;
+    --ink-soft: #6B5F4E;
+    --crimson: #C8102E;
+    --crimson-dark: #9E0B23;
+    --steel: #003893;
+    --steel-dark: #00265E;
+    --gold: #E8A33D;
+    --perf: #D8C9A6;
+    --ok-bg: #E6F3E3;
+    --ok-fg: #276B36;
+    --err-bg: #FBE7E4;
+    --err-fg: #A32B1E;
+    --radius: 16px;
+    --border: #E5DCC7;
   }
-  *{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
-  html,body{ height:100%; }
-  body{
-    margin:0; font-family:'Noto Sans','Noto Sans Devanagari',sans-serif;
-    background: radial-gradient(circle at 15% -10%, #ffffff 0%, transparent 45%), var(--paper);
-    color:var(--ink); min-height:100vh; display:flex; align-items:center; justify-content:center; padding:28px 16px;
+
+  * {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
   }
-  .ticket{
-    width:100%; max-width:420px; background:#fff; border-radius:var(--radius);
-    box-shadow:0 18px 40px rgba(43,32,19,0.16), 0 3px 10px rgba(43,32,19,0.08); overflow:hidden;
+
+  html, body {
+    height: 100%;
   }
-  
-  /* Header stub */
-  .stub{
-    background:linear-gradient(155deg, var(--steel) 0%, var(--steel-dark) 100%);
-    color:#fff; padding:26px 24px 34px; position:relative; text-align:center;
+
+  body {
+    margin: 0;
+    font-family: 'Noto Sans', 'Noto Sans Devanagari', sans-serif;
+    background:
+      radial-gradient(circle at 15% -10%, #ffffff 0%, transparent 45%),
+      var(--paper);
+    color: var(--ink);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px 16px;
   }
-  .flame-mark{ width:46px; height:46px; margin:0 auto 10px; display:block; }
-  .stub h1{ margin:0; font-size:1.5rem; font-weight:800; letter-spacing:-0.01em; line-height:1.15; }
-  .stub .np{ font-family:'Noto Sans Devanagari',sans-serif; font-weight:700; font-size:1.05rem; margin-top:3px; color:#DCE6FA; }
-  .perf{ position:relative; height:18px; background:var(--steel-dark); }
-  .perf svg{ display:block; width:100%; height:18px; }
+
+  .ticket {
+    width: 100%;
+    max-width: 420px;
+    background: #fff;
+    border-radius: var(--radius);
+    box-shadow:
+      0 20px 44px rgba(43, 32, 19, 0.14),
+      0 4px 12px rgba(43, 32, 19, 0.06);
+    overflow: hidden;
+  }
+
+  /* Header */
+  .stub {
+    background: linear-gradient(155deg, var(--steel) 0%, var(--steel-dark) 100%);
+    color: #fff;
+    padding: 28px 24px 36px;
+    position: relative;
+    text-align: center;
+  }
+
+  .flame-mark {
+    width: 48px;
+    height: 48px;
+    margin: 0 auto 12px;
+    display: block;
+  }
+
+  .stub h1 {
+    margin: 0;
+    font-size: 1.55rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+  }
+
+  .stub .np {
+    font-family: 'Noto Sans Devanagari', sans-serif;
+    font-weight: 700;
+    font-size: 1.05rem;
+    margin-top: 4px;
+    color: #DCE6FA;
+  }
+
+  .perf {
+    position: relative;
+    height: 18px;
+    background: var(--steel-dark);
+  }
+
+  .perf svg {
+    display: block;
+    width: 100%;
+    height: 18px;
+  }
 
   /* Body */
-  .body{ padding:20px 24px 24px; }
-  
+  .body {
+    padding: 22px 24px 28px;
+  }
+
   /* View Switcher */
-  .view-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 16px; }
-  .view-title { font-weight: 800; color: var(--steel-dark); font-size: 1.1rem; margin: 0; }
-  .switch-link { 
-    font-size: 0.85rem; font-weight: 700; color: var(--steel); 
-    text-decoration: underline; text-underline-offset: 3px; cursor: pointer; 
-  }
-  .switch-link:hover { color: var(--crimson); }
-
-  .status{ display:none; margin-bottom:18px; padding:13px 15px; border-radius:10px; font-weight:600; font-size:0.92rem; line-height:1.4; }
-  .status.success{ display:block; background:var(--ok-bg); color:var(--ok-fg); }
-  .status.error{ display:block; background:var(--err-bg); color:var(--err-fg); }
-
-  .field{ margin-bottom:16px; }
-  .field label{ display:block; font-weight:700; font-size:0.84rem; color:var(--ink-soft); margin-bottom:6px; }
-  .field label .np{ font-family:'Noto Sans Devanagari',sans-serif; font-weight:600; margin-left:5px; }
-
-  input, select{
-    width:100%; padding:13px 14px; border:1.5px solid #E5DCC7; border-radius:10px;
-    background:var(--paper-dim); color:var(--ink); font-size:16px; font-family:inherit;
-    appearance:none; -webkit-appearance:none; transition:border-color .15s ease;
-  }
-  select{
-    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236B5F4E' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");
-    background-repeat:no-repeat; background-position:right 14px center; background-size:16px; padding-right:40px;
-  }
-  input:focus, select:focus{ outline:none; border-color:var(--steel); background:#fff; box-shadow:0 0 0 3px rgba(0,56,147,0.14); }
-  input.invalid{ border-color:var(--crimson); background:#FDF1EF; }
-  
-  .field-msg{ font-size:0.78rem; color:var(--crimson-dark); margin-top:5px; display:none; }
-  .field-msg.show{ display:block; }
-
-  .qty-row{ display:flex; align-items:center; gap:10px; }
-  .qty-row input{ text-align:center; }
-  .qty-btn{
-    flex:0 0 auto; width:44px; height:44px; border-radius:10px; border:1.5px solid #E5DCC7;
-    background:var(--paper-dim); font-size:1.2rem; font-weight:700; color:var(--steel); cursor:pointer;
+  .view-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    gap: 12px;
   }
 
-  button.submit{
-    width:100%; padding:15px; margin-top:6px; border:none; border-radius:11px;
-    background:linear-gradient(155deg, var(--crimson) 0%, var(--crimson-dark) 100%);
-    color:#fff; font-size:1rem; font-weight:800; cursor:pointer; box-shadow:0 8px 18px rgba(200,16,46,0.28);
+  .view-title {
+    font-weight: 800;
+    color: var(--steel-dark);
+    font-size: 1.15rem;
+    margin: 0;
   }
-  
-  .hide { display: none !important; }
+
+  .switch-link {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--steel);
+    text-decoration: none;
+    padding: 6px 10px;
+    border-radius: 8px;
+    background: rgba(0, 56, 147, 0.08);
+    transition: background 0.15s ease, color 0.15s ease;
+    white-space: nowrap;
+  }
+
+  .switch-link:hover {
+    background: rgba(0, 56, 147, 0.14);
+    color: var(--crimson);
+  }
+
+  /* Status */
+  .status {
+    display: none;
+    margin-bottom: 18px;
+    padding: 13px 15px;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 0.92rem;
+    line-height: 1.4;
+  }
+
+  .status.success {
+    display: block;
+    background: var(--ok-bg);
+    color: var(--ok-fg);
+  }
+
+  .status.error {
+    display: block;
+    background: var(--err-bg);
+    color: var(--err-fg);
+  }
+
+  /* Fields */
+  .field {
+    margin-bottom: 18px;
+  }
+
+  .field label {
+    display: block;
+    font-weight: 700;
+    font-size: 0.84rem;
+    color: var(--ink-soft);
+    margin-bottom: 7px;
+  }
+
+  .field label .np {
+    font-family: 'Noto Sans Devanagari', sans-serif;
+    font-weight: 600;
+    margin-left: 4px;
+    opacity: 0.9;
+  }
+
+  input,
+  select {
+    width: 100%;
+    padding: 13px 14px;
+    border: 1.5px solid var(--border);
+    border-radius: 11px;
+    background: var(--paper-dim);
+    color: var(--ink);
+    font-size: 16px;
+    font-family: inherit;
+    appearance: none;
+    -webkit-appearance: none;
+    transition: border-color 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  select {
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236B5F4E' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    background-size: 16px;
+    padding-right: 42px;
+  }
+
+  input:focus,
+  select:focus {
+    outline: none;
+    border-color: var(--steel);
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(0, 56, 147, 0.15);
+  }
+
+  input.invalid {
+    border-color: var(--crimson);
+    background: #FDF1EF;
+  }
+
+  .field-msg {
+    font-size: 0.78rem;
+    color: var(--crimson-dark);
+    margin-top: 6px;
+    display: none;
+  }
+
+  .field-msg.show {
+    display: block;
+  }
+
+  /* Quantity */
+  .qty-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .qty-row input {
+    text-align: center;
+    font-weight: 700;
+    max-width: 80px;
+  }
+
+  .qty-btn {
+    flex: 0 0 auto;
+    width: 46px;
+    height: 46px;
+    border-radius: 11px;
+    border: 1.5px solid var(--border);
+    background: var(--paper-dim);
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--steel);
+    cursor: pointer;
+    transition: background 0.15s ease, border-color 0.15s ease;
+  }
+
+  .qty-btn:hover {
+    background: #fff;
+    border-color: var(--steel);
+  }
+
+  .qty-btn:active {
+    background: rgba(0, 56, 147, 0.08);
+  }
+
+  /* Submit */
+  button.submit {
+    width: 100%;
+    padding: 15px;
+    margin-top: 8px;
+    border: none;
+    border-radius: 12px;
+    background: linear-gradient(155deg, var(--crimson) 0%, var(--crimson-dark) 100%);
+    color: #fff;
+    font-size: 1.02rem;
+    font-weight: 800;
+    cursor: pointer;
+    box-shadow: 0 8px 20px rgba(200, 16, 46, 0.28);
+    transition: transform 0.12s ease, box-shadow 0.12s ease;
+  }
+
+  button.submit:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 10px 24px rgba(200, 16, 46, 0.32);
+  }
+
+  button.submit:active {
+    transform: translateY(0);
+  }
+
+  button.submit:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  .hide {
+    display: none !important;
+  }
 
   /* Receipt */
-  .receipt-id{ text-align:center; padding:6px 0 18px; }
-  .receipt-id .label{ font-size:0.78rem; color:var(--ink-soft); font-weight:700; }
-  .receipt-id .value{ font-size:1.7rem; font-weight:800; color:var(--steel); margin-top:2px; }
-  .receipt-rows{ border-top:1.5px dashed var(--perf); padding-top:14px; }
-  .receipt-row{ display:flex; justify-content:space-between; gap:12px; padding:7px 0; font-size:0.92rem; }
-  .receipt-row span:last-child{ font-weight:700; text-align:right; }
-  .new-order-btn{ width:100%; margin-top:18px; padding:13px; border-radius:11px; border:1.5px solid var(--steel); background:#fff; color:var(--steel); font-weight:700; cursor:pointer; }
+  .receipt-id {
+    text-align: center;
+    padding: 4px 0 20px;
+  }
+
+  .receipt-id .label {
+    font-size: 0.78rem;
+    color: var(--ink-soft);
+    font-weight: 700;
+    letter-spacing: 0.04em;
+  }
+
+  .receipt-id .value {
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: var(--steel);
+    margin-top: 4px;
+  }
+
+  .receipt-rows {
+    border-top: 1.5px dashed var(--perf);
+    padding-top: 16px;
+  }
+
+  .receipt-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 14px;
+    padding: 9px 0;
+    font-size: 0.94rem;
+  }
+
+  .receipt-row span:first-child {
+    color: var(--ink-soft);
+    font-weight: 500;
+  }
+
+  .receipt-row span:last-child {
+    font-weight: 700;
+    text-align: right;
+  }
+
+  .new-order-btn {
+    width: 100%;
+    margin-top: 22px;
+    padding: 14px;
+    border-radius: 12px;
+    border: 1.5px solid var(--steel);
+    background: #fff;
+    color: var(--steel);
+    font-weight: 700;
+    font-size: 0.98rem;
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+
+  .new-order-btn:hover {
+    background: var(--steel);
+    color: #fff;
+  }
 </style>
 </head>
 <body>
-
 <div class="ticket">
   <div class="stub">
     <svg class="flame-mark" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -107,8 +377,20 @@
     <h1>LPG Gas Services</h1>
     <div class="np">ग्यास अर्डर तथा बुकिङ</div>
   </div>
+
   <div class="perf">
-    <svg preserveAspectRatio="none" viewBox="0 0 400 18"><circle cx="20" cy="0" r="9" fill="var(--paper)"/><circle cx="60" cy="0" r="9" fill="var(--paper)"/><circle cx="100" cy="0" r="9" fill="var(--paper)"/><circle cx="140" cy="0" r="9" fill="var(--paper)"/><circle cx="180" cy="0" r="9" fill="var(--paper)"/><circle cx="220" cy="0" r="9" fill="var(--paper)"/><circle cx="260" cy="0" r="9" fill="var(--paper)"/><circle cx="300" cy="0" r="9" fill="var(--paper)"/><circle cx="340" cy="0" r="9" fill="var(--paper)"/><circle cx="380" cy="0" r="9" fill="var(--paper)"/></svg>
+    <svg preserveAspectRatio="none" viewBox="0 0 400 18">
+      <circle cx="20" cy="0" r="9" fill="var(--paper)"/>
+      <circle cx="60" cy="0" r="9" fill="var(--paper)"/>
+      <circle cx="100" cy="0" r="9" fill="var(--paper)"/>
+      <circle cx="140" cy="0" r="9" fill="var(--paper)"/>
+      <circle cx="180" cy="0" r="9" fill="var(--paper)"/>
+      <circle cx="220" cy="0" r="9" fill="var(--paper)"/>
+      <circle cx="260" cy="0" r="9" fill="var(--paper)"/>
+      <circle cx="300" cy="0" r="9" fill="var(--paper)"/>
+      <circle cx="340" cy="0" r="9" fill="var(--paper)"/>
+      <circle cx="380" cy="0" r="9" fill="var(--paper)"/>
+    </svg>
   </div>
 
   <div class="body">
@@ -117,20 +399,20 @@
     <div id="formContainer">
       <div class="view-header">
         <h2 class="view-title" id="viewTitle">Direct Order</h2>
-        <a class="switch-link" id="toggleViewBtn">Go to Booking &rarr;</a>
+        <a class="switch-link" id="toggleViewBtn">Go to Booking →</a>
       </div>
 
       <form id="gasForm" novalidate>
         <!-- Common Fields -->
         <div class="field">
           <label>Customer Name <span class="np">नाम</span></label>
-          <input type="text" id="name" required placeholder="Ram Bahadur">
+          <input type="text" id="name" required placeholder="Ram Bahadur" autocomplete="name">
           <div class="field-msg" id="nameMsg">Please enter your name.</div>
         </div>
 
         <div class="field">
           <label>Phone Number <span class="np">फोन नम्बर</span></label>
-          <input type="tel" id="phone" required placeholder="98XXXXXXXX" maxlength="10">
+          <input type="tel" id="phone" required placeholder="98XXXXXXXX" maxlength="10" inputmode="numeric" autocomplete="tel">
           <div class="field-msg" id="phoneMsg">Valid 10-digit number required.</div>
         </div>
 
@@ -153,7 +435,7 @@
           </div>
         </div>
 
-        <!-- Booking Specific (Hidden by default) -->
+        <!-- Booking Specific -->
         <div id="bookingFields" class="hide">
           <div class="field">
             <label>Empty Cylinder Status <span class="np">खाली सिलिन्डर</span></label>
@@ -162,7 +444,7 @@
               <option value="Will Drop Later">Will Drop Later / पछि लिएर आउने</option>
             </select>
           </div>
-          
+
           <div class="field">
             <label>Payment Status <span class="np">भुक्तानी स्थिति</span></label>
             <select id="paymentStatus">
@@ -172,13 +454,13 @@
           </div>
         </div>
 
-        <!-- Common Quantity -->
+        <!-- Quantity -->
         <div class="field">
           <label>Quantity <span class="np">संख्या</span></label>
           <div class="qty-row">
-            <button type="button" class="qty-btn" id="qtyDown">–</button>
-            <input type="number" id="quantity" min="1" max="10" value="1">
-            <button type="button" class="qty-btn" id="qtyUp">+</button>
+            <button type="button" class="qty-btn" id="qtyDown" aria-label="Decrease quantity">–</button>
+            <input type="number" id="quantity" min="1" max="10" value="1" readonly>
+            <button type="button" class="qty-btn" id="qtyUp" aria-label="Increase quantity">+</button>
           </div>
         </div>
 
@@ -186,7 +468,7 @@
       </form>
     </div>
 
-    <!-- Receipt View -->
+    <!-- Receipt -->
     <div id="receipt" class="hide">
       <div class="receipt-id">
         <div class="label" id="rCategoryLabel">ORDER CONFIRMED</div>
@@ -203,15 +485,13 @@
       </div>
       <button type="button" class="new-order-btn" id="newOrderBtn">Done</button>
     </div>
-
   </div>
 </div>
 
 <script>
-(function(){
-  const GOOGLE_APP_URL = "YOUR_SCRIPT_URL_HERE"; // Update your Apps Script URL here!
-  
-  // UI Elements
+(function () {
+  const GOOGLE_APP_URL = ""; // ← Paste your Apps Script Web App URL here
+
   const form = document.getElementById('gasForm');
   const directFields = document.getElementById('directOrderFields');
   const bookingFields = document.getElementById('bookingFields');
@@ -219,50 +499,62 @@
   const toggleBtn = document.getElementById('toggleViewBtn');
   const submitBtn = document.getElementById('submitBtn');
   const statusBox = document.getElementById('statusBox');
-  
-  // State
+
   let isBookingMode = false;
 
-  // View Switcher Logic
+  // View switcher
   toggleBtn.addEventListener('click', () => {
     isBookingMode = !isBookingMode;
-    if(isBookingMode) {
+
+    if (isBookingMode) {
       viewTitle.textContent = "Advance Booking";
-      toggleBtn.innerHTML = "&larr; Back to Order";
+      toggleBtn.innerHTML = "← Back to Order";
       directFields.classList.add('hide');
       bookingFields.classList.remove('hide');
       submitBtn.textContent = "Confirm Booking";
     } else {
       viewTitle.textContent = "Direct Order";
-      toggleBtn.innerHTML = "Go to Booking &rarr;";
+      toggleBtn.innerHTML = "Go to Booking →";
       directFields.classList.remove('hide');
       bookingFields.classList.add('hide');
       submitBtn.textContent = "Place Order";
     }
   });
 
-  // Qty Logic
+  // Quantity controls
   const qtyEl = document.getElementById('quantity');
-  document.getElementById('qtyDown').onclick = () => qtyEl.value = Math.max(1, (parseInt(qtyEl.value)||1) - 1);
-  document.getElementById('qtyUp').onclick = () => qtyEl.value = Math.min(10, (parseInt(qtyEl.value)||1) + 1);
+  document.getElementById('qtyDown').onclick = () => {
+    qtyEl.value = Math.max(1, (parseInt(qtyEl.value) || 1) - 1);
+  };
+  document.getElementById('qtyUp').onclick = () => {
+    qtyEl.value = Math.min(10, (parseInt(qtyEl.value) || 1) + 1);
+  };
 
   // Validation
-  const nameEl = document.getElementById('name'), phoneEl = document.getElementById('phone');
+  const nameEl = document.getElementById('name');
+  const phoneEl = document.getElementById('phone');
+
   function validate() {
-    let nValid = nameEl.value.trim().length >= 2;
-    let pValid = /^9[678]\d{8}$/.test(phoneEl.value.trim());
-    nameEl.classList.toggle('invalid', !nValid); document.getElementById('nameMsg').classList.toggle('show', !nValid);
-    phoneEl.classList.toggle('invalid', !pValid); document.getElementById('phoneMsg').classList.toggle('show', !pValid);
+    const nValid = nameEl.value.trim().length >= 2;
+    const pValid = /^9[678]\d{8}$/.test(phoneEl.value.trim());
+
+    nameEl.classList.toggle('invalid', !nValid);
+    document.getElementById('nameMsg').classList.toggle('show', !nValid);
+
+    phoneEl.classList.toggle('invalid', !pValid);
+    document.getElementById('phoneMsg').classList.toggle('show', !pValid);
+
     return nValid && pValid;
   }
 
-  // Submit Handler
+  // Submit
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
     statusBox.style.display = 'none';
+    statusBox.className = 'status';
 
-    if(!validate()) {
-      statusBox.textContent = "Please fix highlighted fields.";
+    if (!validate()) {
+      statusBox.textContent = "Please fix the highlighted fields.";
       statusBox.className = "status error";
       return;
     }
@@ -284,14 +576,20 @@
     };
 
     try {
-      await fetch(GOOGLE_APP_URL, {
-        method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload)
-      });
+      if (GOOGLE_APP_URL) {
+        await fetch(GOOGLE_APP_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+      }
       showReceipt(payload);
-    } catch(err) {
-      statusBox.textContent = "Failed to submit. Try again.";
+    } catch (err) {
+      statusBox.textContent = "Failed to submit. Please try again.";
       statusBox.className = "status error";
     }
+
     submitBtn.disabled = false;
     submitBtn.textContent = isBookingMode ? "Confirm Booking" : "Place Order";
   });
@@ -299,7 +597,7 @@
   function showReceipt(o) {
     document.getElementById('formContainer').classList.add('hide');
     document.getElementById('receipt').classList.remove('hide');
-    
+
     document.getElementById('rCategoryLabel').textContent = o.orderCategory.toUpperCase() + " CONFIRMED";
     document.getElementById('rOrderId').textContent = o.orderId;
     document.getElementById('rName').textContent = o.name;
@@ -307,7 +605,7 @@
     document.getElementById('rBrand').textContent = o.brand;
     document.getElementById('rQty').textContent = o.quantity;
 
-    if(isBookingMode) {
+    if (isBookingMode) {
       document.getElementById('rTypeRow').classList.add('hide');
       document.getElementById('rEmptyRow').classList.remove('hide');
       document.getElementById('rPaymentRow').classList.remove('hide');
@@ -322,7 +620,13 @@
   }
 
   document.getElementById('newOrderBtn').onclick = () => {
-    form.reset(); qtyEl.value = 1;
+    form.reset();
+    qtyEl.value = 1;
+    nameEl.classList.remove('invalid');
+    phoneEl.classList.remove('invalid');
+    document.getElementById('nameMsg').classList.remove('show');
+    document.getElementById('phoneMsg').classList.remove('show');
+    statusBox.className = 'status';
     document.getElementById('receipt').classList.add('hide');
     document.getElementById('formContainer').classList.remove('hide');
   };
