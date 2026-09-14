@@ -306,8 +306,9 @@
       <div class="field">
         <label for="brand">Gas Brand <span class="np">ब्रान्ड</span></label>
         <select id="brand">
-          <option value="Lokpriya Gas">Lokpriya Gas / लोकप्रिय ग्यास</option>
+          <option value="Lohit Gas">Lohit Gas / लोहित ग्यास</option>
           <option value="Manoj Gas">Manoj Gas / मनोज ग्यास</option>
+          <option value="Lokpriya Gas">Lokpriya Gas / लोकप्रिय ग्यास</option>
         </select>
       </div>
 
@@ -316,6 +317,25 @@
         <select id="type">
           <option value="Refill">Refill Only / साट्ने (खाली - भरिएको)</option>
           <option value="New Cylinder">New Cylinder / नयाँ सिलिन्डर</option>
+        </select>
+      </div>
+
+      <!-- थपिएको: खाली सिलिन्डर दिने अवस्था -->
+      <div class="field">
+        <label for="emptyCylinder">Empty Cylinder <span class="np">खाली सिलिन्डर अवस्था</span></label>
+        <select id="emptyCylinder">
+          <option value="Returned Now">Returned Now / दिन तयार छ</option>
+          <option value="Pending Return">Pending / खाली पछि बुझाउने</option>
+          <option value="Not Needed (New)">Not Needed / पर्दैन (नयाँ खरिद)</option>
+        </select>
+      </div>
+
+      <!-- थपिएको: भुक्तानी स्थिति -->
+      <div class="field">
+        <label for="paymentStatus">Payment Status <span class="np">भुक्तानी स्थिति</span></label>
+        <select id="paymentStatus">
+          <option value="Paid">Paid / नगद बुझाइयो</option>
+          <option value="Unpaid - Credit">Unpaid / उधारो (पछि दिने)</option>
         </select>
       </div>
 
@@ -346,6 +366,8 @@
         <div class="receipt-row"><span>Phone</span><span id="rPhone">—</span></div>
         <div class="receipt-row"><span>Brand</span><span id="rBrand">—</span></div>
         <div class="receipt-row"><span>Type</span><span id="rType">—</span></div>
+        <div class="receipt-row"><span>Empty Cylinder</span><span id="rEmpty">—</span></div>
+        <div class="receipt-row"><span>Payment</span><span id="rPayment">—</span></div>
         <div class="receipt-row"><span>Quantity</span><span id="rQty">—</span></div>
         <div class="receipt-row"><span>Placed at</span><span id="rTime">—</span></div>
       </div>
@@ -356,12 +378,9 @@
 
 <script>
 (function(){
-  // ---- Configuration ----------------------------------------------------
-
   const GOOGLE_APP_URL = "https://script.google.com/macros/s/AKfycbyDwzk5dSBcLzhUgh-bv0bIksfxu0nj__RbbBsucnIkw5hadijeVaKD54ymP1y-tTCy/exec";
   const MIN_SECONDS_BETWEEN_ORDERS = 5;
 
-  // In-memory throttle (intentionally not persisted across page loads).
   let lastSubmitAt = 0;
   let clientIP = "Unknown";
 
@@ -375,7 +394,6 @@
   const submitLabel = document.getElementById('submitLabel');
   const statusBox   = document.getElementById('statusBox');
   const receipt     = document.getElementById('receipt');
-  const bodyEl      = document.querySelector('.body');
 
   const nameEl  = document.getElementById('name');
   const phoneEl = document.getElementById('phone');
@@ -425,11 +443,6 @@
       return;
     }
 
-    if (GOOGLE_APP_URL.includes('YOUR_SCRIPT_ID_HERE')){
-      showStatus('Setup needed: add your Google Apps Script URL in the code before this form can send orders.', 'notice');
-      return;
-    }
-
     const now = Date.now();
     if (lastSubmitAt && (now - lastSubmitAt) < MIN_SECONDS_BETWEEN_ORDERS * 1000){
       const wait = Math.ceil((MIN_SECONDS_BETWEEN_ORDERS * 1000 - (now - lastSubmitAt)) / 1000);
@@ -449,6 +462,8 @@
       phone: phoneEl.value.trim(),
       brand: document.getElementById('brand').value,
       type: document.getElementById('type').value,
+      emptyCylinder: document.getElementById('emptyCylinder').value,
+      paymentStatus: document.getElementById('paymentStatus').value,
       quantity: qtyEl.value
     };
 
@@ -479,6 +494,8 @@
     document.getElementById('rPhone').textContent = o.phone;
     document.getElementById('rBrand').textContent = o.brand;
     document.getElementById('rType').textContent = o.type;
+    document.getElementById('rEmpty').textContent = o.emptyCylinder;
+    document.getElementById('rPayment').textContent = o.paymentStatus;
     document.getElementById('rQty').textContent = o.quantity;
     document.getElementById('rTime').textContent = o.timestamp;
   }
