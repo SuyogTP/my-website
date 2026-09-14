@@ -136,6 +136,7 @@
     background: rgba(0, 56, 147, 0.08);
     transition: background 0.15s ease, color 0.15s ease;
     white-space: nowrap;
+    cursor: pointer;
   }
 
   .switch-link:hover {
@@ -244,6 +245,16 @@
     text-align: center;
     font-weight: 700;
     max-width: 80px;
+  }
+
+  /* Remove spin buttons for cleaner UI */
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  input[type="number"] {
+    -moz-appearance: textfield;
   }
 
   .qty-btn {
@@ -454,12 +465,12 @@
           </div>
         </div>
 
-        <!-- Quantity -->
+        <!-- Quantity (Editable & Strictly Numeric) -->
         <div class="field">
           <label>Quantity <span class="np">संख्या</span></label>
           <div class="qty-row">
             <button type="button" class="qty-btn" id="qtyDown" aria-label="Decrease quantity">–</button>
-            <input type="number" id="quantity" min="1" max="10" value="1" readonly>
+            <input type="number" id="quantity" min="1" max="99" value="1" inputmode="numeric" pattern="[0-9]*">
             <button type="button" class="qty-btn" id="qtyUp" aria-label="Increase quantity">+</button>
           </div>
         </div>
@@ -490,7 +501,7 @@
 
 <script>
 (function () {
-  const GOOGLE_APP_URL = "https://script.google.com/macros/s/AKfycbyDwzk5dSBcLzhUgh-bv0bIksfxu0nj__RbbBsucnIkw5hadijeVaKD54ymP1y-tTCy/exec"; // ← Paste your Apps Script Web App URL here
+  const GOOGLE_APP_URL = "https://script.google.com/macros/s/AKfycbyDwzk5dSBcLzhUgh-bv0bIksfxu0nj__RbbBsucnIkw5hadijeVaKD54ymP1y-tTCy/exec";
 
   const form = document.getElementById('gasForm');
   const directFields = document.getElementById('directOrderFields');
@@ -521,13 +532,33 @@
     }
   });
 
-  // Quantity controls
+  // Quantity controls and strict numeric sanitization
   const qtyEl = document.getElementById('quantity');
+
+  // Prevent typing invalid characters like 'e', 'E', '+', '-', '.'
+  qtyEl.addEventListener('keydown', (e) => {
+    if (['e', 'E', '+', '-', '.'].includes(e.key)) {
+      e.preventDefault();
+    }
+  });
+
+  // Strip non-digits on input paste or direct edit
+  qtyEl.addEventListener('input', () => {
+    qtyEl.value = qtyEl.value.replace(/[^0-9]/g, '');
+  });
+
+  // Default to 1 if input is left blank or set below 1 on blur
+  qtyEl.addEventListener('blur', () => {
+    if (!qtyEl.value || parseInt(qtyEl.value, 10) < 1) {
+      qtyEl.value = 1;
+    }
+  });
+
   document.getElementById('qtyDown').onclick = () => {
-    qtyEl.value = Math.max(1, (parseInt(qtyEl.value) || 1) - 1);
+    qtyEl.value = Math.max(1, (parseInt(qtyEl.value, 10) || 1) - 1);
   };
   document.getElementById('qtyUp').onclick = () => {
-    qtyEl.value = Math.min(10, (parseInt(qtyEl.value) || 1) + 1);
+    qtyEl.value = (parseInt(qtyEl.value, 10) || 0) + 1;
   };
 
   // Validation
@@ -569,7 +600,7 @@
       name: nameEl.value.trim(),
       phone: phoneEl.value.trim(),
       brand: document.getElementById('brand').value,
-      quantity: qtyEl.value,
+      quantity: qtyEl.value || "1",
       type: isBookingMode ? "N/A" : document.getElementById('type').value,
       emptyCylinder: isBookingMode ? document.getElementById('emptyCylinder').value : "N/A",
       paymentStatus: isBookingMode ? document.getElementById('paymentStatus').value : "N/A"
