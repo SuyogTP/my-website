@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Team Innovators | Presentation Teleprompter</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/control_utils/control_utils.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
+
+<link rel="stylesheet" href="../css/presentation.css">
+</head>
+<body>
+
+  <header class="header">
+    <div class="brand">
+      <span class="brand-name">Team Innovators</span>
+      <span class="brand-sub">Automated Flood Detection &amp; Mitigation System</span>
+    </div>
+    <nav class="progress-dots" id="progressDots" aria-label="Jump to slide"></nav>
+  </header>
+
+  <main class="main-content">
+    <div class="script-container">
+      <div class="speaker-tag">
+        <span class="prompt">$</span>
+        <span id="speakerEmoji">📢</span>
+        <span id="speakerName">Suyog</span>
+      </div>
+      <div class="delivery-hint">💬 Delivery Key: <strong>Bold = Imposing &amp; Emphasized</strong> | <em>[Italics] = Action Cues</em></div>
+      <h1 class="slide-title" id="slideTitle">Opening Hook</h1>
+      <p class="slide-script" id="slideScript">Loading presentation…</p>
+    </div>
+  </main>
+
+  <span class="sr-only" id="slideAnnouncer" aria-live="polite"></span>
+
+  <div class="camera-container" id="cameraBox">
+    <div class="camera-header">
+      <span>📷 Gesture cam</span>
+      <div class="cam-controls">
+        <button class="cam-btn" id="minCamBtn" aria-label="Minimize camera preview">–</button>
+      </div>
+    </div>
+    <video class="input_video" autoplay playsinline muted></video>
+    <canvas class="output_canvas" width="320" height="240"></canvas>
+  </div>
+
+  <div class="controls-dock" id="controlsDock">
+    <button id="prevBtn" class="nav-btn">
+      <span class="icon">←</span><span class="label">Previous</span>
+    </button>
+    
+    <button id="cameraToggleBtn" class="nav-btn toggle-active">
+      <span class="icon" id="camBtnIcon">📷</span><span class="label" id="camBtnLabel">Cam On</span>
+    </button>
+
+    <button id="nextBtn" class="nav-btn primary">
+      <span class="icon">→</span><span class="label">Next</span>
+    </button>
+    <button id="collapseBtn" class="collapse-btn" aria-label="Minimize navigation controls" aria-pressed="false" title="Minimize controls">⌄</button>
+  </div>
+
+<script src="../js/presentation.js" defer></script>
+</body>
+</html>

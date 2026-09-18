@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Browser Hand Tracking Servo Control</title>
+  <!-- Load MediaPipe Libraries via CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="../css/rampage.css">
+</head>
+<body>
+
+  <h1>Webcam Servo Gesture Control</h1>
+  <button id="connectBtn">Connect Arduino via USB</button>
+  <div id="status">Arduino: Not Connected</div>
+
+  <div id="container">
+    <video id="webcam" autoplay playsinline></video>
+  </div>
+
+  <script src="../js/rampage.js" defer></script>
+</body>
+</html>

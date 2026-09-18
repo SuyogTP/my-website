@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="ne">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>ग्यास अर्डर तथा बुकिङ | LPG Gas Order & Booking</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@500;600;700;800&family=Noto+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/Gas.css">
+</head>
+<body>
+
+<!-- Kathmandu valley at dusk, genuinely visible behind the glass ticket -->
+<div class="cityscape" aria-hidden="true">
+  <svg viewBox="0 0 1440 500" preserveAspectRatio="xMidYMax slice" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="skyFade" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#A9C6E8"/>
+        <stop offset="0.45" stop-color="#F3C89B"/>
+        <stop offset="0.72" stop-color="#F0A987"/>
+        <stop offset="1" stop-color="#E8D9C4"/>
+      </linearGradient>
+
+      <radialGradient id="sunGlow" cx="0.5" cy="0.5" r="0.5">
+        <stop offset="0" stop-color="#FFE7B0" stop-opacity="0.95"/>
+        <stop offset="1" stop-color="#FFE7B0" stop-opacity="0"/>
+      </radialGradient>
+
+      <pattern id="backHouses" width="220" height="170" patternUnits="userSpaceOnUse">
+        <rect x="6" y="70" width="46" height="70" fill="#B98B78"/>
+        <polygon points="4,70 54,70 29,50" fill="#9C6B58"/>
+        <rect x="64" y="50" width="40" height="90" fill="#8FA6B8"/>
+        <rect x="64" y="42" width="40" height="10" fill="#75899A"/>
+        <rect x="118" y="82" width="52" height="58" fill="#C79A72"/>
+        <polygon points="115,82 173,82 144,60" fill="#A27650"/>
+        <rect x="182" y="60" width="34" height="80" fill="#9C88A8"/>
+      </pattern>
+
+      <pattern id="frontHouses" width="260" height="240" patternUnits="userSpaceOnUse">
+        <rect x="8" y="100" width="72" height="140" fill="#C1622D"/>
+        <polygon points="4,100 84,100 44,66" fill="#8C4620"/>
+        <rect x="30" y="132" width="16" height="20" fill="#FFE9A8"/>
+        <rect x="56" y="132" width="16" height="20" fill="#FFE9A8"/>
+        <rect x="30" y="172" width="16" height="20" fill="#FFE9A8"/>
+
+        <rect x="92" y="66" width="58" height="174" fill="#2F6F6B"/>
+        <rect x="86" y="50" width="70" height="16" fill="#204F4B"/>
+        <rect x="96" y="36" width="50" height="14" fill="#2F6F6B"/>
+        <rect x="106" y="22" width="30" height="14" fill="#204F4B"/>
+        <rect x="108" y="92" width="14" height="18" fill="#FFE9A8"/>
+        <rect x="128" y="92" width="14" height="18" fill="#FFE9A8"/>
+        <rect x="108" y="130" width="14" height="18" fill="#FFE9A8"/>
+        <rect x="128" y="130" width="14" height="18" fill="#FFE9A8"/>
+
+        <rect x="166" y="112" width="64" height="128" fill="#A23B3B"/>
+        <polygon points="162,112 234,112 198,82" fill="#7E2C2C"/>
+        <rect x="184" y="150" width="16" height="20" fill="#FFE9A8"/>
+        <rect x="206" y="182" width="16" height="20" fill="#FFE9A8"/>
+
+        <rect x="240" y="140" width="44" height="100" fill="#D9A441"/>
+        <polygon points="236,140 288,140 262,116" fill="#B8862F"/>
+      </pattern>
+    </defs>
+
+    <rect x="0" y="0" width="1440" height="500" fill="url(#skyFade)"/>
+    <circle cx="1180" cy="150" r="220" fill="url(#sunGlow)"/>
+    <circle cx="1180" cy="150" r="46" fill="#FFF3D6" opacity="0.9"/>
+
+    <!-- distant Himalayan ridge -->
+    <polygon points="0,200 160,150 320,195 520,120 760,175 960,110 1180,170 1440,140 1440,500 0,500" fill="#C9D8E8" opacity="0.55"/>
+
+    <!-- terraced houses on the hillside -->
+    <rect y="185" width="1440" height="150" fill="url(#backHouses)" opacity="0.6"/>
+
+    <!-- foreground row of houses closest to the ticket -->
+    <rect y="270" width="1440" height="230" fill="url(#frontHouses)"/>
+  </svg>
+</div>
+<div class="cityscape-overlay" aria-hidden="true"></div>
+
+<div class="ticket">
+  <div class="stub">
+    <div class="flame-container">
+      <svg class="flame-mark" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="flameOuter" x1="24" y1="4" x2="24" y2="44" gradientUnits="userSpaceOnUse">
+            <stop offset="0" stop-color="#FDE68A"/>
+            <stop offset="0.55" stop-color="#F59E0B"/>
+            <stop offset="1" stop-color="#DC2626"/>
+          </linearGradient>
+          <linearGradient id="flameInner" x1="24" y1="14" x2="24" y2="36" gradientUnits="userSpaceOnUse">
+            <stop offset="0" stop-color="#FFF7DA"/>
+            <stop offset="1" stop-color="#FCD34D"/>
+          </linearGradient>
+        </defs>
+        <path d="M24 4c1 7-6 9-6 16a6 6 0 0 0 12 0c2 2 3 5 3 8a9 9 0 1 1-18 0c0-9 7-12 9-24z" fill="url(#flameOuter)"/>
+        <path d="M24 16c0 4-4 5-4 10a4 4 0 0 0 8 0c1 1 1.5 2.5 1.5 4a5.5 5.5 0 1 1-11 0c0-6 4-8 5.5-14z" fill="url(#flameInner)"/>
+      </svg>
+    </div>
+    <h1>LPG Gas Services</h1>
+    <div class="np">ग्यास अर्डर तथा बुकिङ</div>
+  </div>
+
+  <div class="perf"></div>
+
+  <div class="body">
+    <div id="statusBox" class="status"></div>
+
+    <div id="formContainer">
+      <div class="view-header">
+        <h2 class="view-title" id="viewTitle">Direct Order</h2>
+        <a class="switch-link" id="toggleViewBtn">Booking Mode →</a>
+      </div>
+
+      <form id="gasForm" novalidate>
+        <div class="field">
+          <label>Customer Name <span class="np">नाम</span></label>
+          <input type="text" id="name" required placeholder="Ram Bahadur" autocomplete="name">
+          <div class="field-msg" id="nameMsg">Please enter your name.</div>
+        </div>
+
+        <div class="field">
+          <label>Phone Number <span class="np">फोन नम्बर</span></label>
+          <input type="tel" id="phone" required placeholder="98XXXXXXXX" maxlength="10" inputmode="numeric" autocomplete="tel">
+          <div class="field-msg" id="phoneMsg">Valid 10-digit number required.</div>
+        </div>
+
+        <div class="field">
+          <label>Gas Brand <span class="np">ब्रान्ड</span></label>
+          <select id="brand">
+            <option value="Lokpriya Gas">Lokpriya Gas / लोकप्रिय ग्यास</option>
+            <option value="Manoj Gas">Manoj Gas / मनोज ग्यास</option>
+          </select>
+        </div>
+
+        <div id="directOrderFields">
+          <div class="field">
+            <label>Order Type <span class="np">प्रकार</span></label>
+            <select id="type">
+              <option value="Immediate Refill">Refill Ready / अहिले साट्ने</option>
+              <option value="New Cylinder">New Cylinder / नयाँ किन्ने</option>
+            </select>
+          </div>
+        </div>
+
+        <div id="bookingFields" class="hide">
+          <div class="field">
+            <label>Empty Cylinder Status <span class="np">खाली सिलिन्डर</span></label>
+            <select id="emptyCylinder">
+              <option value="Dropped Off">Dropped Off / खाली छाडेको छ</option>
+              <option value="Will Drop Later">Will Drop Later / पछि लिएर आउने</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Payment Status <span class="np">भुक्तानी स्थिति</span></label>
+            <select id="paymentStatus">
+              <option value="Unpaid">Unpaid / पैसा तिर्न बाँकी</option>
+              <option value="Paid in Advance">Paid in Advance / नगद बुझाइसक्यो</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Quantity <span class="np">संख्या</span></label>
+          <div class="qty-row">
+            <button type="button" class="qty-btn" id="qtyDown" aria-label="Decrease quantity">–</button>
+            <input type="number" id="quantity" min="1" max="99" value="1" inputmode="numeric" pattern="[0-9]*">
+            <button type="button" class="qty-btn" id="qtyUp" aria-label="Increase quantity">+</button>
+          </div>
+        </div>
+
+        <button type="submit" class="submit" id="submitBtn">Place Order</button>
+      </form>
+    </div>
+
+    <!-- Receipt -->
+    <div id="receipt" class="hide">
+      <div class="receipt-id">
+        <div class="label" id="rCategoryLabel">ORDER CONFIRMED</div>
+        <div class="value" id="rOrderId">—</div>
+      </div>
+      <div class="receipt-rows">
+        <div class="receipt-row"><span>Name</span><span id="rName">—</span></div>
+        <div class="receipt-row"><span>Phone</span><span id="rPhone">—</span></div>
+        <div class="receipt-row"><span>Brand</span><span id="rBrand">—</span></div>
+        <div class="receipt-row" id="rTypeRow"><span>Type</span><span id="rType">—</span></div>
+        <div class="receipt-row hide" id="rEmptyRow"><span>Empty</span><span id="rEmpty">—</span></div>
+        <div class="receipt-row hide" id="rPaymentRow"><span>Payment</span><span id="rPayment">—</span></div>
+        <div class="receipt-row"><span>Quantity</span><span id="rQty">—</span></div>
+      </div>
+      <button type="button" class="new-order-btn" id="newOrderBtn">Done</button>
+    </div>
+  </div>
+</div>
+
+<script src="../js/Gas.js" defer></script>
+</body>
+</html>

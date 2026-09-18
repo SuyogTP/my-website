@@ -1,0 +1,459 @@
+:root {
+    --glass: rgba(255, 255, 255, 0.72);
+    --glass-strong: rgba(255, 255, 255, 0.86);
+    --ink: #0F172A;
+    --ink-soft: #475569;
+    --brand-red: #DC2626;
+    --brand-red-dark: #B91C1C;
+    --brand-blue: #1D4ED8;
+    --accent: #F59E0B;
+    --ok-bg: #ECFDF5;
+    --ok-fg: #047857;
+    --err-bg: #FEF2F2;
+    --err-fg: #B91C1C;
+    --radius: 20px;
+    --border: rgba(15, 23, 42, 0.12);
+  }
+
+  * {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  html, body {
+    height: 100%;
+  }
+
+  body {
+    margin: 0;
+    font-family: 'Noto Sans', 'Noto Sans Devanagari', sans-serif;
+    background: #EAD9C4;
+    color: var(--ink);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px 16px;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  /* --- Kathmandu valley at dusk, sitting behind everything. Only a light,
+       genuinely-see-through white veil sits on top, so the hillside and
+       its houses stay visible, not blanked out. --- */
+  .cityscape {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  .cityscape svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  .cityscape-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    /* thin white veil only — this used to be near-opaque, now it barely tints */
+    background: linear-gradient(
+      to bottom,
+      rgba(255, 255, 255, 0.10) 0%,
+      rgba(255, 255, 255, 0.22) 55%,
+      rgba(255, 255, 255, 0.32) 100%
+    );
+  }
+
+  .ticket {
+    width: 100%;
+    max-width: 420px;
+    background: var(--glass);
+    backdrop-filter: blur(22px) saturate(160%);
+    -webkit-backdrop-filter: blur(22px) saturate(160%);
+    border: 1px solid rgba(255, 255, 255, 0.55);
+    border-radius: var(--radius);
+    box-shadow:
+      0 30px 60px -18px rgba(15, 23, 42, 0.45),
+      0 1px 0 rgba(255, 255, 255, 0.6) inset;
+    overflow: hidden;
+    position: relative;
+    z-index: 1;
+    animation: rise 0.5s ease both;
+  }
+
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(14px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* --- The Shop Awning Header --- */
+  .stub {
+    background:
+      linear-gradient(to bottom, rgba(255,255,255,0.18) 0%, rgba(0,0,0,0.32) 100%),
+      repeating-linear-gradient(
+        to right,
+        var(--brand-red) 0,
+        var(--brand-red) 40px,
+        var(--brand-blue) 40px,
+        var(--brand-blue) 80px
+      );
+    color: #fff;
+    padding: 32px 24px 44px;
+    position: relative;
+    text-align: center;
+  }
+
+  .flame-container {
+    width: 74px;
+    height: 74px;
+    margin: 0 auto 16px;
+    background: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow:
+      0 8px 18px rgba(0,0,0,0.2),
+      0 0 0 4px rgba(245, 158, 11, 0.5);
+  }
+
+  .flame-mark {
+    width: 44px;
+    height: 44px;
+    filter: drop-shadow(0 1px 2px rgba(0,0,0,0.18));
+  }
+
+  .stub h1 {
+    margin: 0;
+    font-size: 1.55rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.4);
+  }
+
+  .stub .np {
+    font-family: 'Noto Sans Devanagari', sans-serif;
+    font-weight: 700;
+    font-size: 1.05rem;
+    margin-top: 4px;
+    color: #F1F5F9;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.4);
+  }
+
+  /* Pure CSS Scalloped Flaps (No SVG) */
+  .perf {
+    height: 20px;
+    position: relative;
+  }
+
+  .perf::before {
+    content: "";
+    position: absolute;
+    top: -20px;
+    left: 0;
+    right: 0;
+    height: 20px;
+    background-image: radial-gradient(circle at 20px 20px, var(--glass) 20px, transparent 20.5px);
+    background-size: 40px 20px;
+    background-position: -20px top;
+    background-repeat: repeat-x;
+  }
+
+  /* --- Body & Form --- */
+  .body {
+    padding: 16px 28px 32px;
+  }
+
+  .view-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    gap: 12px;
+  }
+
+  .view-title {
+    font-weight: 800;
+    color: var(--ink);
+    font-size: 1.25rem;
+    margin: 0;
+  }
+
+  .switch-link {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--brand-blue);
+    text-decoration: none;
+    padding: 8px 12px;
+    border-radius: 8px;
+    background: rgba(29, 78, 216, 0.1);
+    transition: all 0.2s ease;
+    white-space: nowrap;
+    cursor: pointer;
+  }
+
+  .switch-link:hover {
+    background: var(--brand-blue);
+    color: #fff;
+  }
+
+  /* Status Messages */
+  .status {
+    display: none;
+    margin-bottom: 20px;
+    padding: 14px 16px;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 0.92rem;
+    line-height: 1.4;
+    border: 1px solid transparent;
+  }
+
+  .status.success {
+    display: block;
+    background: var(--ok-bg);
+    color: var(--ok-fg);
+    border-color: #A7F3D0;
+  }
+
+  .status.error {
+    display: block;
+    background: var(--err-bg);
+    color: var(--err-fg);
+    border-color: #FECACA;
+  }
+
+  /* Input Fields */
+  .field {
+    margin-bottom: 20px;
+  }
+
+  .field label {
+    display: block;
+    font-weight: 700;
+    font-size: 0.88rem;
+    color: var(--ink);
+    margin-bottom: 8px;
+  }
+
+  .field label .np {
+    font-family: 'Noto Sans Devanagari', sans-serif;
+    font-weight: 600;
+    margin-left: 4px;
+    color: var(--ink-soft);
+  }
+
+  input, select {
+    width: 100%;
+    padding: 14px 16px;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.9);
+    color: var(--ink);
+    font-size: 16px;
+    font-weight: 500;
+    font-family: inherit;
+    appearance: none;
+    -webkit-appearance: none;
+    transition: all 0.2s ease;
+  }
+
+  select {
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23475569' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 16px center;
+    background-size: 16px;
+    padding-right: 48px;
+  }
+
+  input:focus, select:focus {
+    outline: none;
+    border-color: var(--brand-blue);
+    box-shadow: 0 0 0 4px rgba(29, 78, 216, 0.15);
+    background: #fff;
+  }
+
+  input.invalid {
+    border-color: var(--brand-red);
+    background: #FEF2F2;
+  }
+
+  .field-msg {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--brand-red-dark);
+    margin-top: 6px;
+    display: none;
+  }
+
+  .field-msg.show {
+    display: block;
+  }
+
+  /* Quantity Control */
+  .qty-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .qty-row input {
+    text-align: center;
+    font-weight: 700;
+    max-width: 80px;
+    font-size: 18px;
+  }
+
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  input[type="number"] { -moz-appearance: textfield; }
+
+  .qty-btn {
+    flex: 0 0 auto;
+    width: 52px;
+    height: 52px;
+    border-radius: 12px;
+    border: 2px solid var(--border);
+    background: rgba(255, 255, 255, 0.85);
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--ink);
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .qty-btn:hover {
+    background: #fff;
+    border-color: var(--brand-blue);
+  }
+
+  .qty-btn:active {
+    transform: scale(0.96);
+  }
+
+  /* Submit Button */
+  button.submit {
+    width: 100%;
+    padding: 16px;
+    margin-top: 12px;
+    border: none;
+    border-radius: 12px;
+    background: linear-gradient(180deg, var(--brand-red) 0%, var(--brand-red-dark) 100%);
+    color: #fff;
+    font-size: 1.05rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    box-shadow:
+      0 4px 6px -1px rgba(220, 38, 38, 0.3),
+      0 2px 4px -1px rgba(220, 38, 38, 0.2),
+      inset 0 1px 0 rgba(255,255,255,0.25);
+    transition: all 0.2s ease;
+  }
+
+  button.submit:hover {
+    transform: translateY(-2px);
+    box-shadow:
+      0 10px 16px -3px rgba(220, 38, 38, 0.4),
+      0 4px 6px -2px rgba(220, 38, 38, 0.25),
+      inset 0 1px 0 rgba(255,255,255,0.3);
+  }
+
+  button.submit:active {
+    transform: translateY(0);
+  }
+
+  button.submit:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  .hide { display: none !important; }
+
+  /* Receipt / Ticket Inner */
+  #receipt {
+    background: rgba(255, 255, 255, 0.75);
+    border: 2px dashed rgba(15, 23, 42, 0.18);
+    border-radius: 16px;
+    padding: 24px;
+    margin-top: 8px;
+    animation: rise 0.35s ease both;
+  }
+
+  .receipt-id {
+    text-align: center;
+    padding-bottom: 20px;
+  }
+
+  .receipt-id .label {
+    font-size: 0.8rem;
+    color: var(--ink-soft);
+    font-weight: 800;
+    letter-spacing: 0.05em;
+  }
+
+  .receipt-id .value {
+    font-size: 1.85rem;
+    font-weight: 800;
+    color: var(--brand-blue);
+    margin-top: 4px;
+  }
+
+  .receipt-rows {
+    border-top: 2px dashed rgba(15, 23, 42, 0.18);
+    padding-top: 16px;
+  }
+
+  .receipt-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 14px;
+    padding: 10px 0;
+    font-size: 0.98rem;
+  }
+
+  .receipt-row span:first-child {
+    color: var(--ink-soft);
+    font-weight: 600;
+  }
+
+  .receipt-row span:last-child {
+    font-weight: 800;
+    text-align: right;
+    color: var(--ink);
+  }
+
+  .new-order-btn {
+    width: 100%;
+    margin-top: 24px;
+    padding: 16px;
+    border-radius: 12px;
+    border: 2px solid var(--brand-blue);
+    background: rgba(255, 255, 255, 0.85);
+    color: var(--brand-blue);
+    font-weight: 800;
+    font-size: 1rem;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .new-order-btn:hover {
+    background: var(--brand-blue);
+    color: #fff;
+  }
+
+  @media (max-width: 380px) {
+    .stub { padding: 28px 18px 40px; }
+    .body { padding: 16px 20px 28px; }
+  }

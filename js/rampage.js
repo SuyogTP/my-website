@@ -1,32 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Browser Hand Tracking Servo Control</title>
-  <!-- Load MediaPipe Libraries via CDN -->
-  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
-  <style>
-    body { font-family: sans-serif; text-align: center; background: #1a1a1a; color: #fff; margin: 20px; }
-    #container { position: relative; display: inline-block; }
-    video { transform: scaleX(-1); border-radius: 8px; width: 640px; height: 480px; }
-    button { padding: 12px 24px; font-size: 16px; margin-bottom: 15px; cursor: pointer; border-radius: 5px; border: none; background: #007bff; color: white; }
-    button:hover { background: #0056b3; }
-    #status { font-size: 20px; font-weight: bold; margin-top: 10px; color: #ffca28; }
-  </style>
-</head>
-<body>
-
-  <h1>Webcam Servo Gesture Control</h1>
-  <button id="connectBtn">Connect Arduino via USB</button>
-  <div id="status">Arduino: Not Connected</div>
-
-  <div id="container">
-    <video id="webcam" autoplay playsinline></video>
-  </div>
-
-  <script>
-    let port, writer;
+let port, writer;
     let lastAngle = -1;
 
     const connectBtn = document.getElementById('connectBtn');
@@ -120,6 +92,3 @@
       height: 480
     });
     camera.start();
-  </script>
-</body>
-</html>
