@@ -8,6 +8,15 @@ const topicDescription = document.getElementById('topic-description');
 const topicBadge = document.getElementById('topic-badge');
 const topicDetail = document.getElementById('topic-detail');
 const topicEffect = document.getElementById('topic-effect');
+const topicSections = document.getElementById('topic-sections');
+const menuToggle = document.getElementById('menu-toggle');
+const siteLinks = document.getElementById('site-links');
+const scrollProgress = document.getElementById('scroll-progress');
+const nepalClock = document.getElementById('nepal-clock');
+const localClock = document.getElementById('local-clock');
+const heroTopLine = document.getElementById('hero-top-line');
+const heroBottomLine = document.getElementById('hero-bottom-line');
+const sectionNodes = document.querySelectorAll('.section-node');
 
 const topics = [
     {
@@ -1063,17 +1072,20 @@ class Particle {
     draw() {
         if (!ctx) return;
         const isDark = document.body.classList.contains('dark-mode');
+        const isHomepage = document.body.id === 'top';
         
         if (this.type === 'ambient') {
             const pulse = Math.sin(this.pulse) * 0.3 + 0.7;
-            const baseOpacity = this.opacity * pulse;
-            const coreColor = isDark
+            const baseOpacity = this.opacity * pulse * (isHomepage ? 0.45 : 1);
+            const coreColor = isHomepage
+                ? `rgba(80, 150, 255, ${baseOpacity})`
+                : isDark
                 ? `rgba(150, 240, 255, ${baseOpacity})`
                 : `rgba(255, 220, 130, ${baseOpacity})`;
-            const glowColor = isDark ? 'rgba(80, 180, 255, 0.6)' : 'rgba(255, 200, 100, 0.5)';
+            const glowColor = isHomepage ? 'rgba(40, 110, 255, 0.28)' : isDark ? 'rgba(80, 180, 255, 0.6)' : 'rgba(255, 200, 100, 0.5)';
             
-            ctx.shadowBlur = isDark ? 35 : 25;
-            ctx.shadowColor = isDark ? 'rgba(100, 200, 255, 0.7)' : 'rgba(255, 210, 150, 0.5)';
+            ctx.shadowBlur = isHomepage ? 20 : isDark ? 35 : 25;
+            ctx.shadowColor = isHomepage ? 'rgba(50, 130, 255, 0.4)' : isDark ? 'rgba(100, 200, 255, 0.7)' : 'rgba(255, 210, 150, 0.5)';
             ctx.fillStyle = coreColor;
             ctx.beginPath();
             ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
@@ -1180,6 +1192,166 @@ if (toggleBtn) {
     });
 }
 
+if (menuToggle && siteLinks) {
+    menuToggle.addEventListener('click', () => {
+        const isOpen = siteLinks.classList.toggle('open');
+        menuToggle.setAttribute('aria-expanded', String(isOpen));
+        menuToggle.setAttribute('aria-label', isOpen ? 'Close navigation menu' : 'Open navigation menu');
+        menuToggle.querySelector('span').textContent = isOpen ? 'Close' : 'Menu';
+    });
+
+    siteLinks.addEventListener('click', event => {
+        if (event.target.matches('a')) {
+            siteLinks.classList.remove('open');
+            menuToggle.setAttribute('aria-expanded', 'false');
+            menuToggle.setAttribute('aria-label', 'Open navigation menu');
+            menuToggle.querySelector('span').textContent = 'Menu';
+        }
+    });
+}
+
+function setupCursorEffect() {
+    if (window.matchMedia('(pointer: coarse)').matches) return;
+
+    const dot = document.createElement('span');
+    const ring = document.createElement('span');
+    const invertedCursor = document.createElement('span');
+    const heroBadge = document.querySelector('.hero-badge');
+    const heroQuote = document.querySelector('.hero-quote');
+    dot.className = 'cursor-dot';
+    ring.className = 'cursor-ring';
+    invertedCursor.className = 'inverted-cursor';
+    document.body.append(dot, ring, invertedCursor);
+    document.body.classList.add('cursor-enhanced');
+
+    let ringX = 0;
+    let ringY = 0;
+    let targetX = 0;
+    let targetY = 0;
+    let quoteCloseTimer;
+
+    const animateCursor = () => {
+        ringX += (targetX - ringX) * 0.18;
+        ringY += (targetY - ringY) * 0.18;
+        dot.style.transform = `translate(${targetX}px, ${targetY}px) translate(-50%, -50%)`;
+        ring.style.transform = `translate(${ringX}px, ${ringY}px) translate(-50%, -50%)`;
+        invertedCursor.style.transform = `translate(${targetX}px, ${targetY}px) translate(-50%, -50%)`;
+        requestAnimationFrame(animateCursor);
+    };
+
+    if (heroBadge && heroQuote) {
+        const keepQuoteOpen = () => {
+            clearTimeout(quoteCloseTimer);
+            heroBadge.classList.add('quote-open');
+        };
+        const delayQuoteClose = () => {
+            clearTimeout(quoteCloseTimer);
+            quoteCloseTimer = window.setTimeout(() => heroBadge.classList.remove('quote-open'), 700);
+        };
+        heroBadge.addEventListener('pointerenter', keepQuoteOpen);
+        heroBadge.addEventListener('pointerleave', delayQuoteClose);
+        heroQuote.addEventListener('pointerenter', keepQuoteOpen);
+        heroQuote.addEventListener('pointerleave', delayQuoteClose);
+    }
+
+    document.addEventListener('pointermove', event => {
+        targetX = event.clientX;
+        targetY = event.clientY;
+        dot.classList.add('visible');
+        ring.classList.add('visible');
+        invertedCursor.classList.add('visible');
+        const textTarget = event.target.closest('p, h1, h2, h3, li, strong, span');
+        const linkTarget = event.target.closest('a, button');
+        ring.classList.toggle('over-text', Boolean(textTarget));
+        ring.classList.toggle('over-link', Boolean(linkTarget));
+        invertedCursor.classList.toggle('over-link', Boolean(linkTarget));
+    });
+
+    document.addEventListener('pointerleave', () => {
+        dot.classList.remove('visible');
+        ring.classList.remove('visible');
+        invertedCursor.classList.remove('visible');
+    });
+    animateCursor();
+}
+
+setupCursorEffect();
+
+function cycleHeroTitle() {
+    if (!heroTopLine || !heroBottomLine) return;
+    const states = [
+        ['Hi, I\'m', 'SUYOG'],
+        ['I\'m an', 'INNOVATOR'],
+        ['I\'m a', 'CODER']
+    ];
+    let stateIndex = 0;
+    window.setInterval(() => {
+        const next = states[(stateIndex + 1) % states.length];
+        [heroTopLine, heroBottomLine].forEach(element => {
+            element.classList.remove('dynamic-in');
+            element.classList.add('dynamic-out');
+        });
+        window.setTimeout(() => {
+            heroTopLine.textContent = next[0];
+            heroBottomLine.textContent = next[1];
+            [heroTopLine, heroBottomLine].forEach(element => {
+                element.classList.remove('dynamic-out');
+                element.classList.add('dynamic-in');
+            });
+        }, 280);
+        stateIndex = (stateIndex + 1) % states.length;
+    }, 3000);
+}
+
+function setupMagneticLinks() {
+    document.querySelectorAll('a, button').forEach(element => {
+        element.addEventListener('pointermove', event => {
+            const bounds = element.getBoundingClientRect();
+            const offsetX = (event.clientX - (bounds.left + bounds.width / 2)) * 0.18;
+            const offsetY = (event.clientY - (bounds.top + bounds.height / 2)) * 0.18;
+            element.style.transform = `translate(${offsetX}px, ${offsetY}px) scale(1.03)`;
+        });
+        element.addEventListener('pointerleave', () => {
+            element.style.transform = '';
+        });
+    });
+}
+
+function updateSectionNavigation() {
+    const sections = ['top', 'about', 'highlights', 'topics'];
+    const current = sections.reduce((active, id) => {
+        const section = document.getElementById(id);
+        return section && window.scrollY + window.innerHeight * 0.35 >= section.offsetTop ? id : active;
+    }, 'top');
+    sectionNodes.forEach(node => node.classList.toggle('active', node.dataset.section === current));
+}
+
+if (heroTopLine && heroBottomLine) cycleHeroTitle();
+setupMagneticLinks();
+if (sectionNodes.length) {
+    updateSectionNavigation();
+    window.addEventListener('scroll', updateSectionNavigation, { passive: true });
+}
+
+function updateHomepageChrome() {
+    if (scrollProgress) {
+        const scrollable = document.documentElement.scrollHeight - window.innerHeight;
+        const progress = scrollable > 0 ? (window.scrollY / scrollable) * 100 : 0;
+        scrollProgress.style.height = `${progress}%`;
+    }
+
+    const now = new Date();
+    const format = options => new Intl.DateTimeFormat('en-US', options).format(now);
+    if (nepalClock) nepalClock.textContent = format({ timeZone: 'Asia/Kathmandu', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false });
+    if (localClock) localClock.textContent = format({ hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false });
+}
+
+if (scrollProgress || nepalClock || localClock) {
+    updateHomepageChrome();
+    window.addEventListener('scroll', updateHomepageChrome, { passive: true });
+    window.setInterval(updateHomepageChrome, 1000);
+}
+
 const imgContainer = document.getElementById('interactive-img');
 const uiWrapper = document.getElementById('ui-wrapper');
 const errorScreen = document.getElementById('error-screen');
@@ -1249,7 +1421,7 @@ function buildTopicCards() {
     topics.forEach(topic => {
         const card = document.createElement('a');
         card.className = 'topic-card';
-        card.href = `topic.html?topic=${encodeURIComponent(topic.id)}`;
+        card.href = `html/topic.html?topic=${encodeURIComponent(topic.id)}`;
         card.innerHTML = `
             <div class="topic-icon">${topic.icon}</div>
             <h3>${topic.title}</h3>
@@ -1281,11 +1453,63 @@ function createMoneyShower() {
     }
 }
 
+function createTopicSections(topic) {
+    if (!topicSections) return;
+
+    const detailText = topic.details.join(' ');
+    const focus = topic.title.toLowerCase();
+    topicSections.innerHTML = `
+        <section class="topic-section">
+            <h2>Why ${topic.title} interests me</h2>
+            <p>${topic.description} For Suyog, ${focus} is a way to stay curious, notice useful ideas, and turn imagination into something real.</p>
+        </section>
+        <section class="topic-section">
+            <h2>What I explore</h2>
+            <p>${detailText}</p>
+            <ul>
+                <li>I look for the patterns, stories, and practical lessons hidden inside this topic.</li>
+                <li>I connect it to school, coding, reading, creativity, and the world around me.</li>
+                <li>I keep asking questions so that learning feels active instead of passive.</li>
+            </ul>
+        </section>
+        <section class="topic-section topic-section-highlight">
+            <h2>Ideas to try</h2>
+            <div class="topic-ideas">
+                <article><strong>Learn the basics</strong><span>Start with one simple idea about ${focus} and explain it in your own words.</span></article>
+                <article><strong>Notice it in real life</strong><span>Look for an everyday example, a surprising detail, or a question you want to investigate.</span></article>
+                <article><strong>Make something</strong><span>Turn the idea into a note, drawing, experiment, story, code project, or conversation.</span></article>
+            </div>
+        </section>
+        <section class="topic-section">
+            <h2>My takeaway</h2>
+            <p>Exploring ${focus} reminds me that progress comes from attention and practice. Every new question can become the beginning of a better project, a stronger habit, or a more interesting way to understand the world.</p>
+        </section>
+    `;
+}
+
+function updateTopicSeo(topic) {
+    const topicUrl = `https://suyogbasnet.com.np/html/topic.html?topic=${encodeURIComponent(topic.id)}`;
+    const description = `${topic.title}: ${topic.description} Explore Suyog Basnet's ideas, details, and learning notes.`;
+    document.title = `${topic.title} | Suyog Basnet`;
+
+    const descriptionMeta = document.querySelector('meta[name="description"]');
+    const ogTitleMeta = document.querySelector('meta[property="og:title"]');
+    const ogDescriptionMeta = document.querySelector('meta[property="og:description"]');
+    const ogUrlMeta = document.querySelector('meta[property="og:url"]');
+    const canonical = document.querySelector('link[rel="canonical"]');
+
+    if (descriptionMeta) descriptionMeta.setAttribute('content', description);
+    if (ogTitleMeta) ogTitleMeta.setAttribute('content', `${topic.title} | Suyog Basnet`);
+    if (ogDescriptionMeta) ogDescriptionMeta.setAttribute('content', description);
+    if (ogUrlMeta) ogUrlMeta.setAttribute('content', topicUrl);
+    if (canonical) canonical.setAttribute('href', topicUrl);
+}
+
 function loadTopicPage() {
     if (!topicTitle || !topicDescription || !topicBadge || !topicDetail) return;
     const requested = getQueryParam('topic') || 'reading';
     const topic = findTopic(requested) || topics[0];
-    document.title = `${topic.title} | Suyog Basnet`;
+    updateTopicSeo(topic);
     topicBadge.textContent = `${topic.icon} ${topic.title}`;
     topicTitle.textContent = topic.title;
     topicDescription.textContent = topic.description;
@@ -1295,6 +1519,7 @@ function loadTopicPage() {
         detailParagraph.textContent = detail;
         topicDetail.appendChild(detailParagraph);
     });
+    createTopicSections(topic);
     applyTopicTheme(topic.theme);
     if (topic.special === 'money-shower') {
         createMoneyShower();

@@ -1,0 +1,58 @@
+:root {
+    --bg-color: #050508;
+    --panel-bg: rgba(10, 12, 22, 0.88);
+    --primary: #00ffcc;
+    --secondary: #ff007f;
+    --text: #e2e8f0;
+    --muted: #94a3b8;
+    --border: #1e293b;
+}
+
+* { box-sizing: border-box; user-select: none; }
+html, body { margin: 0; min-height: 100%; }
+body {
+    background: var(--bg-color);
+    color: var(--text);
+    font-family: "Courier New", Courier, monospace;
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 300px minmax(0, 1fr) 350px;
+    grid-template-rows: 60px minmax(0, 1fr) 40px;
+    overflow: hidden;
+}
+header {
+    grid-column: 1 / -1;
+    background: linear-gradient(90deg, #0f172a, #020617);
+    border-bottom: 2px solid var(--primary);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+    box-shadow: 0 0 20px rgba(0, 255, 204, 0.2);
+    z-index: 2;
+}
+.logo { color: var(--primary); font-size: 24px; font-weight: bold; letter-spacing: 4px; text-shadow: 0 0 10px var(--primary); }
+.metrics-bar { display: flex; gap: 30px; font-size: 13px; }
+.metric span { color: var(--secondary); font-weight: bold; }
+.sidebar, .right-panel { background: var(--panel-bg); backdrop-filter: blur(10px); padding: 20px; z-index: 1; }
+.sidebar { border-right: 1px solid var(--border); display: flex; flex-direction: column; gap: 28px; }
+.right-panel { border-left: 1px solid var(--border); overflow-y: auto; }
+.panel-title { color: var(--primary); font-size: 14px; text-transform: uppercase; border-bottom: 1px dashed var(--primary); padding-bottom: 5px; margin-bottom: 10px; }
+.engine-list { display: flex; flex-direction: column; gap: 10px; }
+.module-btn { background: rgba(255,255,255,0.03); border: 1px solid var(--border); color: var(--text); padding: 12px; text-align: left; cursor: pointer; transition: 0.3s; border-radius: 4px; font: inherit; }
+.module-btn:hover, .module-btn.active { background: rgba(0,255,204,0.1); border-color: var(--primary); box-shadow: 0 0 10px rgba(0,255,204,0.2); }
+.status-copy { color: var(--muted); font-size: 12px; line-height: 1.6; }
+.status-copy span { color: var(--primary); }
+.status-copy strong { color: var(--secondary); font-weight: normal; }
+.back-link { color: var(--primary); margin-top: auto; text-decoration: none; font-size: 12px; }
+main { position: relative; background: #000; overflow: hidden; min-height: 0; }
+canvas { display: block; width: 100%; height: 100%; }
+.hud-overlay { position: absolute; top: 20px; left: 20px; pointer-events: none; background: rgba(0,0,0,0.7); padding: 15px; border-left: 3px solid var(--primary); font-size: 12px; display: flex; flex-direction: column; gap: 5px; }
+.log-container { background: rgba(0,0,0,0.5); border: 1px solid var(--border); height: 200px; overflow: hidden; padding: 10px; font-size: 11px; color: #4ade80; display: flex; flex-direction: column; }
+.upgrade-card { background: rgba(255,255,255,0.02); border: 1px solid var(--border); padding: 10px; border-radius: 4px; display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 10px; }
+.upgrade-card small { color: #64748b; display: block; margin-top: 4px; }
+.upgrade-card button { background: var(--secondary); border: none; color: white; padding: 5px 10px; cursor: pointer; font: inherit; font-size: 12px; border-radius: 2px; white-space: nowrap; }
+.upgrade-card button:disabled { background: #475569; cursor: not-allowed; }
+footer { grid-column: 1 / -1; background: #020617; border-top: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 20px; font-size: 11px; color: #64748b; z-index: 2; }
+@media (max-width: 1050px) { body { grid-template-columns: 230px minmax(0, 1fr); } .right-panel { grid-column: 1 / -1; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; max-height: 260px; } }
+@media (max-width: 700px) { body { display: flex; flex-direction: column; overflow: auto; } header { min-height: 92px; align-items: flex-start; flex-direction: column; gap: 10px; padding: 14px; } .logo { font-size: 17px; } .metrics-bar { gap: 12px; flex-wrap: wrap; font-size: 10px; } .sidebar, .right-panel { border: 0; padding: 14px; } .sidebar { order: 1; } main { order: 2; height: 55vh; min-height: 360px; } .right-panel { order: 3; display: block; max-height: none; } footer { order: 4; min-height: 52px; gap: 8px; flex-wrap: wrap; padding: 10px 14px; } .hud-overlay { top: 10px; left: 10px; font-size: 10px; } }

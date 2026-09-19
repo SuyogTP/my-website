@@ -8,6 +8,8 @@
   const toggleBtn = document.getElementById('toggleViewBtn');
   const submitBtn = document.getElementById('submitBtn');
   const statusBox = document.getElementById('statusBox');
+  const cityscape = document.querySelector('.cityscape');
+  const motionOverlay = document.getElementById('motionOverlay');
 
   let isBookingMode = false;
 
@@ -59,6 +61,23 @@
     return nValid && pValid;
   }
 
+  function startCloudCover() {
+    motionOverlay.replaceChildren();
+    const cloud = document.createElement('span');
+    cloud.className = 'cloud-bank';
+    motionOverlay.appendChild(cloud);
+    requestAnimationFrame(() => cloud.classList.add('is-forming'));
+  }
+
+  function clearCloudCover() {
+    const cloud = motionOverlay.querySelector('.cloud-bank');
+    if (!cloud) return;
+    cloud.classList.add('fade-out');
+    window.setTimeout(() => {
+      if (cloud.classList.contains('fade-out')) cloud.remove();
+    }, 900);
+  }
+
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
     statusBox.style.display = 'none';
@@ -72,6 +91,8 @@
 
     submitBtn.disabled = true;
     submitBtn.textContent = "Processing...";
+    cityscape.classList.add('is-delivering');
+    startCloudCover();
 
     const payload = {
       orderId: (isBookingMode ? 'BKG-' : 'ORD-') + Math.floor(1000 + Math.random() * 9000),
@@ -99,6 +120,8 @@
     } catch (err) {
       statusBox.textContent = "Failed to submit. Please try again.";
       statusBox.className = "status error";
+      cityscape.classList.remove('is-delivering');
+      clearCloudCover();
     }
 
     submitBtn.disabled = false;
@@ -106,6 +129,8 @@
   });
 
   function showReceipt(o) {
+    cityscape.classList.remove('is-delivering');
+    clearCloudCover();
     document.getElementById('formContainer').classList.add('hide');
     document.getElementById('receipt').classList.remove('hide');
 
@@ -131,6 +156,8 @@
   }
 
   document.getElementById('newOrderBtn').onclick = () => {
+    cityscape.classList.remove('is-delivering');
+    clearCloudCover();
     form.reset();
     qtyEl.value = 1;
     nameEl.classList.remove('invalid');

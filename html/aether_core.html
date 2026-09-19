@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AETHER Core OS | Browser-Native Network Simulation</title>
+    <meta name="description" content="Explore AETHER Core OS, a browser-native interactive network mesh simulation with live telemetry, peer nodes, and canvas rendering.">
+    <meta name="keywords" content="AETHER Core OS, browser simulation, canvas network, P2P mesh, web development project">
+    <link rel="canonical" href="https://suyogbasnet.com.np/html/aether_core.html">
+    <meta property="og:title" content="AETHER Core OS | Browser-Native Network Simulation">
+    <meta property="og:description" content="A browser-native interactive network mesh and telemetry simulation by Suyog Basnet.">
+    <meta property="og:type" content="website">
+    <link rel="stylesheet" href="../css/aether.css">
+    <link rel="stylesheet" href="../css/site-theme.css">
+</head>
+<body>
+
+    <header>
+        <div>PROJECT_AETHER_KERNEL // v0.1.0-alpha</div>
+        <div class="sys-status">
+            <div class="status-item">CORE_CLOCK: <span id="clock-tick">000000</span></div>
+            <div class="status-item">RENDER_ENGINE: <span>WEBGPU_SIM</span></div>
+            <div class="status-item">OS_STATE: <span class="success-text">STABLE</span></div>
+        </div>
+    </header>
+
+    <div class="workspace">
+        <!-- Left Panel: Kernel Telemetry -->
+        <div class="panel">
+            <div class="panel-header">
+                <span>HYPERVISOR_METRICS</span>
+                <span class="node-badge">LIVE</span>
+            </div>
+            <div class="panel-content">
+                <div class="metric-row">
+                    <div>Wasm Page Allocations</div>
+                    <div id="wasm-mem">65,536 / 4.2GB</div>
+                </div>
+                <div class="bar-container"><div id="wasm-bar" class="bar-fill"></div></div>
+                <br>
+                <div class="metric-row">
+                    <div>WebWorker Thread Pool</div>
+                    <div>16 / 16 Actives</div>
+                </div>
+                <div class="bar-container"><div id="worker-bar" class="bar-fill success-fill"></div></div>
+                <br>
+                <div class="metric-row">
+                    <div>OPFS I/O Write Capacity</div>
+                    <div id="io-rate">412 MB/s</div>
+                </div>
+                <br>
+                <div class="metric-row">
+                    <div>Byzantine Node Consensus</div>
+                    <div class="success-text">SECURE (99.4%)</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Center Panel: P2P Network Matrix Mesh Map -->
+        <div class="canvas-container">
+            <canvas id="matrixCanvas"></canvas>
+        </div>
+
+        <!-- Right Panel: Micro-Kernel Process Stream -->
+        <div class="panel">
+            <div class="panel-header">
+                <span>DECENTRALIZED_IO_STREAM</span>
+            </div>
+            <div class="panel-content log-terminal" id="terminal-stream">
+                <!-- Log streams appended via JS -->
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/aether.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Titan | 3D Engine Matrix Prototype</title>
+    <meta name="description" content="Project Titan is a browser-based 3D engine prototype that renders a procedural isometric matrix with live runtime telemetry.">
+    <meta name="keywords" content="Project Titan, 3D engine prototype, procedural matrix, canvas rendering, web development project">
+    <link rel="canonical" href="https://suyogbasnet.com.np/html/titan.html">
+    <meta property="og:title" content="Project Titan | 3D Engine Matrix Prototype">
+    <meta property="og:description" content="A procedural 3D matrix and pseudo-shader rendering experiment by Suyog Basnet.">
+    <meta property="og:type" content="website">
+    <link rel="stylesheet" href="../css/titan.css">
+    <link rel="stylesheet" href="../css/site-theme.css">
+</head>
+<body>
+
+    <div id="canvas-container">
+        <canvas id="titan-webgpu-sim"></canvas>
+
+        <!-- Dev Inspector UI Overlays -->
+        <div id="dev-hud">
+            <div class="hud-header">
+                <span class="hud-title">TitanEngine Core v0.5</span>
+                <div class="status-dot"></div>
+            </div>
+            <div class="metric-row">
+                <span class="metric-label">Render Pipeline:</span>
+                <span class="metric-value cyan-text">Ray-March Voxel Matrix</span>
+            </div>
+            <div class="metric-row">
+                <span class="metric-label">FPS Runtime:</span>
+                <span class="metric-value" id="fps-val">60.0</span>
+            </div>
+            <div class="metric-row">
+                <span class="metric-label">Active GPU Voxels:</span>
+                <span class="metric-value" id="voxel-val">262,144</span>
+            </div>
+            <div class="metric-row">
+                <span class="metric-label">Network Thread Sync:</span>
+                <span class="metric-value amber-text">4.2ms (WebRTC)</span>
+            </div>
+        </div>
+
+        <div id="console-log">
+            <div class="log-entry">[SYSTEM] Initializing 5-Year Scope Core Engine...</div>
+            <div class="log-entry">[GPU] Allocation Successful. Compiling pseudo-WebGPU Shader Pipelines...</div>
+            <div class="log-entry">[WORLD] Chunk spatial partition map loaded (Size: 1024x1024x256).</div>
+        </div>
+    </div>
+
+    <script src="../js/titan.js" defer></script>
+</body>
+</html>

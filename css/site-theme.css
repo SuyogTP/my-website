@@ -1,0 +1,168 @@
+/* Shared Suyog Basnet visual language for every page. */
+:root {
+    --site-bg: #08090c;
+    --site-surface: rgba(16, 17, 22, 0.82);
+    --site-surface-strong: rgba(10, 11, 15, 0.94);
+    --site-text: #f7f8fb;
+    --site-muted: #8a8a93;
+    --site-blue: #3b82f6;
+    --site-blue-bright: #60a5fa;
+    --site-border: rgba(255, 255, 255, 0.12);
+}
+
+html {
+    scrollbar-color: var(--site-blue) var(--site-bg);
+}
+
+body {
+    background-color: var(--site-bg) !important;
+    color: var(--site-text);
+    background-image:
+        linear-gradient(rgba(255, 255, 255, 0.032) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.032) 1px, transparent 1px),
+        radial-gradient(circle at 50% 0%, rgba(59, 130, 246, 0.16), transparent 38%);
+    background-size: 64px 64px, 64px 64px, 100% 100%;
+}
+
+body::selection {
+    background: var(--site-blue);
+    color: #fff;
+}
+
+body a {
+    color: var(--site-blue-bright);
+}
+
+body a:hover {
+    color: #fff;
+}
+
+body button,
+body input,
+body select,
+body textarea {
+    font: inherit;
+}
+
+body button:focus-visible,
+body a:focus-visible,
+body input:focus-visible,
+body select:focus-visible,
+body textarea:focus-visible {
+    outline: 2px solid var(--site-blue-bright);
+    outline-offset: 3px;
+}
+
+body > header,
+body > nav,
+body > main,
+body > footer,
+body > .header,
+body > .workspace,
+body > #canvas-container,
+body > .ticket,
+body > .main-content {
+    position: relative;
+    z-index: 1;
+}
+
+/* Shared simple-page chrome. */
+body > nav:not(.progress-dots) {
+    background: rgba(15, 16, 21, 0.78);
+    border-bottom: 1px solid var(--site-border);
+    backdrop-filter: blur(16px);
+}
+
+body > nav:not(.progress-dots) a {
+    color: #c6c8d0;
+    text-decoration: none;
+    font-weight: 700;
+}
+
+body > nav:not(.progress-dots) a:hover {
+    color: #fff;
+}
+
+body > main h1,
+body > main h2,
+body > main h3 {
+    color: var(--site-text);
+}
+
+body > main p,
+body > main li {
+    color: var(--site-muted);
+}
+
+body header {
+    background: var(--site-surface-strong) !important;
+    color: var(--site-text);
+    border-color: var(--site-blue) !important;
+}
+
+body header h1,
+body header h2,
+body header h3,
+body section h1,
+body section h2,
+body section h3,
+body article h1,
+body article h2,
+body article h3 {
+    color: var(--site-text);
+}
+
+body section,
+body article {
+    background-color: var(--site-surface) !important;
+    color: var(--site-text);
+    border-color: var(--site-border) !important;
+}
+
+body .ticket,
+body .ticket .body,
+body #receipt {
+    background: var(--site-surface) !important;
+    color: var(--site-text);
+    border-color: var(--site-border);
+}
+
+body .ticket .stub {
+    background: linear-gradient(135deg, #111827, #172554) !important;
+}
+
+body input,
+body select,
+body textarea {
+    background-color: #111217;
+    color: var(--site-text);
+    border-color: var(--site-border);
+}
+
+body input::placeholder,
+body textarea::placeholder {
+    color: #777983;
+}
+
+/* Keep custom application surfaces dark and consistent without changing their behavior. */
+.panel,
+.right-panel,
+#dev-hud,
+#console-log,
+.camera-container,
+.controls-dock,
+.ticket,
+section,
+.card {
+    border-color: var(--site-border);
+}
+
+body#top {
+    background-image: none;
+}
+
+@media (max-width: 720px) {
+    body > nav:not(.progress-dots) {
+        width: auto;
+    }
+}

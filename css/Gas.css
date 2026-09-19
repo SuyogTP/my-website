@@ -1,6 +1,6 @@
 :root {
-    --glass: rgba(255, 255, 255, 0.72);
-    --glass-strong: rgba(255, 255, 255, 0.86);
+    --glass: rgba(236, 242, 246, 0.78);
+    --glass-strong: rgba(248, 250, 252, 0.92);
     --ink: #0F172A;
     --ink-soft: #475569;
     --brand-red: #DC2626;
@@ -27,7 +27,7 @@
   body {
     margin: 0;
     font-family: 'Noto Sans', 'Noto Sans Devanagari', sans-serif;
-    background: #EAD9C4;
+    background: #0B1C35;
     color: var(--ink);
     min-height: 100vh;
     display: flex;
@@ -38,20 +38,122 @@
     overflow-x: hidden;
   }
 
-  /* --- Kathmandu valley at dusk, sitting behind everything. Only a light,
-       genuinely-see-through white veil sits on top, so the hillside and
-       its houses stay visible, not blanked out. --- */
   .cityscape {
     position: fixed;
     inset: 0;
     z-index: 0;
     pointer-events: none;
+    background: #0B1C35 url("../images/image-1789732906790.png") center / cover no-repeat;
+    overflow: hidden;
   }
 
   .cityscape svg {
     width: 100%;
     height: 100%;
+    min-width: 100%;
+    min-height: 100%;
     display: block;
+    opacity: 0;
+  }
+
+  .cityscape::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 78% 13%, rgba(255, 255, 255, 0.08), transparent 16%), linear-gradient(to bottom, rgba(4, 16, 35, 0.02), rgba(4, 16, 35, 0.08));
+    pointer-events: none;
+  }
+
+  .motion-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  .cloud-bank {
+    position: absolute;
+    left: 54%;
+    top: 4%;
+    width: 38vw;
+    height: 15vh;
+    min-width: 280px;
+    background: linear-gradient(180deg, rgba(226, 236, 245, 0.96), rgba(169, 187, 205, 0.9));
+    border-radius: 48% 44% 38% 42%;
+    opacity: 0;
+    transform: translateX(9vw) scale(0.86);
+    filter: drop-shadow(0 7px 10px rgba(13, 28, 48, 0.28));
+    transition: opacity 0.8s ease, transform 1.4s cubic-bezier(0.22, 0.61, 0.36, 1);
+  }
+
+  .cloud-bank::before,
+  .cloud-bank::after {
+    content: "";
+    position: absolute;
+    bottom: 18%;
+    background: inherit;
+    border-radius: 50%;
+  }
+
+  .cloud-bank::before {
+    left: 12%;
+    width: 35%;
+    height: 76%;
+  }
+
+  .cloud-bank::after {
+    right: 8%;
+    width: 42%;
+    height: 92%;
+  }
+
+  .cityscape.is-delivering .cloud-bank {
+    opacity: 0.92;
+    transform: translateX(0) scale(1);
+  }
+
+  .cloud-bank.fade-out {
+    opacity: 0;
+    transform: translateX(-2vw) scale(0.96);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cloud-bank { transition: none; }
+  }
+
+  .cityscape .cloud {
+    animation: cloudDrift 34s linear infinite;
+  }
+
+  .cityscape .window-light {
+    animation: windowFlicker 6s ease-in-out infinite;
+  }
+
+  #deliveryCar {
+    opacity: 0;
+    transition: opacity 0.25s ease;
+  }
+
+  .cityscape.is-delivering #deliveryCar {
+    opacity: 1;
+  }
+
+  @keyframes cloudDrift {
+    from { transform: translateX(-32px); }
+    50% { transform: translateX(24px); }
+    to { transform: translateX(-32px); }
+  }
+
+  @keyframes windowFlicker {
+    0%, 100% { opacity: 0.72; }
+    45% { opacity: 1; }
+    52% { opacity: 0.5; }
+    60% { opacity: 0.9; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cityscape .cloud { animation: none; }
   }
 
   .cityscape-overlay {
@@ -59,21 +161,20 @@
     inset: 0;
     z-index: 0;
     pointer-events: none;
-    /* thin white veil only — this used to be near-opaque, now it barely tints */
     background: linear-gradient(
       to bottom,
-      rgba(255, 255, 255, 0.10) 0%,
-      rgba(255, 255, 255, 0.22) 55%,
-      rgba(255, 255, 255, 0.32) 100%
+      rgba(6, 19, 39, 0.08) 0%,
+      rgba(6, 19, 39, 0.16) 55%,
+      rgba(6, 19, 39, 0.28) 100%
     );
   }
 
   .ticket {
     width: 100%;
     max-width: 420px;
-    background: var(--glass);
-    backdrop-filter: blur(22px) saturate(160%);
-    -webkit-backdrop-filter: blur(22px) saturate(160%);
+    background: rgba(236, 242, 246, 0.74);
+    backdrop-filter: blur(14px) saturate(145%);
+    -webkit-backdrop-filter: blur(14px) saturate(145%);
     border: 1px solid rgba(255, 255, 255, 0.55);
     border-radius: var(--radius);
     box-shadow:
@@ -90,7 +191,6 @@
     to { opacity: 1; transform: translateY(0); }
   }
 
-  /* --- The Shop Awning Header --- */
   .stub {
     background:
       linear-gradient(to bottom, rgba(255,255,255,0.18) 0%, rgba(0,0,0,0.32) 100%),
@@ -145,7 +245,6 @@
     text-shadow: 0 1px 2px rgba(0,0,0,0.4);
   }
 
-  /* Pure CSS Scalloped Flaps (No SVG) */
   .perf {
     height: 20px;
     position: relative;
@@ -164,7 +263,6 @@
     background-repeat: repeat-x;
   }
 
-  /* --- Body & Form --- */
   .body {
     padding: 16px 28px 32px;
   }
@@ -202,7 +300,6 @@
     color: #fff;
   }
 
-  /* Status Messages */
   .status {
     display: none;
     margin-bottom: 20px;
@@ -228,7 +325,6 @@
     border-color: #FECACA;
   }
 
-  /* Input Fields */
   .field {
     margin-bottom: 20px;
   }
@@ -295,7 +391,6 @@
     display: block;
   }
 
-  /* Quantity Control */
   .qty-row {
     display: flex;
     align-items: center;
@@ -314,7 +409,7 @@
     -webkit-appearance: none;
     margin: 0;
   }
-  input[type="number"] { -moz-appearance: textfield; }
+  input[type="number"] { appearance: textfield; -moz-appearance: textfield; }
 
   .qty-btn {
     flex: 0 0 auto;
@@ -339,7 +434,6 @@
     transform: scale(0.96);
   }
 
-  /* Submit Button */
   button.submit {
     width: 100%;
     padding: 16px;
@@ -380,7 +474,6 @@
 
   .hide { display: none !important; }
 
-  /* Receipt / Ticket Inner */
   #receipt {
     background: rgba(255, 255, 255, 0.75);
     border: 2px dashed rgba(15, 23, 42, 0.18);
