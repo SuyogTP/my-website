@@ -24,6 +24,48 @@ body {
     background-size: 64px 64px, 64px 64px, 100% 100%;
 }
 
+body.loading-active {
+    overflow: hidden;
+}
+
+.loading-screen {
+    position: fixed;
+    inset: 0;
+    z-index: 2000;
+    display: grid;
+    place-items: center;
+    background: #050505;
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.65s ease, visibility 0.65s ease;
+}
+
+.loading-screen.is-complete {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.loading-value {
+    display: flex;
+    align-items: flex-start;
+    color: #fff;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: clamp(5.5rem, 18vw, 11rem);
+    font-weight: 800;
+    letter-spacing: -0.08em;
+    line-height: 0.78;
+}
+
+.loading-percent {
+    margin: 0.02em 0 0 0.14em;
+    color: #2563eb;
+    font-size: 0.22em;
+    font-weight: 400;
+    letter-spacing: 0;
+    line-height: 1;
+}
+
 body::selection {
     background: var(--site-blue);
     color: #fff;
@@ -164,5 +206,15 @@ body#top {
 @media (max-width: 720px) {
     body > nav:not(.progress-dots) {
         width: auto;
+    }
+
+    .loading-value {
+        font-size: clamp(5rem, 27vw, 8rem);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .loading-screen {
+        transition-duration: 0.01ms;
     }
 }

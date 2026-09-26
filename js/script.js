@@ -1,4 +1,35 @@
-﻿// --- Theme Toggle Logic ---
+﻿// --- Page loading counter ---
+const loadingScreen = document.getElementById('loading-screen');
+const loadingNumber = document.getElementById('loading-number');
+
+if (loadingScreen && loadingNumber) {
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let progress = 1;
+
+    const finishLoading = () => {
+        loadingNumber.textContent = '100';
+        window.setTimeout(() => {
+            loadingScreen.classList.add('is-complete');
+            document.body.classList.remove('loading-active');
+        }, reducedMotion ? 0 : 180);
+    };
+
+    if (reducedMotion) {
+        finishLoading();
+    } else {
+        const loadingTimer = window.setInterval(() => {
+            progress += 1;
+            loadingNumber.textContent = String(progress);
+
+            if (progress >= 100) {
+                window.clearInterval(loadingTimer);
+                finishLoading();
+            }
+        }, 20);
+    }
+}
+
+// --- Theme Toggle Logic ---
 const toggleBtn = document.getElementById('theme-toggle');
 const lightImg = document.getElementById('hero-img-light');
 const darkImg = document.getElementById('hero-img-dark');

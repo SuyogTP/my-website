@@ -71,7 +71,13 @@
     }
     </script>
 </head>
-<body id="top">
+<body id="top" class="loading-active">
+
+    <div id="loading-screen" class="loading-screen" role="status" aria-live="polite" aria-label="Loading page">
+        <div class="loading-value" aria-hidden="true">
+            <span id="loading-number">1</span><span class="loading-percent">%</span>
+        </div>
+    </div>
 
     <!-- Particle Background -->
     <canvas id="bg-canvas"></canvas>
