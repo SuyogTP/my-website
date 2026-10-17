@@ -911,45 +911,29 @@ const topics = [
         special: 'none'
     },
     {
-        id: 'coding-challenges',
-        title: 'Coding Challenges',
-        icon: '💡',
-        subtitle: 'Fun puzzles with code and logic',
-        description: 'Coding challenges are a great way to practice problem-solving skills.',
-        details: [
-            'I enjoy solving problems and finding elegant solutions.',
-            'Challenges keep my thinking sharp and creative.',
-            'They help me become a more confident programmer.'
-        ],
-        theme: {
-            bg: 'linear-gradient(135deg, #e0f2fe, #bae6fd)',
-            accent: '#0384c7',
-            text: '#0f172a',
-            card: 'rgba(240, 249, 255, 0.95)',
-            border: 'rgba(2, 132, 199, 0.18)'
-        },
-        special: 'none'
-    },
-    {
-        id: 'ai',
-        title: 'Artificial Intelligence',
-        icon: '🤖',
-        subtitle: 'Smart machines and future thinking',
-        description: 'AI feels futuristic and exciting because it learns from data and patterns.',
-        details: [
-            'I am curious about how AI can help people and projects.',
-            'AI combines math, logic, and creativity.',
-            'I like imagining future tools powered by smart systems.'
-        ],
-        theme: {
-            bg: 'linear-gradient(135deg, #e0f2fe, #dbeafe)',
-            accent: '#2563eb',
-            text: '#0f172a',
-            card: 'rgba(240, 249, 255, 0.95)',
-            border: 'rgba(59, 130, 246, 0.18)'
-        },
-        special: 'none'
-    },
+  id: 'ai',
+  title: 'Artificial Intelligence',
+  icon: '🤖',
+  subtitle: 'Smart machines and future thinking',
+  description: 'AI feels futuristic and exciting because it constantly learns from data, uncovers hidden patterns, and redefines what software can achieve.',
+  details: [
+    'I am deeply curious about how AI can empower everyday people and supercharge local community projects.',
+    'AI combines rigorous math, strict logic, and boundless creativity to solve problems.',
+    'I love imagining and prototyping future developer tools powered by autonomous, smart systems.',
+    'I like how it bridges human intuition with machine efficiency to assist in making critical decisions.',
+    'Fascinated by natural language processing and how machines learn to understand human context.',
+    'Driven to explore ethical AI frameworks that ensure technology remains fair, accessible, and safe for everyone.'
+  ],
+  theme: {
+    bg: 'linear-gradient(135deg, #e0f2fe, #dbeafe)',
+    accent: '#2563eb',
+    text: '#0f172a',
+    card: 'rgba(240, 249, 255, 0.95)',
+    border: 'rgba(59, 130, 246, 0.18)'
+  },
+  special: 'featured-skill'
+},
+
     {
         id: 'spacecraft',
         title: 'Spacecraft',
@@ -1452,7 +1436,7 @@ function buildTopicCards() {
     topics.forEach(topic => {
         const card = document.createElement('a');
         card.className = 'topic-card';
-        card.href = `html/topic.html?topic=${encodeURIComponent(topic.id)}`;
+        card.href = `html/topics/${encodeURIComponent(topic.id)}.html`;
         card.innerHTML = `
             <div class="topic-icon">${topic.icon}</div>
             <h3>${topic.title}</h3>
@@ -1467,6 +1451,7 @@ function applyTopicTheme(theme) {
     document.documentElement.style.setProperty('--page-text', theme.text);
     document.documentElement.style.setProperty('--page-card-bg', theme.card);
     document.documentElement.style.setProperty('--page-card-border', theme.border);
+    document.documentElement.style.setProperty('--topic-accent', theme.accent);
 }
 
 function createMoneyShower() {
@@ -1486,6 +1471,72 @@ function createMoneyShower() {
 
 function createTopicSections(topic) {
     if (!topicSections) return;
+
+    if (topic.id === 'writing') {
+        topicSections.innerHTML = `
+            <article class="writing-article">
+                <p class="writing-kicker">NOTES FROM THE DESK</p>
+                <h2>The Pen and the Keyboard</h2>
+                <p class="writing-lead">As a developer, most people expect my world to be made entirely of semicolons, brackets, and terminal windows. But writing is not separate from coding: both help me take messy thoughts and give them a creative, clear shape.</p>
+                <p>Whether I am writing code for an app or putting a story in my notebook, the goal is similar: make an idea understandable, useful, and alive.</p>
+
+                <section class="writing-section">
+                    <span class="writing-number">01</span>
+                    <div>
+                        <h3>Journaling as My Daily Tech Stack</h3>
+                        <p>Continuous learning is part of coding, but it can be hard to remember every new idea. I use a journal to record what I learned, which bugs frustrated me, and how I finally solved them.</p>
+                        <p>It is a personal documentation system for my brain. Writing down what I learn helps me understand it deeply, turn abstract lessons into concrete knowledge, and find useful notes when I get stuck later.</p>
+                    </div>
+                </section>
+
+                <section class="writing-section">
+                    <span class="writing-number">02</span>
+                    <div>
+                        <h3>Giving Voice to Books, Games, and Dreams</h3>
+                        <p>Coding lets me build worlds out of logic; writing lets me explore worlds through imagination. I enjoy writing about favorite books, the narrative design of video games, and ambitious dreams for the future.</p>
+                        <p>A notebook is a place to be creative without worrying about compiler errors or system crashes. It is pure, unfiltered expression.</p>
+                    </div>
+                </section>
+
+                <section class="writing-section">
+                    <span class="writing-number">03</span>
+                    <div>
+                        <h3>Mastering the Art of Communication</h3>
+                        <p>Code communicates with computers; essays and stories communicate with people. Practicing writing helps me explain complex technical ideas in clear, everyday language.</p>
+                        <p>That practice helps me write better documentation, explain projects to clients, and collaborate with developers around the world.</p>
+                    </div>
+                </section>
+
+                <section class="writing-section writing-theme-note">
+                    <span class="writing-number">04</span>
+                    <div>
+                        <h3>Integrating the Creative Mindset</h3>
+                        <p>To celebrate the balance of logic and literature, this topic uses a warm orange-rose palette: the feeling of opening a fresh notebook at sunrise.</p>
+                        <pre><code>{
+  id: 'writing',
+  title: 'Writing',
+  icon: '✍️',
+  subtitle: 'Stories, essays, and journaling',
+  theme: {
+    bg: 'linear-gradient(135deg, #fff7ed, #ffe4d6)',
+    accent: '#fb7185',
+    text: '#1f2937',
+    card: 'rgba(255, 247, 238, 0.95)',
+    border: 'rgba(251, 113, 133, 0.18)'
+  }
+}</code></pre>
+                    </div>
+                </section>
+
+                <section class="writing-finale">
+                    <p class="writing-kicker">LOGIC MEETS LITERATURE</p>
+                    <h3>You can be both creative and technical.</h3>
+                    <p>Writing makes me a better thinker, a clearer communicator, and a more thoughtful coder. After a long coding session, opening a blank page and writing down a few thoughts can bring surprising clarity.</p>
+                </section>
+            </article>
+        `;
+        return;
+    }
 
     const detailText = topic.details.join(' ');
     const focus = topic.title.toLowerCase();
@@ -1519,26 +1570,35 @@ function createTopicSections(topic) {
 }
 
 function updateTopicSeo(topic) {
-    const topicUrl = `https://suyogbasnet.com.np/html/topic.html?topic=${encodeURIComponent(topic.id)}`;
+    const isDedicatedPage = document.body.dataset.topicId === topic.id;
+    const topicUrl = isDedicatedPage
+        ? `https://suyogbasnet.com.np/html/topics/${encodeURIComponent(topic.id)}.html`
+        : `https://suyogbasnet.com.np/html/topic.html?topic=${encodeURIComponent(topic.id)}`;
     const description = `${topic.title}: ${topic.description} Explore Suyog Basnet's ideas, details, and learning notes.`;
     document.title = `${topic.title} | Suyog Basnet`;
 
-    const descriptionMeta = document.querySelector('meta[name="description"]');
-    const ogTitleMeta = document.querySelector('meta[property="og:title"]');
-    const ogDescriptionMeta = document.querySelector('meta[property="og:description"]');
-    const ogUrlMeta = document.querySelector('meta[property="og:url"]');
+    const setMetaContent = (selector, attribute, key, content) => {
+        let meta = document.querySelector(selector);
+        if (!meta) {
+            meta = document.createElement('meta');
+            meta.setAttribute(attribute, key);
+            document.head.appendChild(meta);
+        }
+        meta.setAttribute('content', content);
+    };
+
     const canonical = document.querySelector('link[rel="canonical"]');
 
-    if (descriptionMeta) descriptionMeta.setAttribute('content', description);
-    if (ogTitleMeta) ogTitleMeta.setAttribute('content', `${topic.title} | Suyog Basnet`);
-    if (ogDescriptionMeta) ogDescriptionMeta.setAttribute('content', description);
-    if (ogUrlMeta) ogUrlMeta.setAttribute('content', topicUrl);
+    setMetaContent('meta[name="description"]', 'name', 'description', description);
+    setMetaContent('meta[property="og:title"]', 'property', 'og:title', `${topic.title} | Suyog Basnet`);
+    setMetaContent('meta[property="og:description"]', 'property', 'og:description', description);
+    setMetaContent('meta[property="og:url"]', 'property', 'og:url', topicUrl);
     if (canonical) canonical.setAttribute('href', topicUrl);
 }
 
 function loadTopicPage() {
     if (!topicTitle || !topicDescription || !topicBadge || !topicDetail) return;
-    const requested = getQueryParam('topic') || 'reading';
+    const requested = document.body.dataset.topicId || getQueryParam('topic') || 'reading';
     const topic = findTopic(requested) || topics[0];
     updateTopicSeo(topic);
     topicBadge.textContent = `${topic.icon} ${topic.title}`;

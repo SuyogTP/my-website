@@ -10,11 +10,11 @@ const themeToggle = document.getElementById('theme-toggle');
             
             // Switch button text and images
             if (body.classList.contains('dark-mode')) {
-                themeToggle.textContent = '☀️ Light Mode';
+                themeToggle.textContent = '☀️ Light Theme';
                 imgLight.classList.remove('active');
                 imgDark.classList.add('active');
             } else {
-                themeToggle.textContent = '🌙 Dark Mode';
+                themeToggle.textContent = '🌙 Dark Theme';
                 imgDark.classList.remove('active');
                 imgLight.classList.add('active');
             }

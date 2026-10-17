@@ -1,0 +1,192 @@
+.topic-page {
+    width: min(1120px, 92%);
+    margin: 0 auto;
+    padding: clamp(56px, 8vw, 100px) 0;
+}
+
+.topic-card-large {
+    max-width: 960px;
+    padding: clamp(24px, 5vw, 56px);
+    border: 1px solid var(--site-border);
+    border-top: 2px solid var(--topic-accent, var(--site-blue));
+    border-radius: 22px;
+    background: linear-gradient(145deg, rgba(18, 19, 25, 0.97), rgba(9, 10, 14, 0.97));
+    box-shadow: 0 30px 90px rgba(0, 0, 0, 0.34);
+}
+
+.topic-badge {
+    padding: 8px 14px;
+    border: 1px solid color-mix(in srgb, var(--topic-accent, var(--site-blue)) 36%, transparent);
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--topic-accent, var(--site-blue)) 12%, transparent);
+    color: var(--topic-accent, var(--site-blue-bright));
+}
+
+.topic-card-large h1 {
+    color: var(--site-text);
+    letter-spacing: -0.045em;
+}
+
+.topic-card-large > p,
+.topic-detail p,
+.topic-section p,
+.topic-section li {
+    color: var(--site-muted);
+}
+
+.topic-detail p,
+.topic-section {
+    border: 1px solid var(--site-border);
+    background: rgba(255, 255, 255, 0.025);
+}
+
+.topic-section h2,
+.topic-ideas strong {
+    color: var(--topic-accent, var(--site-blue-bright));
+}
+
+.topic-section-highlight {
+    background: linear-gradient(135deg, color-mix(in srgb, var(--topic-accent, var(--site-blue)) 10%, transparent), rgba(255, 255, 255, 0.025));
+}
+
+.topic-ideas article {
+    border: 1px solid var(--site-border);
+    background: rgba(255, 255, 255, 0.035);
+}
+
+.topic-ideas span {
+    color: var(--site-muted);
+}
+
+.topic-actions .cta.alt {
+    border: 1px solid var(--site-border);
+    background: rgba(255, 255, 255, 0.06);
+}
+
+.writing-article {
+    display: grid;
+    gap: 30px;
+    margin-top: 42px;
+}
+
+.writing-kicker {
+    margin: 0 0 -22px;
+    color: var(--topic-accent, #fb7185);
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.2em;
+}
+
+.writing-article > h2 {
+    margin: 0;
+    color: #fff;
+    font-size: clamp(2rem, 5vw, 3.4rem);
+    letter-spacing: -0.04em;
+}
+
+.writing-article > p,
+.writing-section p,
+.writing-finale p {
+    margin: 0;
+    color: #a3a3ad;
+    font-size: 1.04rem;
+    line-height: 1.85;
+}
+
+.writing-article .writing-lead {
+    color: #e2e2e8;
+    font-size: clamp(1.12rem, 2vw, 1.3rem);
+}
+
+.writing-section {
+    display: grid;
+    grid-template-columns: 54px minmax(0, 1fr);
+    gap: 18px;
+    padding: clamp(20px, 4vw, 32px);
+    border: 1px solid rgba(255, 255, 255, 0.09);
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.025);
+}
+
+.writing-number {
+    color: var(--topic-accent, #fb7185);
+    font-size: 0.86rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+}
+
+.writing-section h3,
+.writing-finale h3 {
+    margin: 0 0 12px;
+    color: #f7f8fb;
+    font-size: clamp(1.25rem, 2.5vw, 1.7rem);
+}
+
+.writing-section p + p {
+    margin-top: 14px;
+}
+
+.writing-theme-note {
+    border-color: rgba(251, 113, 133, 0.24);
+    background: linear-gradient(135deg, rgba(251, 113, 133, 0.09), rgba(251, 146, 60, 0.035));
+}
+
+.writing-section pre {
+    overflow-x: auto;
+    margin-top: 18px;
+    padding: 20px;
+    border: 1px solid rgba(251, 113, 133, 0.2);
+    border-radius: 14px;
+    background: rgba(7, 8, 12, 0.8);
+    color: #fda4af;
+    font: 0.88rem/1.7 Consolas, 'Courier New', monospace;
+}
+
+.writing-finale {
+    display: grid;
+    gap: 16px;
+    padding: clamp(24px, 4vw, 36px);
+    border: 1px solid rgba(251, 113, 133, 0.24);
+    border-radius: 18px;
+    background: linear-gradient(135deg, rgba(251, 113, 133, 0.13), rgba(251, 146, 60, 0.07));
+}
+
+.writing-finale .writing-kicker {
+    margin: 0;
+}
+
+.writing-finale h3 {
+    margin: 0;
+}
+
+@media (max-width: 720px) {
+    body[data-topic-id] nav .nav-links {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .topic-page {
+        width: min(100% - 28px, 1120px);
+    }
+
+    .writing-section {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+
+    .writing-section pre {
+        font-size: 0.76rem;
+    }
+
+    .topic-ideas {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .topic-card-large,
+    .topic-card-large:hover {
+        transition: none;
+        transform: none;
+    }
+}
