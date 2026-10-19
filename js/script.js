@@ -1190,20 +1190,85 @@ function animate() {
 
 animate();
 
+let activeThemeWaveCleanup = null;
+
+function prepareThemeColorWave() {
+    if (activeThemeWaveCleanup) activeThemeWaveCleanup();
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return null;
+
+    const textNodes = [];
+    const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+    let textNode;
+
+    while ((textNode = walker.nextNode())) {
+        const parent = textNode.parentElement;
+        if (!parent || !textNode.data.trim() || (toggleBtn && toggleBtn.contains(parent))) continue;
+        if (parent.closest('script, style, noscript, textarea, input, select, option, svg, [contenteditable="true"]')) continue;
+
+        const computedStyle = window.getComputedStyle(parent);
+        if (computedStyle.display === 'none' || computedStyle.visibility === 'hidden') continue;
+        textNodes.push({ node: textNode, color: computedStyle.color });
+    }
+
+    if (!textNodes.length) return null;
+
+    const waveText = [];
+    const maxDelay = 700;
+    const duration = 650;
+    const maxDistance = Math.hypot(document.documentElement.scrollWidth, document.documentElement.scrollHeight) || 1;
+    const range = document.createRange();
+
+    textNodes.forEach(({ node, color }) => {
+        range.selectNodeContents(node);
+        const rect = range.getBoundingClientRect();
+        const x = rect.left + window.scrollX;
+        const y = rect.top + window.scrollY;
+        const delay = Math.round((Math.hypot(x, y) / maxDistance) * maxDelay);
+        const text = document.createElement('span');
+        text.textContent = node.data;
+        text.style.color = color;
+        text.style.transition = `color ${duration}ms ease-in-out ${delay}ms`;
+        node.replaceWith(text);
+        waveText.push(text);
+    });
+
+    let frame;
+    let timer;
+    const cleanup = () => {
+        window.cancelAnimationFrame(frame);
+        window.clearTimeout(timer);
+        waveText.forEach(text => {
+            if (text.isConnected) text.replaceWith(document.createTextNode(text.textContent || ''));
+        });
+        if (activeThemeWaveCleanup === cleanup) activeThemeWaveCleanup = null;
+    };
+    activeThemeWaveCleanup = cleanup;
+
+    return () => {
+        if (waveText[0].isConnected) waveText[0].getBoundingClientRect();
+        frame = window.requestAnimationFrame(() => {
+            waveText.forEach(text => text.style.removeProperty('color'));
+            timer = window.setTimeout(cleanup, maxDelay + duration);
+        });
+    };
+}
+
 if (toggleBtn) {
     toggleBtn.addEventListener('click', () => {
+        const startThemeColorWave = prepareThemeColorWave();
         document.body.classList.toggle('dark-mode');
         const isDarkMode = document.body.classList.contains('dark-mode');
         if (isDarkMode) {
-            toggleBtn.textContent = '☀️ Light Mode';
+            toggleBtn.textContent = '☀️ Light Theme';
             if (lightImg) lightImg.classList.remove('active');
             if (darkImg) darkImg.classList.add('active');
         } else {
-            toggleBtn.textContent = '🌙 Dark Mode';
+            toggleBtn.textContent = '🌙 Dark Theme';
             if (darkImg) darkImg.classList.remove('active');
             if (lightImg) lightImg.classList.add('active');
         }
         weatherMode = 'none';
+        if (startThemeColorWave) startThemeColorWave();
     });
 }
 
@@ -1484,7 +1549,7 @@ function createTopicSections(topic) {
                     <span class="writing-number">01</span>
                     <div>
                         <h3>Journaling as My Daily Tech Stack</h3>
-                        <p>Continuous learning is part of coding, but it can be hard to remember every new idea. I use a journal to record what I learned, which bugs frustrated me, and how I finally solved them.</p>
+                        <p>Continuous learning is part of coding, but it can be hard to remember every new idea. I use a journal to record what I learned (obsidian), which bugs frustrated me, and how I finally solved them.</p>
                         <p>It is a personal documentation system for my brain. Writing down what I learn helps me understand it deeply, turn abstract lessons into concrete knowledge, and find useful notes when I get stuck later.</p>
                     </div>
                 </section>
