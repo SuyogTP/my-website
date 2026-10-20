@@ -327,12 +327,12 @@
   <div class="perf"></div>
 
   <div class="body">
-    <div id="statusBox" class="status"></div>
+    <div id="statusBox" class="status" role="status" aria-live="polite"></div>
 
     <div id="formContainer">
       <div class="view-header">
         <h2 class="view-title" id="viewTitle">Direct Order</h2>
-        <a class="switch-link" id="toggleViewBtn">Booking Mode →</a>
+        <button type="button" class="switch-link" id="toggleViewBtn">Booking Mode →</button>
       </div>
 
       <form id="gasForm" novalidate>
@@ -354,6 +354,17 @@
             <option value="Lokpriya Gas">Lokpriya Gas / लोकप्रिय ग्यास</option>
             <option value="Manoj Gas">Manoj Gas / मनोज ग्यास</option>
           </select>
+        </div>
+
+        <div class="field">
+          <label for="todayRate">Today's Gas Rate per Cylinder (NPR) / आजको दर</label>
+          <input type="number" id="todayRate" min="1" max="1000000" step="1" value="2100" inputmode="numeric" required>
+        </div>
+
+        <div class="field">
+          <label for="paidAmount">Amount Paid Now (NPR) / अहिले दिएको रकम</label>
+          <input type="number" id="paidAmount" min="0" max="99000000" step="1" value="0" inputmode="numeric" required>
+          <div class="field-msg" id="paymentMsg">Enter an amount between zero and the order total, and match the payment status.</div>
         </div>
 
         <div id="directOrderFields">
@@ -378,6 +389,7 @@
             <label>Payment Status <span class="np">भुक्तानी स्थिति</span></label>
             <select id="paymentStatus">
               <option value="Unpaid">Unpaid / पैसा तिर्न बाँकी</option>
+              <option value="Partial / Paid">Partially Paid / केही रकम बुझाएको</option>
               <option value="Paid in Advance">Paid in Advance / नगद बुझाइसक्यो</option>
             </select>
           </div>
@@ -387,7 +399,7 @@
           <label>Quantity <span class="np">संख्या</span></label>
           <div class="qty-row">
             <button type="button" class="qty-btn" id="qtyDown" aria-label="Decrease quantity">–</button>
-            <input type="number" id="quantity" min="1" max="99" value="1" inputmode="numeric" pattern="[0-9]*">
+            <input type="number" id="quantity" min="1" max="99" value="1" inputmode="numeric" pattern="[0-9]*" required>
             <button type="button" class="qty-btn" id="qtyUp" aria-label="Increase quantity">+</button>
           </div>
         </div>
@@ -409,6 +421,10 @@
         <div class="receipt-row hide" id="rEmptyRow"><span>Empty</span><span id="rEmpty">—</span></div>
         <div class="receipt-row hide" id="rPaymentRow"><span>Payment</span><span id="rPayment">—</span></div>
         <div class="receipt-row"><span>Quantity</span><span id="rQty">—</span></div>
+        <div class="receipt-row"><span>Rate per Cylinder</span><span id="rRate">—</span></div>
+        <div class="receipt-row"><span>Order Total</span><span id="rTotal">—</span></div>
+        <div class="receipt-row"><span>Paid</span><span id="rPaid">—</span></div>
+        <div class="receipt-row"><span>Balance Due</span><span id="rBalance">—</span></div>
       </div>
       <button type="button" class="new-order-btn" id="newOrderBtn">Done</button>
     </div>
