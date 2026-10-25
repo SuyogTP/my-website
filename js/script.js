@@ -1398,7 +1398,7 @@ function setupMagneticLinks() {
 }
 
 function updateSectionNavigation() {
-    const sections = ['top', 'about', 'highlights', 'topics'];
+    const sections = ['top', 'about', 'achievements', 'highlights', 'topics'];
     const current = sections.reduce((active, id) => {
         const section = document.getElementById(id);
         return section && window.scrollY + window.innerHeight * 0.35 >= section.offsetTop ? id : active;
