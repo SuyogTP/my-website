@@ -604,84 +604,142 @@ body.dark-mode .highlight-coding {
 
 .achievement-layout {
     display: grid;
-    grid-template-columns: minmax(0, 1.1fr) minmax(280px, 0.9fr);
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
     align-items: center;
-    gap: 28px;
+    gap: clamp(20px, 4vw, 52px);
+}
+
+.achievement-section {
+    scroll-margin-top: 100px;
 }
 
 .achievement-copy,
 .achievement-visual {
     min-width: 0;
-    padding: 30px;
-    border: 1px solid var(--page-card-border);
-    border-radius: 18px;
-    background: rgba(16, 17, 22, 0.72);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    background: linear-gradient(145deg, rgba(20, 22, 29, 0.96), rgba(12, 13, 18, 0.94));
 }
 
 .achievement-copy {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     text-align: left;
+    padding: clamp(24px, 3.5vw, 44px);
+}
+
+.achievement-copy .achievement-label {
+    margin-bottom: 14px;
+    color: #60a5fa;
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    line-height: 1.5;
 }
 
 .achievement-copy h3 {
-    margin-bottom: 16px;
-    color: var(--accent-color);
-    font-size: clamp(1.5rem, 3vw, 2rem);
+    margin-bottom: 12px;
+    color: #f7f8fb;
+    font-size: clamp(1.65rem, 3vw, 2.35rem);
+    letter-spacing: -0.04em;
+    line-height: 1.12;
 }
 
 .achievement-copy p {
-    color: #a2a3ac;
-    line-height: 1.75;
+    color: #b5b7c0;
+    line-height: 1.65;
 }
 
 .achievement-copy .achievement-lead {
-    margin-bottom: 16px;
+    margin-bottom: 24px;
+    color: #d9dbe2;
+    font-size: 1.02rem;
+}
+
+.achievement-steps {
+    display: grid;
+    gap: 14px;
+    margin: 0 0 24px;
+    padding: 0;
+    list-style: none;
+}
+
+.achievement-steps li {
+    display: grid;
+    grid-template-columns: 34px 1fr;
+    align-items: start;
+    gap: 12px;
+}
+
+.achievement-steps li > span {
+    display: grid;
+    width: 32px;
+    height: 32px;
+    place-items: center;
+    border: 1px solid rgba(96, 165, 250, 0.35);
+    border-radius: 50%;
+    color: #93c5fd;
+    font-size: 0.72rem;
+    font-weight: 800;
+}
+
+.achievement-steps li p {
+    padding-top: 3px;
+    font-size: 0.92rem;
+}
+
+.achievement-steps strong {
+    margin-right: 5px;
     color: #f7f8fb;
-    font-size: 1.08rem;
 }
 
 .achievement-components {
     display: flex;
     flex-wrap: wrap;
-    gap: 9px;
-    margin: 22px 0;
+    gap: 8px;
+    margin: 0 0 22px;
 }
 
 .achievement-components span {
-    padding: 7px 11px;
-    border: 1px solid rgba(96, 165, 250, 0.24);
+    padding: 6px 10px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
     border-radius: 999px;
-    background: rgba(59, 130, 246, 0.1);
-    color: #cbd5e1;
-    font-size: 0.82rem;
+    background: rgba(255, 255, 255, 0.045);
+    color: #c7c9d1;
+    font-size: 0.76rem;
 }
 
 .achievement-copy .achievement-impact {
-    padding-top: 18px;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 16px 18px;
+    border: 1px solid rgba(96, 165, 250, 0.2);
+    border-radius: 12px;
+    background: rgba(59, 130, 246, 0.08);
+    font-size: 0.88rem;
 }
 
 .achievement-impact strong {
     display: block;
-    margin-bottom: 5px;
+    margin-bottom: 4px;
     color: #60a5fa;
 }
 
 .achievement-visual {
     margin: 0;
-    padding: 14px;
+    padding: 12px;
     overflow: hidden;
 }
 
 .achievement-visual img {
     display: block;
     width: 100%;
-    max-height: 440px;
-    border-radius: 12px;
+    max-height: 620px;
+    border-radius: 12px 12px 6px 6px;
     object-fit: contain;
 }
 
 .achievement-visual figcaption {
-    padding: 12px 6px 2px;
+    padding: 11px 8px 4px;
     color: #8a8a93;
     font-size: 0.85rem;
 }
@@ -1444,6 +1502,12 @@ body#top footer {
 
     .achievement-layout {
         grid-template-columns: 1fr;
+        max-width: 620px;
+        margin: 0 auto;
+    }
+
+    .achievement-visual img {
+        max-height: 560px;
     }
 
     body#top .topic-grid {
@@ -1497,7 +1561,15 @@ body#top footer {
 
     .achievement-copy,
     .achievement-visual {
-        padding: 20px;
+        border-radius: 16px;
+    }
+
+    .achievement-copy {
+        padding: 22px;
+    }
+
+    .achievement-visual {
+        padding: 9px;
     }
 
     body#top .section {
